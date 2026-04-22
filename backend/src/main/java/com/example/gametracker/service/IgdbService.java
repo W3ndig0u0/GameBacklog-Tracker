@@ -26,7 +26,8 @@ public class IgdbService {
         String body = """
         search "%s";
         fields id,name,cover.url,first_release_date,
-                total_rating,total_rating_count,summary,genres.name;
+        genres.name,themes.name, total_rating,total_rating_count,summary,
+        game_modes.name,platforms.name;
         where cover != null;
         limit 10;
     """.formatted(query);
@@ -39,8 +40,9 @@ public class IgdbService {
 
         String body = """
             fields id,name,cover.url,first_release_date,
-                    total_rating,total_rating_count,hypes;
-            where cover != null;
+            genres.name,themes.name, total_rating,total_rating_count,summary,
+            game_modes.name,platforms.name;
+            where cover != null & total_rating != null;
             sort hypes desc;
             limit 20;
         """;
@@ -53,8 +55,9 @@ public class IgdbService {
 
         String body = """
             fields id,name,cover.url,first_release_date,
-                    total_rating,total_rating_count;
-            where cover != null;
+            genres.name,themes.name, total_rating,total_rating_count,summary,
+            game_modes.name,platforms.name;
+            where cover != null & total_rating != null;
             sort total_rating_count desc;
             limit 20;
         """;
@@ -66,8 +69,10 @@ public class IgdbService {
     public String getTopRatedGames() {
 
         String body = """
+
             fields id,name,cover.url,first_release_date,
-                    total_rating,total_rating_count,aggregated_rating;
+            genres.name,themes.name, total_rating,total_rating_count,summary,
+            game_modes.name,platforms.name;
             where cover != null & total_rating != null;
             sort total_rating desc;
             limit 20;

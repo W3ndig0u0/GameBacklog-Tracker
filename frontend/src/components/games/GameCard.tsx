@@ -6,6 +6,7 @@ type Props = {
 };
 
 export default function GameCard({ game }: Props) {
+  console.log("Rendering GameCard for:", game);
   const handleClick = () => {
     toast.success(`Selected: ${game.name}`);
   };
