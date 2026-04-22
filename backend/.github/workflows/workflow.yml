@@ -51,6 +51,6 @@ jobs:
           service: ${{ vars.GC_SERVICE_NAME }}
           image: ${{ env.IMAGE_URL }}
           env_vars: |
-            DB_URL=${{ secrets.DB_URL }}
-            DB_USER=${{ secrets.DB_USER }}
+            DB_URL=${{ vars.DB_URL }}
+            DB_USER=${{ vars.DB_USER }}
             DB_PASS=${{ secrets.DB_PASS }}
