@@ -4,10 +4,12 @@ import com.example.gametracker.TwitchAuthToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -18,31 +20,33 @@ public class IgdbService {
     @Value("${igdb.client-id}")
     private String clientId;
 
-    private final WebClient webClient = WebClient.create();
+    private final WebClient webClient = WebClient.builder()
+            .baseUrl("https://api.igdb.com/v4")
+            .build();
 
     @Cacheable(value = "gameSearch", key = "#query")
     public String search(String query) {
 
         String body = """
-        search "%s";
-        fields id,name,cover.url,first_release_date,
-        genres.name,themes.name, total_rating,total_rating_count,summary,
-        game_modes.name,platforms.name;
-        where cover != null;
-        limit 10;
-    """.formatted(query);
-        String result = callIgdb(body);
-        System.out.println("IGDB RESULT: " + result);
-        return result;
+            search "%s";
+            fields id,name,cover.url,first_release_date,
+                   genres.name,themes.name,platforms.name,
+                   total_rating,total_rating_count;
+            where cover != null;
+            limit 10;
+        """.formatted(query);
+
+        return callIgdb(body);
     }
+
     @Cacheable(value = "topTrendingGames")
     public String getTrendingGames() {
 
         String body = """
             fields id,name,cover.url,first_release_date,
-            genres.name,themes.name, total_rating,total_rating_count,summary,
-            game_modes.name,platforms.name;
-            where cover != null & total_rating != null;
+                   genres.name,themes.name,platforms.name,
+                   total_rating,total_rating_count,hypes;
+            where cover != null & hypes != null;
             sort hypes desc;
             limit 20;
         """;
@@ -55,9 +59,9 @@ public class IgdbService {
 
         String body = """
             fields id,name,cover.url,first_release_date,
-            genres.name,themes.name, total_rating,total_rating_count,summary,
-            game_modes.name,platforms.name;
-            where cover != null & total_rating != null;
+                   genres.name,themes.name,platforms.name,
+                   total_rating,total_rating_count;
+            where cover != null & total_rating_count != null;
             sort total_rating_count desc;
             limit 20;
         """;
@@ -69,10 +73,9 @@ public class IgdbService {
     public String getTopRatedGames() {
 
         String body = """
-
             fields id,name,cover.url,first_release_date,
-            genres.name,themes.name, total_rating,total_rating_count,summary,
-            game_modes.name,platforms.name;
+                   genres.name,themes.name,platforms.name,
+                   total_rating,total_rating_count;
             where cover != null & total_rating != null;
             sort total_rating desc;
             limit 20;
@@ -83,19 +86,18 @@ public class IgdbService {
 
     private String callIgdb(String body) {
         return webClient.post()
-                .uri("https://api.igdb.com/v4/games")
+                .uri("/games")
                 .header("Client-ID", clientId)
                 .header("Authorization", "Bearer " + twitchAuthToken.getToken())
-                .header("Accept", "application/json")
-                .header("Content-Type", "text/plain")
+                .contentType(MediaType.TEXT_PLAIN)
+                .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
-                .onStatus(
-                        HttpStatusCode::isError,
-                        response -> response.bodyToMono(String.class)
-                                .map(msg -> new RuntimeException("IGDB ERROR: " + msg))
-                )
                 .bodyToMono(String.class)
+                .timeout(Duration.ofSeconds(5))
+                .onErrorResume(e -> Mono.error(
+                        new RuntimeException("IGDB CALL FAILED: " + e.getMessage())
+                ))
                 .block();
     }
 }
