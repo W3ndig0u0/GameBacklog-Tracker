@@ -8,9 +8,11 @@ type Props = {
 
 export default function GameSection({ title, data }: Props) {
   return (
-    <section style={{ marginBottom: "40px" }}>
-      <h2>{title}</h2>
-      <GameGrid games={data} />
+    <section className="mb-10 flex flex-col items-center">
+      <h2 className="text-xl font-semibold mb-4 text-center">{title}</h2>
+      <div className="w-full flex justify-center">
+        <GameGrid games={data} />
+      </div>
     </section>
   );
 }

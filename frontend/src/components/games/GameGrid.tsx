@@ -7,7 +7,7 @@ type Props = {
 
 export default function GameGrid({ games }: Props) {
   return (
-    <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+    <div className="flex flex-wrap justify-center gap-4">
       {games?.map((game) => (
         <GameCard key={game.id} game={game} />
       ))}
