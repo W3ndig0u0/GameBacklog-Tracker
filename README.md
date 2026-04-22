@@ -1,6 +1,10 @@
 # 🎮 GameBacklog Tracker
 
-![UI Preview Placeholder](https://via.placeholder.com/1200x600/09090b/a855f7?text=GameBacklog+Tracker+-+Modern+Gaming+Hub)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Test_the_App-a855f7?style=for-the-badge)](https://gamebacklog-tracker.pages.dev/)
+
+> **Track. Discover. Play.** > Your ultimate, lightning-fast hub for tracking and discovering the best games, wrapped in a modern, "Netflix-like" UI.
+
+**🌍 Live Demo:** [https://gamebacklog-tracker.pages.dev/](https://gamebacklog-tracker.pages.dev/)
 
 > **Track. Discover. Play.** > Your ultimate, lightning-fast hub for tracking and discovering the best games, wrapped in a modern, "Netflix-like" UI.
 
