@@ -29,6 +29,8 @@ public class IgdbService {
 
         return callIgdb(body);
     }
+
+    @Cacheable(value = "topTrendingGames")
     public String getTrendingGames() {
 
         String body = """
@@ -41,6 +43,7 @@ public class IgdbService {
         return callIgdb(body);
     }
 
+    @Cacheable(value = "popularGames")
     public String getPopularGames() {
 
         String body = """
@@ -52,6 +55,7 @@ public class IgdbService {
         return callIgdb(body);
     }
 
+    @Cacheable(value = "topRatedGames")
     public String getTopRatedGames() {
 
         String body = """
