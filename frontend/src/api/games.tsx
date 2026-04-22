@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL =
-  "https://game-tracker-backend-876198057788.europe-north2.run.app/api/games";
+  "https://game-tracker-backend-876198057788.europe-north2.run.app/api";
 
 export type Game = {
   id: number;
@@ -10,16 +10,16 @@ export type Game = {
 };
 
 export const fetchTrendingGames = async (): Promise<Game[]> => {
-  const res = await axios.get<string>(`${BASE_URL}/trending`);
-  return JSON.parse(res.data);
+  const res = await axios.get(`${BASE_URL}/games/trending`);
+  return typeof res.data === "string" ? JSON.parse(res.data) : res.data;
 };
 
 export const fetchPopularGames = async (): Promise<Game[]> => {
-  const res = await axios.get<string>(`${BASE_URL}/popular`);
-  return JSON.parse(res.data);
+  const res = await axios.get(`${BASE_URL}/games/popular`);
+  return typeof res.data === "string" ? JSON.parse(res.data) : res.data;
 };
 
 export const fetchTopRatedGames = async (): Promise<Game[]> => {
-  const res = await axios.get<string>(`${BASE_URL}/top-rated`);
-  return JSON.parse(res.data);
+  const res = await axios.get(`${BASE_URL}/games/top-rated`);
+  return typeof res.data === "string" ? JSON.parse(res.data) : res.data;
 };
