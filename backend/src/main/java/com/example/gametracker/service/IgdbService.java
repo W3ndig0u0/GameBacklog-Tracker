@@ -21,11 +21,15 @@ public class IgdbService {
 
     @Cacheable(value = "gameSearch", key = "#query")
     public String search(String query) {
+
         String body = """
             search "%s";
-            fields id,name,cover.url,first_release_date;
+            fields id,name,cover.url,first_release_date,
+                    total_rating,total_rating_count,summary,genres.name;
+            where cover != null;
+            sort total_rating_count desc;
             limit 10;
-            """.formatted(query);
+        """.formatted(query);
 
         return callIgdb(body);
     }
@@ -34,10 +38,11 @@ public class IgdbService {
     public String getTrendingGames() {
 
         String body = """
-        fields id,name,cover.url,total_rating,first_release_date;
-        sort total_rating desc;
-        where total_rating != null;
-        limit 20;
+            fields id,name,cover.url,first_release_date,
+                    total_rating,total_rating_count,hypes;
+            where cover != null;
+            sort hypes desc;
+            limit 20;
         """;
 
         return callIgdb(body);
@@ -47,10 +52,12 @@ public class IgdbService {
     public String getPopularGames() {
 
         String body = """
-        fields id,name,cover.url,total_rating_count;
-        sort total_rating_count desc;
-        limit 20;
-    """;
+            fields id,name,cover.url,first_release_date,
+                    total_rating,total_rating_count;
+            where cover != null;
+            sort total_rating_count desc;
+            limit 20;
+        """;
 
         return callIgdb(body);
     }
@@ -59,10 +66,12 @@ public class IgdbService {
     public String getTopRatedGames() {
 
         String body = """
-        fields id,name,cover.url,total_rating;
-        sort total_rating desc;
-        limit 20;
-    """;
+            fields id,name,cover.url,first_release_date,
+                    total_rating,total_rating_count,aggregated_rating;
+            where cover != null & total_rating != null;
+            sort total_rating desc;
+            limit 20;
+        """;
 
         return callIgdb(body);
     }
