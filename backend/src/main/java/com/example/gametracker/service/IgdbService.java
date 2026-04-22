@@ -21,26 +21,14 @@ public class IgdbService {
 
     @Cacheable(value = "gameSearch", key = "#query")
     public String search(String query) {
-
-        String token = twitchAuthToken.getToken();
-
         String body = """
-                search "%s";
-                fields id,name,cover.url,first_release_date;
-                limit 10;
-                """.formatted(query);
+            search "%s";
+            fields id,name,cover.url,first_release_date;
+            limit 10;
+            """.formatted(query);
 
-        return webClient.post()
-                .uri("https://api.igdb.com/v4/games")
-                .header("Client-ID", clientId)
-                .header("Authorization", "Bearer " + token)
-                .contentType(MediaType.TEXT_PLAIN)
-                .bodyValue(body)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        return callIgdb(body);
     }
-
     public String getTrendingGames() {
 
         String body = """
