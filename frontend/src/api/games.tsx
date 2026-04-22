@@ -6,7 +6,23 @@ const BASE_URL =
 export type Game = {
   id: number;
   name: string;
-  cover?: { url: string };
+
+  cover?: {
+    url: string;
+  };
+
+  first_release_date?: number;
+
+  total_rating?: number;
+  total_rating_count?: number;
+
+  aggregated_rating?: number;
+
+  summary?: string;
+
+  genres?: {
+    name: string;
+  }[];
 };
 
 export const fetchTrendingGames = async (): Promise<Game[]> => {

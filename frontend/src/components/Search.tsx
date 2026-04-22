@@ -1,4 +1,5 @@
 import { useState } from "react";
+import GameSection from "../components/games/GameSection";
 import { useSearchGames } from "../hooks/useSearchGames";
 
 export default function Search() {
@@ -7,39 +8,19 @@ export default function Search() {
   const { data, isLoading, isError } = useSearchGames(query);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Search Games</h1>
+    <div className="p-5">
+      <h3 className="text-white text-lg mb-4">Search Games</h3>
 
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search for a game..."
-        style={{
-          padding: "10px",
-          width: "300px",
-          marginBottom: "20px",
-        }}
+        className="p-2 w-72 mb-5 rounded bg-zinc-800 text-white outline-none"
       />
 
-      {isLoading && query && <p>Loading...</p>}
-      {isError && <p>Error loading games</p>}
-
-      <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-        {data?.map((game) => (
-          <div key={game.id} style={{ width: "150px" }}>
-            <img
-              width="150"
-              src={
-                game.cover?.url
-                  ? "https:" + game.cover.url.replace("t_thumb", "t_cover_big")
-                  : ""
-              }
-              alt={game.name}
-            />
-            <p>{game.name}</p>
-          </div>
-        ))}
-      </div>
+      {isLoading && query && <p className="text-zinc-400">Loading...</p>}
+      {isError && <p className="text-red-500">Error loading games</p>}
+      {data && <GameSection title="Results" data={data} />}
     </div>
   );
 }
