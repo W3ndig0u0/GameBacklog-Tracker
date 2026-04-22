@@ -1,0 +1,50 @@
+package com.example.gametracker.controller;
+
+import com.example.gametracker.service.IgdbService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@CrossOrigin(origins = {
+        "https://gamebacklog-tracker.pages.dev",
+        "http://localhost:5173"
+})
+@RestController
+@RequestMapping("/api")
+public class GameController {
+
+    private final IgdbService igdbService;
+
+    public GameController(IgdbService igdbService) {
+        this.igdbService = igdbService;
+    }
+
+    @GetMapping("/games")
+    public ResponseEntity<String> getGames() {
+        return ResponseEntity.ok("Games");
+    }
+
+    @GetMapping
+    public ResponseEntity<String> welcome() {
+        return ResponseEntity.ok("WELCOME TO GAME TRACKER BACKEND");
+    }
+
+    @GetMapping("/games/trending")
+    public ResponseEntity<String> trending() {
+        return ResponseEntity.ok(igdbService.getTrendingGames());
+    }
+
+    @GetMapping("/games/popular")
+    public ResponseEntity<String> popular() {
+        return ResponseEntity.ok(igdbService.getPopularGames());
+    }
+
+    @GetMapping("/games/top-rated")
+    public ResponseEntity<String> topRated() {
+        return ResponseEntity.ok(igdbService.getTopRatedGames());
+    }
+
+    @GetMapping("/games/search")
+    public ResponseEntity<String> search(@RequestParam String q) {
+        return ResponseEntity.ok(igdbService.search(q));
+    }
+}
