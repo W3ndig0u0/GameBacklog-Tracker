@@ -22,7 +22,20 @@ public class gameController {
         return ResponseEntity.ok("WELCOME TO GAME TRACKER BACKEND");
     }
 
+    @GetMapping("/api/games/trending")
+    public String trending() {
+        return igdbService.getTrendingGames();
+    }
 
+    @GetMapping("/api/games/popular")
+    public String popular() {
+        return igdbService.getPopularGames();
+    }
+
+    @GetMapping("/api/games/top-rated")
+    public String topRated() {
+        return igdbService.getTopRatedGames();
+    }
     @GetMapping("/api/games/search")
     public String search(@RequestParam String q) {
         return igdbService.search(q);

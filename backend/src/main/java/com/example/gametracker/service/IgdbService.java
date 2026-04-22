@@ -40,4 +40,50 @@ public class IgdbService {
                 .bodyToMono(String.class)
                 .block();
     }
+
+    public String getTrendingGames() {
+
+        String body = """
+        fields id,name,cover.url,total_rating,first_release_date;
+        sort total_rating desc;
+        where total_rating != null;
+        limit 20;
+        """;
+
+        return callIgdb(body);
+    }
+
+    public String getPopularGames() {
+
+        String body = """
+        fields id,name,cover.url,total_rating_count;
+        sort total_rating_count desc;
+        limit 20;
+    """;
+
+        return callIgdb(body);
+    }
+
+    public String getTopRatedGames() {
+
+        String body = """
+        fields id,name,cover.url,total_rating;
+        sort total_rating desc;
+        limit 20;
+    """;
+
+        return callIgdb(body);
+    }
+
+    private String callIgdb(String body) {
+        return webClient.post()
+                .uri("https://api.igdb.com/v4/games")
+                .header("Client-ID", clientId)
+                .header("Authorization", "Bearer " + twitchAuthToken.getToken())
+                .contentType(MediaType.TEXT_PLAIN)
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 }
