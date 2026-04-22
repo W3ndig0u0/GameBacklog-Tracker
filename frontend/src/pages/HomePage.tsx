@@ -9,14 +9,19 @@ export default function HomePage() {
   const popular = usePopularGames();
   const topRated = useTopRatedGames();
 
-  if (trending.isLoading || popular.isLoading || topRated.isLoading) {
-    return <div>Loading...</div>;
+  const isLoading =
+    trending.isLoading || popular.isLoading || topRated.isLoading;
+
+  if (isLoading) {
+    return <div className="p-5 text-white">Loading...</div>;
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>JING Game Tracker</h1>
+    <div className="p-5 space-y-6">
+      <h1 className="text-2xl font-bold">JING Game Tracker</h1>
+
       <Search />
+
       <GameSection title="Trending" data={trending.data} />
       <GameSection title="Popular" data={popular.data} />
       <GameSection title="Top Rated" data={topRated.data} />
