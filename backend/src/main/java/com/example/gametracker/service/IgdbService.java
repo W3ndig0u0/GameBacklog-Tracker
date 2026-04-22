@@ -3,6 +3,7 @@ package com.example.gametracker.service;
 import com.example.gametracker.TwitchAuthToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,6 +19,7 @@ public class IgdbService {
 
     private final WebClient webClient = WebClient.create();
 
+    @Cacheable(value = "gameSearch", key = "#query")
     public String search(String query) {
 
         String token = twitchAuthToken.getToken();
