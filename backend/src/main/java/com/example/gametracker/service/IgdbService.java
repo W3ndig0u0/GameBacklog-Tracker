@@ -4,6 +4,7 @@ import com.example.gametracker.TwitchAuthToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,17 +24,16 @@ public class IgdbService {
     public String search(String query) {
 
         String body = """
-            search "%s";
-            fields id,name,cover.url,first_release_date,
-                    total_rating,total_rating_count,summary,genres.name;
-            where cover != null;
-            sort total_rating_count desc;
-            limit 10;
-        """.formatted(query);
-
-        return callIgdb(body);
+        search "%s";
+        fields id,name,cover.url,first_release_date,
+                total_rating,total_rating_count,summary,genres.name;
+        where cover != null;
+        limit 10;
+    """.formatted(query);
+        String result = callIgdb(body);
+        System.out.println("IGDB RESULT: " + result);
+        return result;
     }
-
     @Cacheable(value = "topTrendingGames")
     public String getTrendingGames() {
 
@@ -81,9 +81,15 @@ public class IgdbService {
                 .uri("https://api.igdb.com/v4/games")
                 .header("Client-ID", clientId)
                 .header("Authorization", "Bearer " + twitchAuthToken.getToken())
-                .contentType(MediaType.TEXT_PLAIN)
+                .header("Accept", "application/json")
+                .header("Content-Type", "text/plain")
                 .bodyValue(body)
                 .retrieve()
+                .onStatus(
+                        HttpStatusCode::isError,
+                        response -> response.bodyToMono(String.class)
+                                .map(msg -> new RuntimeException("IGDB ERROR: " + msg))
+                )
                 .bodyToMono(String.class)
                 .block();
     }
