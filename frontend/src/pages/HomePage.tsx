@@ -1,12 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import GameSection from "../components/games/GameSection";
+import LoginButton from "../components/Login";
+import LogoutButton from "../components/Logout";
 import Search from "../components/Search";
 import { usePopularGames } from "../hooks/usePopularGames";
 import { useTopRatedGames } from "../hooks/useTopRatedGames";
 import { useTrendingGames } from "../hooks/useTrendingGames";
-import LoginButton from "./Login";
-import LogoutButton from "./Logout";
-import Profile from "./Profile";
 
 export default function HomePage() {
   const trending = useTrendingGames();
@@ -47,22 +46,7 @@ export default function HomePage() {
     <div className="app-container">
       <h1 className="text-2xl font-bold">JING Game Tracker</h1>
       <div className="main-card-wrapper">
-        {isAuthenticated ? (
-          <div className="logged-in-section">
-            <div className="logged-in-message">
-              ✅ Successfully authenticated!
-            </div>
-            <h2 className="profile-section-title">Your Profile</h2>
-            <div className="profile-card">
-              <Profile />
-            </div>
-            <LogoutButton />
-          </div>
-        ) : (
-          <button className="action-card">
-            <LoginButton />
-          </button>
-        )}
+        {isAuthenticated ? <LogoutButton /> : <LoginButton />}
       </div>
 
       <div className="p-5 space-y-6">
