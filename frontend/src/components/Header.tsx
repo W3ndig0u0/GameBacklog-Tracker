@@ -39,11 +39,13 @@ export default function Header() {
           {isAuthenticated ? (
             <div className="flex items-center gap-4">
               {user?.picture && (
-                <img
-                  src={user.picture}
-                  alt={user.name}
-                  className="w-8 h-8 rounded-full border border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]"
-                />
+                <a href="/profile" className="block group">
+                  <img
+                    src={user.picture}
+                    alt={user.name}
+                    className="w-8 h-8 rounded-full border-2 border-accent-border shadow-custom transition-all duration-300 ease-in-out hover:scale-110 hover:border-accent hover:shadow-accent-glow cursor-pointer"
+                  />
+                </a>
               )}
               <LogoutButton />
             </div>
