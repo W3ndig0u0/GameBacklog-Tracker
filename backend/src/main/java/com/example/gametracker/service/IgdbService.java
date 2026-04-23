@@ -84,6 +84,21 @@ public class IgdbService {
         return callIgdb(body);
     }
 
+    public String getGame(long id){
+
+        String body = String.format("""
+        fields id, name, summary, storyline, first_release_date,
+               genres.name, themes.name, platforms.name, game_modes.name,
+               total_rating, total_rating_count,
+               screenshots.image_id, artworks.image_id, videos.video_id,
+               involved_companies.company.name, involved_companies.developer,
+               similar_games.name, similar_games.cover.image_id;
+        where id = %d;
+        """, id);
+
+        return callIgdb(body);
+    }
+
     private String callIgdb(String body) {
         return webClient.post()
                 .uri("/games")

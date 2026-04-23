@@ -43,4 +43,9 @@ public class GameController {
     public ResponseEntity<String> search(@RequestParam String q) {
         return ResponseEntity.ok(igdbService.search(q));
     }
+
+    @GetMapping("/games/{id}")
+    public ResponseEntity<String> getGame(@PathVariable long id) {
+        return ResponseEntity.ok(igdbService.getGame(id));
+    }
 }

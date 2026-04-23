@@ -1,4 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import Logo from "../assets/Logo";
 import LoginButton from "./Login";
 import LogoutButton from "./Logout";
 
@@ -8,7 +9,11 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full transition-all">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2 cursor-pointer">Logo</div>
+        <div className="flex items-center gap-2 cursor-pointer">
+          <a href="/">
+            <Logo />
+          </a>
+        </div>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
           <a
