@@ -14,6 +14,7 @@ const GamePage = () => {
   const handleAdd = () => {
     addGame(gameId);
   };
+  console.log("Game details:", g);
 
   if (isLoading || !g)
     return (
