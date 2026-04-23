@@ -7,7 +7,7 @@ export const useAddToCollection = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (igdbId: number) => {
+    mutationFn: async (igdbId: string) => {
       const token = await getAccessTokenSilently();
       return collectionApi.addToCollection(igdbId, token);
     },

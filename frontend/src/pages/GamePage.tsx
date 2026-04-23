@@ -9,7 +9,7 @@ const GamePage = () => {
   const { mutate: addGame, isPending } = useAddGame();
   const { gameId } = useParams({ from: "/game/$gameId" });
   const { data, isLoading } = useGameById(gameId);
-  const g = data?.[0];
+  const g = data;
 
   const handleAdd = () => {
     addGame(gameId);
