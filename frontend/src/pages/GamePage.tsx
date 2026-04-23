@@ -1,34 +1,20 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useParams } from "@tanstack/react-router";
-import { toast } from "react-toastify";
+import { useAddItem } from "../hooks/useAddItem";
 import { useGameById } from "../hooks/useGameById";
 
 const getImg = (id: string, sz: string) =>
   id ? `https://images.igdb.com/igdb/image/upload/t_${sz}/${id}.jpg` : "";
 
 const GamePage = () => {
+  const { mutate: addItem, isPending } = useAddItem();
   const { gameId } = useParams({ from: "/game/$gameId" });
   const { data, isLoading } = useGameById(gameId);
   const g = data?.[0];
 
-  const { getAccessTokenSilently } = useAuth0();
-  console.log("Game details:", g);
-  const handleAdd = async () => {
-    try {
-      const token = await getAccessTokenSilently();
-      await fetch("http://localhost:8080/api/library/add", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ igdbId: gameId }),
-      });
-      toast.success("Saved!");
-    } catch {
-      toast.error("Error");
-    }
+  const handleAdd = () => {
+    addItem(gameId);
   };
+  console.log("Game details:", g);
 
   if (isLoading || !g)
     return (
@@ -64,7 +50,11 @@ const GamePage = () => {
             <h1 className="text-4xl font-black uppercase tracking-tighter italic">
               {g.name}
             </h1>
-            <button onClick={handleAdd} className="btn-primary mt-4">
+            <button
+              onClick={handleAdd}
+              disabled={isPending}
+              className="btn-primary mt-4"
+            >
               Add to List
             </button>
           </div>

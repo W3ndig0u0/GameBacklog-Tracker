@@ -72,13 +72,9 @@ export default function GameCard({ game }: Props) {
         <p className="text-sm text-white font-bold truncate tracking-tight">
           {game.name}
         </p>
-        <div className="flex justify-between items-center">
-          {releaseYear && (
-            <p className="text-[10px] text-zinc-400 font-medium">
-              {releaseYear}
-            </p>
-          )}
-        </div>
+        {releaseYear && (
+          <p className="text-[10px] text-zinc-400 font-medium">{releaseYear}</p>
+        )}
       </div>
 
       <div
