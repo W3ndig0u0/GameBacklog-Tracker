@@ -20,6 +20,7 @@ createRoot(document.getElementById("root")!).render(
           audience: `https://backlog-api`,
           scope: "openid profile email",
         }}
+        cacheLocation="localstorage"
       >
         <App />
       </Auth0Provider>
