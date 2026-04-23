@@ -1,18 +1,18 @@
 import { useParams } from "@tanstack/react-router";
-import { useAddItem } from "../hooks/useAddItem";
+import { useAddGame } from "../hooks/useAddGame";
 import { useGameById } from "../hooks/useGameById";
 
 const getImg = (id: string, sz: string) =>
   id ? `https://images.igdb.com/igdb/image/upload/t_${sz}/${id}.jpg` : "";
 
 const GamePage = () => {
-  const { mutate: addItem, isPending } = useAddItem();
+  const { mutate: addGame, isPending } = useAddGame();
   const { gameId } = useParams({ from: "/game/$gameId" });
   const { data, isLoading } = useGameById(gameId);
   const g = data?.[0];
 
   const handleAdd = () => {
-    addItem(gameId);
+    addGame(gameId);
   };
   console.log("Game details:", g);
 

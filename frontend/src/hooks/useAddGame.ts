@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { collectionApi } from "../api/collection";
 
-export const useAddItem = () => {
+export const useAddGame = () => {
   const { getAccessTokenSilently } = useAuth0();
   const queryClient = useQueryClient();
 
@@ -17,7 +17,7 @@ export const useAddItem = () => {
       toast.success("Added to collection!");
     },
     onError: () => {
-      toast.error("Failed to add game");
+      toast.error("Failed to add to collection");
     }
   });
 };
