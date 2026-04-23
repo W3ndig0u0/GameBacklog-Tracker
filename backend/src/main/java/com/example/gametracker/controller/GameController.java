@@ -1,18 +1,16 @@
 package com.example.gametracker.controller;
 
 import com.example.gametracker.service.IgdbService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class GameController {
 
     private final IgdbService igdbService;
-
-    public GameController(IgdbService igdbService) {
-        this.igdbService = igdbService;
-    }
 
     @GetMapping("/games")
     public ResponseEntity<String> getGames() {
