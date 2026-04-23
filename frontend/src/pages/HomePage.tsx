@@ -9,7 +9,7 @@ export default function HomePage() {
   const trending = useTrendingGames();
   const popular = usePopularGames();
   const topRated = useTopRatedGames();
-  const { isLoading, error } = useAuth0(); // Vi behåller dessa för felhantering
+  const { isLoading, error } = useAuth0();
 
   const fetchIsLoading =
     trending.isLoading || popular.isLoading || topRated.isLoading;
@@ -56,8 +56,8 @@ export default function HomePage() {
 
       <section className="space-y-8 pl-4">
         <GameSection title="Trending Now" data={trending.data} />
-        <GameSection title="Popular Releases" data={popular.data} />
-        <GameSection title="Top Rated Gems" data={topRated.data} />
+        {/* <GameSection title="Popular Releases" data={popular.data} /> */}
+        {/* <GameSection title="Top Rated Gems" data={topRated.data} /> */}
       </section>
     </div>
   );
