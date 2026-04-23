@@ -1,4 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import GameSection from "../components/games/GameSection";
 import Search from "../components/Search";
 import { usePopularGames } from "../hooks/usePopularGames";
 import { useTopRatedGames } from "../hooks/useTopRatedGames";
@@ -15,21 +16,17 @@ export default function HomePage() {
 
   if (fetchIsLoading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-purple-500">
-        <span className="animate-pulse text-xl font-semibold">
-          Loading games...
-        </span>
-      </div>
+      <span className="animate-pulse text-xl font-semibold">
+        Loading games...
+      </span>
     );
   }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-blue-500">
-        <span className="animate-pulse text-xl font-semibold">
-          Loading User data...
-        </span>
-      </div>
+      <span className="animate-pulse text-xl font-semibold">
+        Loading User data...
+      </span>
     );
   }
 
@@ -52,7 +49,7 @@ export default function HomePage() {
       </section>
 
       <section className="space-y-8 pl-4">
-        {/* <GameSection title="Trending Now" data={trending.data} /> */}
+        <GameSection title="Trending Now" data={trending.data} />
         {/* <GameSection title="Popular Releases" data={popular.data} /> */}
         {/* <GameSection title="Top Rated Gems" data={topRated.data} /> */}
       </section>
