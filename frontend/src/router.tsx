@@ -5,6 +5,7 @@ import {
   Outlet,
 } from "@tanstack/react-router";
 import Header from "./components/Header";
+import { CollectionPage } from "./pages/CollectionPage";
 import GamePage from "./pages/GamePage";
 import HomePage from "./pages/HomePage";
 import Profile from "./pages/Profile";
@@ -32,20 +33,10 @@ const searchRoute = createRoute({
   ),
 });
 
-const libraryRoute = createRoute({
+const collectionRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/library",
-  component: () => (
-    <div className="p-10 text-text-h text-2xl font-bold">My Library</div>
-  ),
-});
-
-const listRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/lists",
-  component: () => (
-    <div className="p-10 text-text-h text-2xl font-bold">List</div>
-  ),
+  path: "/collection",
+  component: () => <CollectionPage />,
 });
 
 const profileRoute = createRoute({
@@ -63,8 +54,7 @@ const gameRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   indexRoute,
   searchRoute,
-  libraryRoute,
-  listRoute,
+  collectionRoute,
   profileRoute,
   gameRoute,
 ]);

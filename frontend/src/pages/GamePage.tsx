@@ -14,8 +14,6 @@ const GamePage = () => {
   const handleAdd = () => {
     addGame(gameId);
   };
-  console.log("Game details:", g);
-
   if (isLoading || !g)
     return (
       <div className="p-20 text-accent bg-bg h-screen uppercase font-bold">

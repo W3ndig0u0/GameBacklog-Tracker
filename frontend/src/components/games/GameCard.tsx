@@ -56,10 +56,6 @@ export default function GameCard({ game }: Props) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
         <div className="absolute top-0 left-0 w-full p-2 flex justify-between items-start z-10">
-          <p className="text-white text-[10px] font-bold truncate max-w-[70%] drop-shadow-md uppercase tracking-tighter">
-            {game.name}
-          </p>
-
           {game.total_rating && (
             <div className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 backdrop-blur border border-yellow-500/30">
               ★ {game.total_rating.toFixed(0)}

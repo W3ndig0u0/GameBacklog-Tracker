@@ -22,19 +22,17 @@ export default function Header() {
           >
             Home
           </a>
+
+          <span className="hover:text-purple-400 transition-colors cursor-pointer">
+            Search
+          </span>
           {isAuthenticated && (
             <>
               <a
-                href="/library"
+                href="/collection"
                 className="hover:text-purple-400 transition-colors"
               >
-                My Library
-              </a>
-              <a
-                href="/lists"
-                className="hover:text-purple-400 transition-colors"
-              >
-                Lists
+                Collection
               </a>
             </>
           )}

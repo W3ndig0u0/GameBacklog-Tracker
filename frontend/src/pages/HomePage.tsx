@@ -50,8 +50,8 @@ export default function HomePage() {
 
       <section className="space-y-8 pl-4">
         <GameSection title="Trending Now" data={trending.data} />
-        {/* <GameSection title="Popular Releases" data={popular.data} /> */}
-        {/* <GameSection title="Top Rated Gems" data={topRated.data} /> */}
+        <GameSection title="Popular Releases" data={popular.data} />
+        <GameSection title="Top Rated Gems" data={topRated.data} />
       </section>
     </div>
   );

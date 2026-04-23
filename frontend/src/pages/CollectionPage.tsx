@@ -1,0 +1,26 @@
+import { GameCardWrapper } from "../components/games/GameCardWrapper";
+import { useCollection } from "../hooks/useCollection";
+
+export const CollectionPage = () => {
+  const { data: collection, isLoading } = useCollection();
+  if (isLoading) {
+    return (
+      <div className="p-8 text-xs uppercase tracking-widest opacity-50 text-white text-center">
+        Loading Library...
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 max-w-[1400px] mx-auto">
+      <h1 className="text-2xl font-black uppercase tracking-tighter mb-8 text-white">
+        My Collection
+      </h1>
+      <div className="flex flex-wrap gap-6 justify-center sm:justify-start">
+        {collection?.map((item) => (
+          <GameCardWrapper key={item.id} igdbId={item.igdb_id} />
+        ))}
+      </div>
+    </div>
+  );
+};
