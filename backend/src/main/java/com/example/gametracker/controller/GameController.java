@@ -4,10 +4,6 @@ import com.example.gametracker.service.IgdbService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {
-        "https://gamebacklog-tracker.pages.dev",
-        "http://localhost:5173"
-})
 @RestController
 @RequestMapping("/api")
 public class GameController {
