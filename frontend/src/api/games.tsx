@@ -23,8 +23,6 @@ export type Game = {
   themes?: GameTag[];
   game_modes?: GameTag[];
   platforms?: GameTag[];
-
-  involved_companies?: InvolvedCompany[];
 };
 
 export type GameTag = {
@@ -37,15 +35,6 @@ export type GameImage = {
   url: string;
 };
 
-export type InvolvedCompany = {
-  id: number;
-  developer: boolean;
-  publisher: boolean;
-  company: {
-    id: number;
-    name: string;
-  };
-};
 export const fetchTrendingGames = async (): Promise<Game[]> => {
   const res = await axios.get(`${BASE_URL}/games/trending`);
   return typeof res.data === "string" ? JSON.parse(res.data) : res.data;

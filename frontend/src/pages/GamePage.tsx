@@ -3,12 +3,16 @@ import { useParams } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import { useGameById } from "../hooks/useGameById";
 
+const getImg = (id: string, sz: string) =>
+  id ? `https://images.igdb.com/igdb/image/upload/t_${sz}/${id}.jpg` : "";
+
 const GamePage = () => {
   const { gameId } = useParams({ from: "/game/$gameId" });
-  const { getAccessTokenSilently } = useAuth0();
-  const { data: games, isLoading } = useGameById(gameId);
-  const game = games?.[0];
+  const { data, isLoading } = useGameById(gameId);
+  const g = data?.[0];
 
+  const { getAccessTokenSilently } = useAuth0();
+  console.log("Game details:", g);
   const handleAdd = async () => {
     try {
       const token = await getAccessTokenSilently();
@@ -20,50 +24,67 @@ const GamePage = () => {
         },
         body: JSON.stringify({ igdbId: gameId }),
       });
-      toast.success("Saved to backlog");
+      toast.success("Saved!");
     } catch {
-      toast.error("Error saving game");
+      toast.error("Error");
     }
   };
 
-  if (isLoading || !game)
-    return <div className="p-20 text-accent bg-bg h-screen">Loading...</div>;
+  if (isLoading || !g)
+    return (
+      <div className="p-20 text-accent bg-bg h-screen uppercase font-bold">
+        Loading...
+      </div>
+    );
+
+  const bId = g.screenshots?.[0]?.image_id || g.artworks?.[1]?.image_id;
+  const cId = g.cover?.image_id || g.artworks?.[0]?.image_id;
 
   return (
-    <div className="min-h-screen bg-bg text-text">
-      {/* Enkel Banner */}
-      <div className="h-64 w-full bg-zinc-800">
-        <img
-          src={`https:${game.screenshots?.[0]?.url.replace("t_thumb", "t_1080p")}`}
-          className="w-full h-full object-cover opacity-40"
-        />
+    <div className="bg-bg text-text min-h-screen">
+      <div className="h-100 bg-zinc-900 relative">
+        {bId && (
+          <img
+            src={getImg(bId, "1080p")}
+            className="w-full h-full object-cover opacity-30"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-bg" />
       </div>
 
       <div className="max-w-4xl mx-auto p-6 -mt-20 relative">
-        <div className="flex gap-8 items-end">
-          <img
-            src={`https:${game.cover?.url.replace("t_thumb", "t_cover_big")}`}
-            className="w-48 rounded-xl shadow-custom border border-border"
-          />
-          <div className="pb-4">
-            <h1 className="text-4xl font-black text-text-h uppercase tracking-tighter">
-              {game.name}
+        <div className="flex gap-6 items-end mb-10">
+          {cId && (
+            <img
+              src={getImg(cId, "1080p")}
+              className="w-82 rounded-xl shadow-2xl border border-white/5"
+            />
+          )}
+          <div>
+            <h1 className="text-4xl font-black uppercase tracking-tighter italic">
+              {g.name}
             </h1>
-            <button
-              onClick={handleAdd}
-              className="mt-4 px-8 py-2 bg-accent text-white font-bold rounded-lg hover:opacity-80 transition-opacity"
-            >
+            <button onClick={handleAdd} className="btn-primary mt-4">
               Add to List
             </button>
           </div>
         </div>
 
-        <div className="mt-10 space-y-4">
-          <p className="text-zinc-400 leading-relaxed">{game.summary}</p>
-          <div className="flex gap-4 text-xs font-bold text-zinc-500 uppercase">
-            <span>Rating: {game.total_rating?.toFixed(0)}%</span>
+        <div className="space-y-6">
+          <p className="text-zinc-300 text-lg leading-relaxed">{g.summary}</p>
+
+          <div className="flex gap-6 text-xs font-bold uppercase text-zinc-500 border-t border-white/5 pt-6">
             <span>
-              Year: {new Date(game.first_release_date * 1000).getFullYear()}
+              Rating:{" "}
+              <b className="text-yellow-500">{g.total_rating?.toFixed(0)}%</b>
+            </span>
+            <span>
+              Year:{" "}
+              <b>
+                {g.first_release_date
+                  ? new Date(g.first_release_date * 1000).getFullYear()
+                  : "N/A"}
+              </b>
             </span>
           </div>
         </div>

@@ -7,7 +7,7 @@ export default function Header() {
   const { isAuthenticated, user } = useAuth0();
 
   return (
-    <header className="sticky top-0 z-50 w-full transition-all">
+    <header className="sticky top-0 z-50 w-full transition-all bg-zinc-900/90 backdrop-blur-md shadow-lg">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2 cursor-pointer">
           <a href="/">
