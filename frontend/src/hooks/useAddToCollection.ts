@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { collectionApi } from "../api/collection";
+import { collectionApi } from "../api/library";
 
 export const useAddToCollection = () => {
   const { getAccessTokenSilently } = useAuth0();

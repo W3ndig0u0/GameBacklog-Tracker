@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { collectionApi } from "../api/collection";
+import { collectionApi } from "../api/library";
 
 export const useAddGame = () => {
   const { getAccessTokenSilently } = useAuth0();

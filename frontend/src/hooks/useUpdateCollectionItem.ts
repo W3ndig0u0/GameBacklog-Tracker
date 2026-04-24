@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CollectionItem } from "../api/collection";
-import { collectionApi } from "../api/collection";
+import type { CollectionItem } from "../api/library";
+import { collectionApi } from "../api/library";
 
 type UpdateFields = Partial<Pick<CollectionItem, "status" | "user_rating" | "review_notes">>;
 

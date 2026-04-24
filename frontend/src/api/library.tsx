@@ -16,7 +16,7 @@ export type CollectionItem = {
 
 export const collectionApi = {
   fetchCollection: async (token: string): Promise<CollectionItem[]> => {
-    const res = await axios.get(`${BASE_URL}/collection`, {
+    const res = await axios.get(`${BASE_URL}/library`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return typeof res.data === "string" ? JSON.parse(res.data) : res.data;
@@ -27,7 +27,7 @@ export const collectionApi = {
     token: string,
   ): Promise<CollectionItem> => {
     const res = await axios.post(
-      `${BASE_URL}/collection/add`,
+      `${BASE_URL}/library/add`,
       { igdbId },
       { headers: { Authorization: `Bearer ${token}` } },
     );
@@ -41,7 +41,7 @@ export const collectionApi = {
     >,
     token: string,
   ): Promise<void> => {
-    await axios.patch(`${BASE_URL}/collection/${igdbId}`, updates, {
+    await axios.patch(`${BASE_URL}/library/${igdbId}`, updates, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
@@ -50,7 +50,7 @@ export const collectionApi = {
     igdbId: string,
     token: string,
   ): Promise<void> => {
-    await axios.delete(`${BASE_URL}/collection/${igdbId}`, {
+    await axios.delete(`${BASE_URL}/library/${igdbId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
