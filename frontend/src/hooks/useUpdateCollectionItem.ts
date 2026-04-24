@@ -6,7 +6,7 @@ import { collectionApi } from "../api/collection";
 type UpdateFields = Partial<Pick<CollectionItem, "status" | "user_rating" | "review_notes">>;
 
 interface UpdateMutationParams {
-  igdbId: number;
+  igdbId: string;
   updates: UpdateFields;
 }
 

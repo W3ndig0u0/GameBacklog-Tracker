@@ -23,6 +23,14 @@ public class CollectionItem {
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
+    private Boolean isFavorite = false;
     private LocalDateTime addedAt = LocalDateTime.now();
+
+    @Column(columnDefinition = "TEXT")
+    private String review;
+    private Integer rating;
+    @ManyToOne
+    @JoinColumn(name = "collection_id")
+    private Collection collection;
 }
 
