@@ -1,4 +1,5 @@
 import { useParams } from "@tanstack/react-router";
+import { GameCardWrapper } from "../components/games/GameCardWrapper";
 import { useAddGame } from "../hooks/useAddGame";
 import { useCollection } from "../hooks/useCollection";
 import { useGameById } from "../hooks/useGameById";
@@ -207,12 +208,13 @@ const GamePage = () => {
           <div>
             <h1 className="text-2xl font-bold text-zinc-300">Videos</h1>
             <p>
-              {g?.videos[0] && (
+              {video && (
                 <iframe
-                  key={g.videos[0].video_id}
+                  className="flex justify-center items-center w-full h-96"
+                  key={video.video_id}
                   width="560"
                   height="315"
-                  src={`https://www.youtube.com/embed/${g.videos[0].video_id}`}
+                  src={`https://www.youtube.com/embed/${video.video_id}`}
                   title="YouTube video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -221,6 +223,15 @@ const GamePage = () => {
               )}
             </p>
           </div>
+        </div>
+      </div>
+
+      <div>
+        <h1 className="text-2xl font-bold text-zinc-300">Similar Games</h1>
+        <div className="flex flex-wrap justify-center gap-4">
+          {g.similar_games?.map((game) => (
+            <GameCardWrapper key={game.id} igdbId={game.id} />
+          ))}
         </div>
       </div>
     </div>
