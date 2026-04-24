@@ -94,35 +94,41 @@ export default function GameCard({ game }: Props) {
           z-20
         "
       >
-        <div className="space-y-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-          <p className="text-white text-base font-black leading-tight tracking-tighter uppercase">
+        <div className="space-y-1 transform text-center translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+          <p className="text-white text-base font-black leading-tight tracking-tighter uppercase truncate px-2">
             {game.name}
           </p>
 
-          {game.total_rating && (
-            <p className="text-yellow-400 text-[11px] font-bold">
-              SCORE: {game.total_rating.toFixed(1)}%
-            </p>
-          )}
-
-          <div className="flex gap-2 text-[10px] text-zinc-400 font-bold uppercase">
-            {game.total_rating_count && (
-              <span>{game.total_rating_count} Votes</span>
+          <div className="flex items-center justify-center gap-3">
+            {game.total_rating && (
+              <p className="text-yellow-400 text-[10px] font-bold tracking-tighter">
+                SCORE: {Math.round(game.total_rating)}%
+              </p>
             )}
-            {releaseYear && <span>• {releaseYear}</span>}
-          </div>
 
+            {game.total_rating_count && (
+              <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-tighter">
+                {game.total_rating_count} VOTES
+              </p>
+            )}
+          </div>
           {tags.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <div className="mt-3 flex flex-wrap gap-1">
               {tags.map((tag) => (
                 <span
                   key={tag.id}
+                  title={tag.name}
                   className="
-                    text-[9px] px-2 py-0.5 rounded-md
-                    bg-purple-600/30 text-purple-100
-                    border border-purple-400/30
-                    font-bold uppercase tracking-widest
-                  "
+                    max-w-[70px] md:max-w-[90px]
+                    truncate whitespace-nowrap
+                    text-[8px] px-1.5 py-0.5 
+                    bg-[#a855f7]/[0.08] 
+                    text-[#a855f7]
+                    border border-[#a855f7]/20
+                    font-black uppercase tracking-tight 
+                    rounded-sm
+                    hover:bg-purple-600/20 transition-colors cursor-default
+                    "
                 >
                   {tag.name}
                 </span>

@@ -51,6 +51,12 @@ const profileRoute = createRoute({
   component: () => <Profile />,
 });
 
+const libraryRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/library",
+  component: () => <>TODO</>,
+});
+
 const gameRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/game/$gameId",
@@ -62,6 +68,7 @@ const routeTree = rootRoute.addChildren([
   searchRoute,
   collectionRoute,
   profileRoute,
+  libraryRoute,
   gameRoute,
 ]);
 
