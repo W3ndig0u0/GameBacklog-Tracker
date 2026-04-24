@@ -23,11 +23,6 @@ public class CollectionItem {
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
-    private Integer userRating;
-
-    @Column(columnDefinition = "TEXT")
-    private String reviewNotes;
-
     private LocalDateTime addedAt = LocalDateTime.now();
 }
 

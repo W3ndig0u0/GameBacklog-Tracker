@@ -3,7 +3,6 @@ import { useCollection } from "../hooks/useCollection";
 
 export const CollectionPage = () => {
   const { data: collection, isLoading } = useCollection();
-  console.log("Collection: ", collection);
   if (isLoading) {
     return (
       <div className="p-8 text-xs uppercase tracking-widest opacity-50 text-white text-center">

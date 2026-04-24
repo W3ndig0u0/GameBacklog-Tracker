@@ -31,8 +31,6 @@ public class CollectionService {
     public void updateItem(String userId, Integer igdbId, CollectionRequest updates) {
         repository.findByUserIdAndIgdbId(userId, igdbId).ifPresent(item -> {
             if (updates.getStatus() != null) item.setStatus(GameStatus.valueOf(updates.getStatus()));
-            if (updates.getUserRating() != null) item.setUserRating(updates.getUserRating());
-            if (updates.getReviewNotes() != null) item.setReviewNotes(updates.getReviewNotes());
             repository.save(item);
         });
     }

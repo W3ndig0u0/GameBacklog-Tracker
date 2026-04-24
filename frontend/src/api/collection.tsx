@@ -35,7 +35,7 @@ export const collectionApi = {
   },
 
   updateCollectionItem: async (
-    igdbId: number,
+    igdbId: string,
     updates: Partial<
       Pick<CollectionItem, "status" | "user_rating" | "review_notes">
     >,
@@ -47,7 +47,7 @@ export const collectionApi = {
   },
 
   removeFromCollection: async (
-    igdbId: number,
+    igdbId: string,
     token: string,
   ): Promise<void> => {
     await axios.delete(`${BASE_URL}/collection/${igdbId}`, {
