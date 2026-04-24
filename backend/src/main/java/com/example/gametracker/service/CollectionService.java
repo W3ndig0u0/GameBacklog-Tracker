@@ -42,10 +42,10 @@ public class CollectionService {
             item.setStatus(GameStatus.valueOf(updates.getStatus().toUpperCase()));
         }
         if (updates.getUserRating() != null) {
-            item.setRating(updates.getUserRating());
+            item.setUserRating(updates.getUserRating());
         }
         if (updates.getReviewNotes() != null) {
-            item.setReview(updates.getReviewNotes());
+            item.setReviewNotes(updates.getReviewNotes());
         }
         if (updates.getIsFavorite() != null) {
             item.setIsFavorite(updates.getIsFavorite());
