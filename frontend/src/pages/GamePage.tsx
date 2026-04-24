@@ -49,11 +49,11 @@ const GamePage = () => {
 
   return (
     <div className="bg-bg text-text min-h-screen pb-20">
-      <div className="h-[40vh] w-full relative overflow-hidden bg-zinc-900">
+      <div className="h-[60vh] w-full relative overflow-hidden bg-zinc-900">
         {bId && (
           <img
             src={getImg(bId, "1080p")}
-            className="w-full h-full object-cover opacity-40 scale-105 blur-sm"
+            className="w-full h-full object-cover opacity-30"
             alt="background"
           />
         )}

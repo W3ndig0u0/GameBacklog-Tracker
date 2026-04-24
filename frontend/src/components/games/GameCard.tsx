@@ -68,7 +68,7 @@ export default function GameCard({ game }: Props) {
         <div className="absolute top-0 left-0 w-full p-2 flex justify-between items-start z-10">
           {game.total_rating && (
             <div className="text-[10px] px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 backdrop-blur border border-yellow-500/30">
-              ★ {game.total_rating.toFixed(0)}
+              {game.total_rating.toFixed(0)}%
             </div>
           )}
         </div>
@@ -101,7 +101,7 @@ export default function GameCard({ game }: Props) {
 
           {game.total_rating && (
             <p className="text-yellow-400 text-[11px] font-bold">
-              SCORE: {game.total_rating.toFixed(1)}
+              SCORE: {game.total_rating.toFixed(1)}%
             </p>
           )}
 
