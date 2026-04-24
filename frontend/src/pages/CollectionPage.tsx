@@ -10,6 +10,7 @@ export const CollectionPage = () => {
       </div>
     );
   }
+  console.log(collection);
 
   return (
     <div className="p-6 max-w-[1400px] mx-auto">
@@ -19,9 +20,12 @@ export const CollectionPage = () => {
       <div className="flex flex-wrap gap-6 justify-center sm:justify-start">
         {collection?.map((item) => (
           <div key={item.id}>
-            <GameCardWrapper igdbId={item.igdbId} />
+            <GameCardWrapper igdbId={item.igdbId.toString()} />
             <p>Status: {item.status}</p>
-            <p>Review: {item.review_notes}</p>
+            <p>Review: {item.review}</p>
+            <p>Rating: {item.rating}</p>
+            <p>Favorite: {item.isFavorite ? "Yes" : "No"}</p>
+            <p>Added: {item.addedAt}</p>
           </div>
         ))}
       </div>

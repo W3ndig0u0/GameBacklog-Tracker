@@ -9,7 +9,7 @@ export const Lightbox = ({ imgId, onClose }: LightboxProps) => {
   if (!imgId) return null;
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm cursor-zoom-out transition-opacity duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm transition-opacity duration-300"
       onClick={onClose}
     >
       <div className="relative max-w-7xl w-full h-full flex items-center justify-center">

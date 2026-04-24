@@ -40,6 +40,7 @@ const GamePage = () => {
   const gameInCollection = !!myGameData;
 
   const handleToggleCollection = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     gameInCollection ? removeGame(gameId) : addGame(gameId);
   };
 
@@ -60,6 +61,8 @@ const GamePage = () => {
           isAdding={isAdding}
           isRemoving={isRemoving}
           onToggle={handleToggleCollection}
+          myGameData={myGameData}
+          updateGame={updateGame}
         />
 
         <div className="max-w-6xl mx-auto px-6">
