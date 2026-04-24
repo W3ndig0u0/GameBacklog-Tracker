@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import Logo from "../assets/Logo";
 import SearchIcon from "../assets/search.svg";
 import LoginButton from "./Login";
@@ -7,6 +8,17 @@ import LogoutButton from "./Logout";
 
 export default function Header() {
   const { isAuthenticated, user } = useAuth0();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 900) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const linkBase =
     "transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1) text-sm font-semibold py-2 px-4 rounded-[10px] border border-transparent";
@@ -80,33 +92,116 @@ export default function Header() {
             />
           </Link>
 
-          <div className="h-4 w-px bg-zinc-800 mx-2" />
+          <div className="hidden md:block h-4 w-px bg-zinc-800 mx-2" />
 
-          {isAuthenticated ? (
-            <div className="flex items-center gap-4">
-              <Link
-                to="/profile"
-                activeProps={{
-                  className:
-                    "ring-2 ring-[#a855f7] ring-offset-2 ring-offset-zinc-900 rounded-full transition-all scale-105",
-                }}
-                inactiveProps={{
-                  className: "p-[2px] hover:scale-105 transition-transform",
-                }}
-              >
-                <img
-                  src={user?.picture}
-                  alt={user?.name}
-                  className="w-8 h-8 rounded-full border border-zinc-700 object-cover"
-                />
-              </Link>
-              <LogoutButton />
-            </div>
-          ) : (
-            <LoginButton />
-          )}
+          <div className="hidden md:flex items-center gap-4">
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/profile"
+                  activeProps={{
+                    className:
+                      "ring-2 ring-[#a855f7] ring-offset-2 ring-offset-zinc-900 rounded-full transition-all scale-105",
+                  }}
+                  inactiveProps={{
+                    className: "p-[2px] hover:scale-105 transition-transform",
+                  }}
+                >
+                  <img
+                    src={user?.picture}
+                    alt={user?.name}
+                    className="w-8 h-8 rounded-full border border-zinc-700 object-cover"
+                  />
+                </Link>
+                <LogoutButton />
+              </>
+            ) : (
+              <LoginButton />
+            )}
+          </div>
+
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden!">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+              />
+            </svg>
+          </button>
         </div>
       </div>
+
+      {isOpen && (
+        <div className="md:hidden px-4 pb-4 border-t border-zinc-800/50 bg-zinc-900/95 backdrop-blur-xl">
+          <nav className="flex flex-col gap-2 pt-4">
+            <Link
+              to="/"
+              activeProps={activeStyles}
+              inactiveProps={inactiveStyles}
+              onClick={() => setIsOpen(false)}
+              className="block"
+            >
+              Home
+            </Link>
+
+            {isAuthenticated && (
+              <>
+                <Link
+                  to="/library"
+                  activeProps={activeStyles}
+                  inactiveProps={inactiveStyles}
+                  onClick={() => setIsOpen(false)}
+                  className="block"
+                >
+                  Library
+                </Link>
+                <Link
+                  to="/collection"
+                  activeProps={activeStyles}
+                  inactiveProps={inactiveStyles}
+                  onClick={() => setIsOpen(false)}
+                  className="block"
+                >
+                  Collections
+                </Link>
+              </>
+            )}
+
+            <div className="h-px bg-zinc-800/50 my-2" />
+
+            {isAuthenticated ? (
+              <div className="flex items-center justify-between px-2">
+                <Link
+                  to="/profile"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-3"
+                >
+                  <img
+                    src={user?.picture}
+                    alt={user?.name}
+                    className="w-8 h-8 rounded-full border border-zinc-700 object-cover"
+                  />
+                  <span className="text-sm font-semibold text-zinc-200">
+                    {user?.name}
+                  </span>
+                </Link>
+                <LogoutButton />
+              </div>
+            ) : (
+              <div className="px-2">
+                <LoginButton />
+              </div>
+            )}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

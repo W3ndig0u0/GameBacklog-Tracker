@@ -38,7 +38,6 @@ export default function Search() {
                 rounded-2xl 
                 bg-[#a855f7]/5 
                 border border-[#a855f7]/20 
-                text-white text-lg
                 outline-none 
                 focus:bg-[#a855f7]/10
                 focus:border-[#a855f7]/60 
