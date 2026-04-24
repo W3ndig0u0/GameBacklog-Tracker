@@ -6,6 +6,7 @@ import { useGameById } from "../../hooks/useGameById";
 import { useRemoveFromCollection } from "../../hooks/useRemoveFromCollection";
 import { useUpdateCollectionItem } from "../../hooks/useUpdateCollectionItem";
 
+import { useAuth0 } from "@auth0/auth0-react";
 import type { CollectionItem } from "../../api/library";
 import { CommunityActivity } from "./CommunityActivity";
 import { GameHero } from "./GameHero";
@@ -19,6 +20,7 @@ import { SimilarGames } from "./SimilarGames";
 
 const GamePage = () => {
   const { gameId } = useParams({ from: "/game/$gameId" });
+  const { isAuthenticated, user } = useAuth0();
 
   const { mutate: addGame, isPending: isAdding } = useAddGame();
   const { mutate: removeGame, isPending: isRemoving } =
@@ -43,6 +45,7 @@ const GamePage = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     gameInCollection ? removeGame(gameId) : addGame(gameId);
   };
+  console.log("User:", user);
 
   if (isLoading || !g) {
     return (
@@ -93,7 +96,7 @@ const GamePage = () => {
             <SimilarGames games={g.similar_games} />
           </div>
 
-          {gameInCollection ? (
+          {isAuthenticated && gameInCollection ? (
             <ReviewEditor
               gameId={gameId}
               myGameData={myGameData}

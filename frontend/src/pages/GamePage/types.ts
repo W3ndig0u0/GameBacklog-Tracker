@@ -22,5 +22,6 @@ export interface GameData {
   genres?: IGDBTag[];
   themes?: IGDBTag[];
   platforms?: IGDBTag[];
+  isAuthenticated?: boolean;
   similar_games?: { id: string | number }[];
 }

@@ -57,7 +57,6 @@ export const GameHero = ({
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent" />
       </div>
 
-      {/* Hero Content */}
       <div className="relative z-10 mx-auto -mt-32 flex max-w-6xl flex-col items-start gap-8 px-6 md:flex-row md:items-end">
         {coverId && (
           <img
