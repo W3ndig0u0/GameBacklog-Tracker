@@ -3,6 +3,7 @@ import { useCollection } from "../hooks/useCollection";
 
 export const CollectionPage = () => {
   const { data: collection, isLoading } = useCollection();
+  console.log("Collection: ", collection);
   if (isLoading) {
     return (
       <div className="p-8 text-xs uppercase tracking-widest opacity-50 text-white text-center">
@@ -18,7 +19,12 @@ export const CollectionPage = () => {
       </h1>
       <div className="flex flex-wrap gap-6 justify-center sm:justify-start">
         {collection?.map((item) => (
-          <GameCardWrapper key={item.id} igdbId={item.igdb_id} />
+          <div>
+            <GameCardWrapper key={item.id} igdbId={item.igdbId} />
+            <p>Id: {item.igdbId}</p>
+            <p>Status: {item.status}</p>
+            <p>Review: {item.review_notes}</p>
+          </div>
         ))}
       </div>
     </div>

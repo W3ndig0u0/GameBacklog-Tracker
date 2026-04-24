@@ -89,7 +89,7 @@ public class IgdbService {
         String body = String.format("""
         fields id, name, summary, storyline, first_release_date,
                genres.name, themes.name, platforms.name, game_modes.name,
-               total_rating, total_rating_count,
+               total_rating, total_rating_count, cover.url,
                screenshots.image_id, artworks.image_id, videos.video_id,
                involved_companies.company.name, involved_companies.developer,
                similar_games.name, similar_games.cover.image_id;

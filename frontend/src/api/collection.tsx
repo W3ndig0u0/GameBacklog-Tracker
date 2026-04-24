@@ -5,7 +5,7 @@ const BASE_URL =
 
 export type CollectionItem = {
   id: string;
-  igdb_id: number;
+  igdbId: number;
   status: "PLAYING" | "BACKLOG" | "COMPLETED" | "DROPPED";
   user_rating?: number;
   review_notes?: string;

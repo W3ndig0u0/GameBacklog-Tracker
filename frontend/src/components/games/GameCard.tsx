@@ -23,6 +23,9 @@ export default function GameCard({ game }: Props) {
     return `https:${url.replace("t_thumb", "t_cover_big")}`;
   };
 
+  const getImg = (id: string, sz: string) =>
+    id ? `https://images.igdb.com/igdb/image/upload/t_${sz}/${id}.jpg` : "";
+
   return (
     <div
       onClick={handleClick}
@@ -48,9 +51,16 @@ export default function GameCard({ game }: Props) {
             loading="lazy"
           />
         ) : (
-          <div className="h-full w-full flex items-center justify-center text-xs text-zinc-500 italic">
-            No image available
-          </div>
+          <img
+            className={`
+              h-full w-full object-cover
+              transition-all duration-500
+              group-hover:scale-110 group-hover:brightness-75
+            `}
+            src={getImg(game.artworks?.[0]?.image_id || "", "cover_big")}
+            alt={game.name}
+            loading="lazy"
+          />
         )}
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
