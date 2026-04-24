@@ -1,6 +1,7 @@
 package com.example.gametracker.repository;
 
 import com.example.gametracker.model.CollectionItem;
+import com.example.gametracker.model.GameStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
@@ -10,4 +11,5 @@ public interface CollectionItemRepository extends JpaRepository<CollectionItem, 
     List<CollectionItem> findByUserId(String userId);
     Optional<CollectionItem> findByUserIdAndIgdbId(String userId, Integer igdbId);
     void deleteByUserIdAndIgdbId(String userId, Integer igdbId);
+    List<CollectionItem> findByUserIdAndStatus(String userId, GameStatus status);
 }

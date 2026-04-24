@@ -2,6 +2,7 @@ package com.example.gametracker.controller;
 
 import com.example.gametracker.dto.CollectionRequest;
 import com.example.gametracker.model.CollectionItem;
+import com.example.gametracker.model.GameStatus;
 import com.example.gametracker.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,16 +23,21 @@ public class CollectionController {
         return collectionService.getCollection(jwt.getSubject());
     }
 
+    @GetMapping("/status/{status}")
+    public List<CollectionItem> getByStatus(@AuthenticationPrincipal Jwt jwt, @PathVariable String status) {
+        return collectionService.getByStatus(jwt.getSubject(), GameStatus.valueOf(status.toUpperCase()));
+    }
+
     @PostMapping("/add")
     public CollectionItem add(@AuthenticationPrincipal Jwt jwt, @RequestBody CollectionRequest request) {
         return collectionService.addToCollection(jwt.getSubject(), request.getIgdbId());
     }
 
     @PatchMapping("/{igdbId}")
-    public void update(@AuthenticationPrincipal Jwt jwt,
-                       @PathVariable Integer igdbId,
-                       @RequestBody CollectionRequest request) {
-        collectionService.updateItem(jwt.getSubject(), igdbId, request);
+    public CollectionItem update(@AuthenticationPrincipal Jwt jwt,
+                                 @PathVariable Integer igdbId,
+                                 @RequestBody CollectionRequest request) {
+        return collectionService.updateItem(jwt.getSubject(), igdbId, request);
     }
 
     @DeleteMapping("/{igdbId}")
