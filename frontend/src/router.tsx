@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import Header from "./components/Header";
 import { CollectionPage } from "./pages/CollectionPage";
-import GamePage from "./pages/GamePage";
+import GamePage from "./pages/GamePage/index";
 import HomePage from "./pages/HomePage";
 import Profile from "./pages/Profile";
 

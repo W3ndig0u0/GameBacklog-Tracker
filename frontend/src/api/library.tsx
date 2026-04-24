@@ -7,9 +7,10 @@ export type CollectionItem = {
   id: string;
   igdbId: number;
   status: "PLAYING" | "BACKLOG" | "COMPLETED" | "DROPPED";
-  user_rating?: number;
-  review_notes?: string;
-  added_at: string;
+  userRating?: number;
+  reviewNotes?: string;
+  addedAt: string;
+  isFavorite?: boolean;
   game_title?: string;
   cover_url?: string;
 };
@@ -20,6 +21,16 @@ export const collectionApi = {
       headers: { Authorization: `Bearer ${token}` },
     });
     return typeof res.data === "string" ? JSON.parse(res.data) : res.data;
+  },
+
+  fetchByStatus: async (
+    status: string,
+    token: string,
+  ): Promise<CollectionItem[]> => {
+    const res = await axios.get(`${BASE_URL}/library/status/${status}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
   },
 
   addToCollection: async (
@@ -37,13 +48,14 @@ export const collectionApi = {
   updateCollectionItem: async (
     igdbId: string,
     updates: Partial<
-      Pick<CollectionItem, "status" | "user_rating" | "review_notes">
+      Pick<CollectionItem, "status" | "userRating" | "reviewNotes">
     >,
     token: string,
-  ): Promise<void> => {
-    await axios.patch(`${BASE_URL}/library/${igdbId}`, updates, {
+  ): Promise<CollectionItem> => {
+    const res = await axios.patch(`${BASE_URL}/library/${igdbId}`, updates, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    return res.data;
   },
 
   removeFromCollection: async (

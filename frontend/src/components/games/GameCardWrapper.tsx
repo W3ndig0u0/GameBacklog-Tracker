@@ -2,7 +2,7 @@ import { useGameById } from "../../hooks/useGameById";
 import GameCard from "./GameCard";
 
 type Props = {
-  igdbId: number;
+  igdbId: string;
 };
 
 export const GameCardWrapper = ({ igdbId }: Props) => {
