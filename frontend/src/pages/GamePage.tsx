@@ -1,4 +1,5 @@
 import { useParams } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { GameCardWrapper } from "../components/games/GameCardWrapper";
 import { useAddGame } from "../hooks/useAddGame";
 import { useCollection } from "../hooks/useCollection";
@@ -8,230 +9,188 @@ import { useRemoveFromCollection } from "../hooks/useRemoveFromCollection";
 const getImg = (id: string, sz: string) =>
   id ? `https://images.igdb.com/igdb/image/upload/t_${sz}/${id}.jpg` : "";
 
+const Badge = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-[12px] px-3 py-1 rounded-full bg-purple-500/10 text-purple-200 border border-purple-500/20 font-semibold uppercase tracking-wider">
+    {children}
+  </span>
+);
+
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  <h2 className="text-2xl font-bold text-zinc-100 mt-10 mb-4">{children}</h2>
+);
+
 const GamePage = () => {
-  const { mutate: addGame, isPending } = useAddGame();
-  const { mutate: removeGame } = useRemoveFromCollection();
-  const { data: collection } = useCollection();
-
   const { gameId } = useParams({ from: "/game/$gameId" });
-  const { data, isLoading } = useGameById(gameId);
-  const g = data;
-  const gameInCollection = collection?.find((item) => item.igdbId === g?.id);
-  const handleAdd = () => {
-    addGame(gameId);
-  };
 
-  const handleRemove = () => {
-    removeGame(gameId);
-  };
+  const { mutate: addGame, isPending: isAdding } = useAddGame();
+  const { mutate: removeGame, isPending: isRemoving } =
+    useRemoveFromCollection();
+  const { data: collection } = useCollection();
+  const { data: g, isLoading } = useGameById(gameId);
 
-  if (isLoading || !g)
+  const gameInCollection = useMemo(
+    () => collection?.some((item) => item.igdbId === g?.id),
+    [collection, g?.id],
+  );
+
+  const bId = g?.screenshots?.[0]?.image_id || g?.artworks?.[1]?.image_id;
+  const cId = g?.cover?.image_id || g?.artworks?.[0]?.image_id;
+  const releaseYear = g?.first_release_date
+    ? new Date(g.first_release_date * 1000).getFullYear()
+    : "N/A";
+
+  if (isLoading || !g) {
     return (
-      <div className="p-20 text-accent bg-bg h-screen uppercase font-bold">
-        Loading...
+      <div className="flex items-center justify-center h-screen bg-bg text-accent uppercase font-black animate-pulse">
+        Loading Game Data...
       </div>
     );
-
-  const bId = g.screenshots?.[0]?.image_id || g.artworks?.[1]?.image_id;
-  const cId = g.cover?.image_id || g.artworks?.[0]?.image_id;
-  const themes = g.themes ?? [];
-  const genres = g.genres ?? [];
-  const game_modes = g.game_modes ?? [];
-  const platforms = g.platforms ?? [];
-  const video = g.videos?.[0];
-  console.log(g);
+  }
 
   return (
-    <div className="bg-bg text-text min-h-screen">
-      <div className="h-100 bg-zinc-900 relative">
+    <div className="bg-bg text-text min-h-screen pb-20">
+      <div className="h-[40vh] w-full relative overflow-hidden bg-zinc-900">
         {bId && (
           <img
             src={getImg(bId, "1080p")}
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-40 scale-105 blur-sm"
+            alt="background"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg" />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent" />
       </div>
 
-      <div className="max-w-4xl mx-auto p-6 -mt-20 relative">
-        <div className="flex gap-6 items-end mb-10">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="flex flex-col md:flex-row gap-8 -mt-32 relative z-10 items-start md:items-end">
           {cId && (
             <img
               src={getImg(cId, "1080p")}
-              className="w-82 rounded-xl shadow-2xl border border-white/5"
+              className="w-64 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10"
+              alt={g.name}
             />
           )}
-          <div>
-            <h1 className="text-4xl font-black uppercase tracking-tighter italic">
+          <div className="flex-1 pb-4">
+            <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter italic leading-none mb-4">
               {g.name}
             </h1>
-            {gameInCollection ? (
-              <button
-                onClick={handleRemove}
-                disabled={isPending}
-                className="btn-primary mt-4"
-              >
-                Remove from List
-              </button>
-            ) : (
-              <button
-                onClick={handleAdd}
-                disabled={isPending}
-                className="btn-primary mt-4"
-              >
-                Add to List
-              </button>
-            )}
+
+            <button
+              onClick={() =>
+                gameInCollection ? removeGame(gameId) : addGame(gameId)
+              }
+              disabled={isAdding || isRemoving}
+              className={`px-8 py-3 rounded-lg font-bold uppercase transition-all active:scale-95 ${
+                gameInCollection
+                  ? "bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30"
+                  : "bg-purple-600 text-white hover:bg-purple-500 shadow-lg shadow-purple-500/20"
+              }`}
+            >
+              {gameInCollection
+                ? "Remove from Collection"
+                : "Add to Collection"}
+            </button>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="flex gap-6 text-xs font-bold uppercase text-zinc-500 border-t border-white/5 pt-6">
-            <span>
-              Rating:{" "}
-              <b className="text-yellow-500">{g.total_rating?.toFixed(0)}%</b>
-            </span>
-            <span>
-              Year:{" "}
-              <b className="text-yellow-500">
-                {g.first_release_date
-                  ? new Date(g.first_release_date * 1000).getFullYear()
-                  : "N/A"}
-              </b>
-            </span>
-            <span>
-              Reviewed by:{" "}
-              <b className="text-yellow-500">{g.total_rating_count} </b> people
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {themes.length > 0 ? (
-              themes.map((theme, index) => (
-                <span
-                  key={index}
-                  className="text-[12px] px-3 py-1 rounded-full
-        bg-purple-500/10 text-purple-200
-        border border-purple-500/20
-        font-semibold uppercase tracking-wider"
-                >
-                  {theme.name}
-                </span>
-              ))
-            ) : (
-              <span className="text-[12px] text-gray-400">N/A</span>
-            )}
-            {genres.length > 0 ? (
-              genres.map((genre, index) => (
-                <span
-                  key={index}
-                  className="text-[12px] px-3 py-1 rounded-full
-        bg-purple-500/10 text-purple-200
-        border border-purple-500/20 
-        font-semibold uppercase tracking-wider"
-                >
-                  {genre.name}
-                </span>
-              ))
-            ) : (
-              <span className="text-[12px] text-gray-400">N/A</span>
-            )}
-          </div>
-          <div>
-            {game_modes.length > 0 ? (
-              game_modes.map((genre, index) => (
-                <span
-                  key={index}
-                  className="text-[12px] px-3 py-1 rounded-full
-        bg-purple-500/10 text-purple-200
-        border border-purple-500/20
-        font-semibold uppercase tracking-wider"
-                >
-                  {genre.name}
-                </span>
-              ))
-            ) : (
-              <span className="text-[12px] text-gray-400">N/A</span>
-            )}
-          </div>
-          <div className="">
-            <h2>Platforms:</h2>
-            {platforms.length > 0 ? (
-              platforms.map((platform, index) => (
-                <span
-                  key={index}
-                  className="text-[12px] px-3 py-1 rounded-full
-        bg-purple-500/10 text-purple-200
-        border border-purple-500/20
-        font-semibold uppercase tracking-wider"
-                >
-                  {platform.name}
-                </span>
-              ))
-            ) : (
-              <span className="text-[12px] text-gray-400">N/A</span>
-            )}
-          </div>
-          <h1 className="text-2xl font-bold text-zinc-300">Summary</h1>
-          <p className="text-zinc-300 text-lg leading-relaxed">
-            Summary: {g.summary}
-          </p>
-          <h1 className="text-2xl font-bold text-zinc-300">Story</h1>
-          <p className="text-zinc-300 text-lg leading-relaxed">
-            Story: {g.storyline}
-          </p>
-
-          <div className="artworks">
-            <h1 className="text-2xl font-bold text-zinc-300">Artworks</h1>
-            <p>
-              {g.artworks?.map((s) => (
-                <img
-                  key={s.image_id}
-                  src={getImg(s.image_id, "1080p")}
-                  className="w-full h-full object-cover"
-                />
-              ))}
-            </p>
-          </div>
-
-          <div className="screenshots">
-            <h1 className="text-2xl font-bold text-zinc-300">Screenshots</h1>
-            <p>
-              {g.screenshots?.map((s) => (
-                <img
-                  key={s.image_id}
-                  src={getImg(s.image_id, "1080p")}
-                  className="w-full h-full object-cover"
-                />
-              ))}
-            </p>
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-zinc-300">Videos</h1>
-            <p>
-              {video && (
-                <iframe
-                  className="flex justify-center items-center w-full h-96"
-                  key={video.video_id}
-                  width="560"
-                  height="315"
-                  src={`https://www.youtube.com/embed/${video.video_id}`}
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              )}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-300">Similar Games</h1>
-        <div className="flex flex-wrap justify-center gap-4">
-          {g.similar_games?.map((game) => (
-            <GameCardWrapper key={game.id} igdbId={game.id} />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 py-6 border-y border-white/5">
+          {[
+            {
+              label: "Rating",
+              val: `${g.total_rating?.toFixed(0) || 0}%`,
+              color: "text-yellow-500",
+            },
+            { label: "Release", val: releaseYear, color: "text-blue-400" },
+            {
+              label: "Reviews",
+              val: g.total_rating_count || 0,
+              color: "text-emerald-400",
+            },
+            {
+              label: "Platforms",
+              val: g.platforms?.length || 0,
+              color: "text-purple-400",
+            },
+          ].map((stat) => (
+            <div key={stat.label} className="flex flex-col">
+              <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
+                {stat.label}
+              </span>
+              <span className={`text-xl font-black ${stat.color}`}>
+                {stat.val}
+              </span>
+            </div>
           ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2 mt-8 cursor-default">
+          {[
+            ...(g.themes || []),
+            ...(g.genres || []),
+            ...(g.platforms || []),
+          ].map((item) => (
+            <Badge key={item.id}>{item.name}</Badge>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-12">
+          <div className="lg:col-span-2 space-y-10">
+            <section>
+              <SectionTitle>Summary</SectionTitle>
+              <p className="text-zinc-400 text-lg leading-relaxed">
+                {g.summary}
+              </p>
+            </section>
+
+            {g.storyline && (
+              <section>
+                <SectionTitle>Storyline</SectionTitle>
+                <p className="text-zinc-400 text-lg leading-relaxed">
+                  {g.storyline}
+                </p>
+              </section>
+            )}
+
+            <section>
+              <SectionTitle>Media</SectionTitle>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {g.screenshots?.slice(0, 8).map((s) => (
+                  <img
+                    key={s.image_id}
+                    src={getImg(s.image_id, "720p")}
+                    className="rounded-xl border border-white/5 hover:border-purple-500/50 transition-colors cursor-zoom-in"
+                    alt="screenshot"
+                  />
+                ))}
+              </div>
+              {g.videos?.[0] && (
+                <div className="mt-6 aspect-video rounded-2xl overflow-hidden border border-white/5">
+                  <iframe
+                    className="w-full h-full"
+                    src={`https://www.youtube.com/embed/${g.videos[0].video_id}`}
+                    title="Trailer"
+                    allowFullScreen
+                  />
+                </div>
+              )}
+            </section>
+          </div>
+
+          <aside className="lg:col-span-1">
+            <div className="text-center lg:text-left">
+              <SectionTitle>Similar Games</SectionTitle>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 justify-items-center">
+              {" "}
+              {g.similar_games?.slice(0, 10).map((game) => (
+                <div
+                  key={game.id}
+                  className="w-full flex justify-center direction-col"
+                >
+                  <GameCardWrapper igdbId={game.id} />
+                </div>
+              ))}
+            </div>
+          </aside>
         </div>
       </div>
     </div>
