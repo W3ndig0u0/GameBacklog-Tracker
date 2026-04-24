@@ -33,7 +33,7 @@ public class IgdbService {
                    genres.name,themes.name,platforms.name,
                    total_rating,total_rating_count;
             where cover != null;
-            limit 10;
+            limit 20;
         """.formatted(query);
 
         return callIgdb(body);
@@ -48,7 +48,7 @@ public class IgdbService {
                    total_rating,total_rating_count,hypes;
             where cover != null & hypes != null;
             sort hypes desc;
-            limit 10;
+            limit 14;
         """;
 
         return callIgdb(body);
@@ -63,7 +63,7 @@ public class IgdbService {
                    total_rating,total_rating_count;
             where cover != null & total_rating_count != null;
             sort total_rating_count desc;
-            limit 10;
+            limit 14;
         """;
 
         return callIgdb(body);
@@ -78,7 +78,7 @@ public class IgdbService {
                    total_rating,total_rating_count;
             where cover != null & total_rating != null;
             sort total_rating desc;
-            limit 10;
+            limit 14;
         """;
 
         return callIgdb(body);
