@@ -22,8 +22,8 @@ export const CollectionPage = () => {
           <div key={item.id}>
             <GameCardWrapper igdbId={item.igdbId.toString()} />
             <p>Status: {item.status}</p>
-            <p>Review: {item.review}</p>
-            <p>Rating: {item.rating}</p>
+            <p>Review: {item.reviewNotes}</p>
+            <p>Rating: {item.userRating}</p>
             <p>Favorite: {item.isFavorite ? "Yes" : "No"}</p>
             <p>Added: {item.addedAt}</p>
           </div>

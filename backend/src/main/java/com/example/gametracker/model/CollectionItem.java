@@ -2,6 +2,8 @@ package com.example.gametracker.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,11 +28,13 @@ public class CollectionItem {
     private GameStatus status;
 
     private Boolean isFavorite = false;
-    private LocalDateTime addedAt = LocalDateTime.now();
+
+    @CreationTimestamp
+    private LocalDateTime addedAt;
 
     @Column(columnDefinition = "TEXT")
-    private String review;
-    private Integer rating;
+    private String reviewNotes;
+    private Integer userRating;
 
     @ManyToMany(mappedBy = "items")
     private Set<Collection> collections = new HashSet<>();}
