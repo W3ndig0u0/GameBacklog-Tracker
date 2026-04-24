@@ -3,6 +3,8 @@ package com.example.gametracker.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -29,8 +31,7 @@ public class CollectionItem {
     @Column(columnDefinition = "TEXT")
     private String review;
     private Integer rating;
-    @ManyToOne
-    @JoinColumn(name = "collection_id")
-    private Collection collection;
-}
+
+    @ManyToMany(mappedBy = "items")
+    private Set<Collection> collections = new HashSet<>();}
 

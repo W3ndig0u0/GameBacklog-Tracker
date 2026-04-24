@@ -8,4 +8,5 @@ public class CollectionRequest {
     private String status;
     private Integer userRating;
     private String reviewNotes;
+    private Boolean isFavorite;
 }

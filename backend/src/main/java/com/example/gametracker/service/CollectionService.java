@@ -2,7 +2,7 @@ package com.example.gametracker.service;
 import com.example.gametracker.dto.CollectionRequest;
 import com.example.gametracker.model.CollectionItem;
 import com.example.gametracker.model.GameStatus;
-import com.example.gametracker.repository.CollectionRepository;
+import com.example.gametracker.repository.CollectionItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CollectionService {
 
-    private final CollectionRepository repository;
+    private final CollectionItemRepository repository;
 
     public List<CollectionItem> getCollection(String userId) {
         return repository.findByUserId(userId);
