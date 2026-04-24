@@ -5,6 +5,7 @@ import {
   Outlet,
 } from "@tanstack/react-router";
 import Header from "./components/Header";
+import Search from "./components/Search";
 import { CollectionPage } from "./pages/CollectionPage";
 import GamePage from "./pages/GamePage/index";
 import HomePage from "./pages/HomePage";
@@ -15,6 +16,13 @@ const rootRoute = createRootRoute({
     <div className="min-h-screen bg-bg text-text font-sans">
       <Header />
       <Outlet />
+    </div>
+  ),
+  notFoundComponent: () => (
+    <div className="min-h-screen flex items-center justify-center text-[#a855f7]">
+      <span className="animate-pulse text-xl font-semibold">
+        404 - Page Not Found
+      </span>
     </div>
   ),
 });
@@ -28,9 +36,7 @@ const indexRoute = createRoute({
 const searchRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/search",
-  component: () => (
-    <div className="p-10 text-text-h text-2xl font-bold">Search Page</div>
-  ),
+  component: () => <Search />,
 });
 
 const collectionRoute = createRoute({

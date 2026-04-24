@@ -1,6 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import GameSection from "../components/games/GameSection";
-import Search from "../components/Search";
 import { usePopularGames } from "../hooks/usePopularGames";
 import { useTopRatedGames } from "../hooks/useTopRatedGames";
 import { useTrendingGames } from "../hooks/useTrendingGames";
@@ -44,10 +43,6 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="px-4">
-        <Search />
-      </section>
-
       <section className="space-y-8 pl-4">
         <GameSection title="Trending Now" data={trending.data} />
         <GameSection title="Popular Releases" data={popular.data} />

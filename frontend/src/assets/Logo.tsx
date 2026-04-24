@@ -20,7 +20,7 @@ export default function Logo() {
         <span className="text-2xl font-extrabold text-text-h tracking-tighter leading-none group-hover:text-accent transition-colors duration-300">
           Game
         </span>
-        <span className="text-[10px] font-semibold text-text tracking-widest leading-none uppercase">
+        <span className="text-[10px] font-semibold text-[#a855f7] text-text tracking-widest leading-none uppercase">
           Tracker
         </span>
       </div>

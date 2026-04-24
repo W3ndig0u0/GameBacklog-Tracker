@@ -1,56 +1,113 @@
-import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { AlertCircle, Loader2, Search as SearchIcon } from "lucide-react";
+import { useDeferredValue, useEffect, useRef, useState } from "react";
 import GameSection from "../components/games/GameSection";
 import { useSearchGames } from "../hooks/useSearchGames";
 
 export default function Search() {
   const [query, setQuery] = useState("");
-  const { data, isLoading, isError } = useSearchGames(query);
+  const deferredQuery = useDeferredValue(query);
+  const { user } = useAuth0();
+  const { data, isLoading, isError } = useSearchGames(deferredQuery);
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
-    <div className="p-4 md:p-10 max-w-7xl mx-auto">
-      <h3 className="text-white text-2xl md:text-4xl font-black uppercase italic tracking-tighter mb-6 md:mb-10">
-        Search Games
-      </h3>
+    <div className="min-h-screen bg-transparent px-4 py-8 md:px-10 lg:py-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
+          <div className="space-y-1">
+            <h3 className="text-white md:text-4xl font-black uppercase italic">
+              {user?.given_name || user?.name || "Player"} Search
+            </h3>
+            <p className="text-zinc-500 text-sm font-medium uppercase tracking-[0.2em]">
+              Discover your next adventure
+            </p>
+          </div>
 
-      <div className="relative mb-10">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search for a game..."
-          className="
-            w-full md:w-96 
-            p-4 
-            rounded-xl 
-            bg-zinc-900/50 
-            border border-white/5 
-            text-white 
-            outline-none 
-            focus:border-accent/50 
-            transition-all 
-            backdrop-blur-md
-            placeholder:text-zinc-600
-          "
-        />
-      </div>
+          <div className="relative group w-full md:w-auto">
+            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+              <SearchIcon className="w-5 h-5 text-zinc-500 group-focus-within:text-[#a855f7] transition-colors" />
+            </div>
 
-      <div className="min-h-[2rem]">
-        {isLoading && query && (
-          <p className="text-accent animate-pulse font-bold uppercase text-xs tracking-widest">
-            Searching...
-          </p>
-        )}
-        {isError && (
-          <p className="text-red-500 font-bold uppercase text-xs">
-            Error loading games
-          </p>
-        )}
-      </div>
-
-      {data && (
-        <div className="mt-4">
-          <GameSection title="Results" data={data} />
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search for a title..."
+              className="
+                w-full md:w-[400px] lg:w-[500px]
+                py-4 pl-4 pr-16
+                rounded-2xl 
+                bg-[#a855f7]/[0.05] 
+                border border-[#a855f7]/20 
+                text-white text-lg
+                outline-none 
+                focus:bg-[#a855f7]/[0.1]
+                focus:border-[#a855f7]/60 
+                focus:shadow-[0_0_30px_rgba(168,85,247,0.15)]
+                transition-all duration-300
+                backdrop-blur-xl
+                placeholder:text-zinc-600
+              "
+            />
+          </div>
         </div>
-      )}
+
+        <div className="mb-8 flex items-center gap-4 min-h-[32px]">
+          {isLoading && query && (
+            <div className="flex items-center gap-2 text-[#a855f7] font-medium text-sm animate-pulse">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Searching database...
+            </div>
+          )}
+
+          {isError && (
+            <div className="flex items-center gap-2 text-red-400 bg-red-400/10 px-4 py-2 rounded-xl border border-red-400/20 text-xs font-bold uppercase tracking-wider">
+              <AlertCircle className="w-4 h-4" />
+              API connection failed
+            </div>
+          )}
+        </div>
+
+        <div className="relative">
+          {data && data.length > 0 ? (
+            <div className="animate-in fade-in slide-in-from-bottom-8 duration-500 ease-out">
+              <GameSection
+                title={query ? `Results for "${query}"` : "Trending"}
+                data={data}
+              />
+            </div>
+          ) : query && !isLoading ? (
+            <div className="flex flex-col items-center justify-center py-32 text-center animate-in fade-in zoom-in-95 duration-500">
+              <div className="w-20 h-20 bg-[#a855f7]/10 rounded-full flex items-center justify-center mb-6 border border-[#a855f7]/20">
+                <SearchIcon className="w-10 h-10 text-zinc-700" />
+              </div>
+              <h4 className="text-white text-xl font-bold mb-2">
+                No matches found
+              </h4>
+              <p className="text-zinc-500 max-w-xs mx-auto">
+                We couldn't find any games matching "{query}".
+              </p>
+            </div>
+          ) : (
+            <div className="border-2 border-dashed border-zinc-800 rounded-3xl py-50 flex flex-col items-center justify-center">
+              <p className="text-zinc-600 font-medium tracking-widest uppercase text-sm">
+                Start typing to explore
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
