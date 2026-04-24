@@ -19,9 +19,8 @@ export const CollectionPage = () => {
       </h1>
       <div className="flex flex-wrap gap-6 justify-center sm:justify-start">
         {collection?.map((item) => (
-          <div>
-            <GameCardWrapper key={item.id} igdbId={item.igdbId} />
-            <p>Id: {item.igdbId}</p>
+          <div key={item.id}>
+            <GameCardWrapper igdbId={item.igdbId} />
             <p>Status: {item.status}</p>
             <p>Review: {item.review_notes}</p>
           </div>
