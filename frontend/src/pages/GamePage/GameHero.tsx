@@ -54,7 +54,7 @@ export const GameHero = ({
             alt=""
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-bg via-bg/20 to-transparent" />
       </div>
 
       <div className="relative z-10 mx-auto -mt-32 flex max-w-6xl flex-col items-start gap-8 px-6 md:flex-row md:items-end">
@@ -75,11 +75,7 @@ export const GameHero = ({
             <button
               onClick={onToggle}
               disabled={isAdding || isRemoving}
-              className={`flex min-w-[240px] items-center justify-center rounded-xl px-8 py-3.5 font-bold uppercase transition active:scale-95 ${
-                gameInCollection
-                  ? "border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
-                  : "bg-purple-600 text-white shadow-lg shadow-purple-500/20 hover:bg-purple-500"
-              }`}
+              className={`flex min-w-60 items-center justify-center rounded-xl px-8 py-3.5 font-bold uppercase transition active:scale-95}`}
             >
               {gameInCollection
                 ? "Remove from Collection"
@@ -118,7 +114,7 @@ export const GameHero = ({
                 <div className="relative">
                   <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="group flex min-w-[160px] items-center justify-between gap-3 transition hover:bg-white/10 active:scale-95"
+                    className="group flex min-w-40 items-center justify-between gap-3 transition hover:bg-white/10 active:scale-95"
                   >
                     <span className="flex items-center gap-2">
                       <span

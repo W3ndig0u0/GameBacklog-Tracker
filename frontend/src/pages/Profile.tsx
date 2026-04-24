@@ -31,7 +31,7 @@ export default function Profile() {
           alt="Profile Banner"
           className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#09090b]/40 to-[#09090b]" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#09090b]/40 to-[#09090b]" />
       </div>
 
       <div className="max-w-4xl mx-auto px-6 -mt-16 relative z-10">

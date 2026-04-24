@@ -80,7 +80,7 @@ export default function Header() {
             />
           </Link>
 
-          <div className="h-4 w-[1px] bg-zinc-800 mx-2" />
+          <div className="h-4 w-px bg-zinc-800 mx-2" />
 
           {isAuthenticated ? (
             <div className="flex items-center gap-4">

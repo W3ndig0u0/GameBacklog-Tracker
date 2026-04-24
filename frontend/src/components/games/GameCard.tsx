@@ -91,7 +91,7 @@ export default function GameCard({ game }: Props) {
           bg-gradient-to-t from-black via-black/95 to-purple-900/40
           backdrop-blur-sm
           flex flex-col justify-end p-4
-          z-20
+          z-1
         "
       >
         <div className="space-y-1 transform text-center translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -127,7 +127,7 @@ export default function GameCard({ game }: Props) {
                     border border-[#a855f7]/20
                     font-black uppercase tracking-tight 
                     rounded-sm
-                    hover:bg-purple-600/20 transition-colors cursor-default
+                    cursor-default
                     "
                 >
                   {tag.name}

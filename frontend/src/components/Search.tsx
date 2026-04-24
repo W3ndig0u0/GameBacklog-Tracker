@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { AlertCircle, Loader2, Search as SearchIcon } from "lucide-react";
-import { useDeferredValue, useEffect, useRef, useState } from "react";
+import { useDeferredValue, useState } from "react";
 import GameSection from "../components/games/GameSection";
 import { useSearchGames } from "../hooks/useSearchGames";
 
@@ -9,17 +9,6 @@ export default function Search() {
   const deferredQuery = useDeferredValue(query);
   const { user } = useAuth0();
   const { data, isLoading, isError } = useSearchGames(deferredQuery);
-  const inputRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   return (
     <div className="min-h-screen bg-transparent px-4 py-8 md:px-10 lg:py-12">
@@ -40,19 +29,18 @@ export default function Search() {
             </div>
 
             <input
-              ref={inputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search for a title..."
               className="
-                w-full md:w-[400px] lg:w-[500px]
+                w-full md:w-100 lg:w-125
                 py-4 pl-4 pr-16
                 rounded-2xl 
-                bg-[#a855f7]/[0.05] 
+                bg-[#a855f7]/5 
                 border border-[#a855f7]/20 
                 text-white text-lg
                 outline-none 
-                focus:bg-[#a855f7]/[0.1]
+                focus:bg-[#a855f7]/10
                 focus:border-[#a855f7]/60 
                 focus:shadow-[0_0_30px_rgba(168,85,247,0.15)]
                 transition-all duration-300
@@ -63,7 +51,7 @@ export default function Search() {
           </div>
         </div>
 
-        <div className="mb-8 flex items-center gap-4 min-h-[32px]">
+        <div className="mb-8 flex items-center gap-4 min-h-8">
           {isLoading && query && (
             <div className="flex items-center gap-2 text-[#a855f7] font-medium text-sm animate-pulse">
               <Loader2 className="w-4 h-4 animate-spin" />

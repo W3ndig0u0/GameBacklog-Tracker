@@ -15,7 +15,7 @@ export const CollectionPage = () => {
   console.log(collection);
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto">
+    <div className="p-6 max-w-350 mx-auto">
       <h3 className="text-white text-2xl md:text-4xl font-black uppercase italic tracking-tighter mb-6 md:mb-10">
         {user?.name || "My"} Collection
       </h3>
@@ -27,7 +27,7 @@ export const CollectionPage = () => {
             <p>Review: {item.reviewNotes}</p>
             <p>Status: {item.status}</p>
             <p>Favorite: {item.isFavorite ? "Yes" : "No"}</p>
-            <p>Added: {item.addedAt.slice(0, 10)}</p>
+            <p>Added: {item?.addedAt ? item.addedAt.slice(0, 10) : "N/A"}</p>
           </div>
         ))}
       </div>
