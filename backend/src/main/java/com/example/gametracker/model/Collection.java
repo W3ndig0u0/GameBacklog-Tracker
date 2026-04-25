@@ -1,36 +1,31 @@
 package com.example.gametracker.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "collections")
-@Getter
-@Setter
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Collection {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String name;
-    private String description;
+    @Column(nullable = false)
     private String userId;
 
-    @ManyToMany
-    @JoinTable(
-            name = "collection_game_mapping",
-            joinColumns = @JoinColumn(name = "collection_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_game_id")
-    )
-    private Set<CollectionItem> items;
+    @Column(nullable = false)
+    private String name;
 
-    @Enumerated(EnumType.STRING)
-    private CollectionType type = CollectionType.CUSTOM;
-    private Boolean isLocked = false;
+    private String description;
+
+    private boolean isLocked = false;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

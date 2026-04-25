@@ -10,6 +10,7 @@ interface GameHeroProps {
   isRemoving: boolean;
   onToggle: () => void;
   myGameData?: CollectionItem;
+  isLoggedIn: boolean;
   updateGame: (data: {
     igdbId: string;
     updates: Partial<CollectionItem>;
@@ -33,6 +34,7 @@ export const GameHero = ({
   onToggle,
   myGameData,
   updateGame,
+  isLoggedIn,
 }: GameHeroProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -45,7 +47,6 @@ export const GameHero = ({
 
   return (
     <>
-      {/* Background Section */}
       <div className="relative h-[60vh] w-full overflow-hidden bg-zinc-900">
         {bgId && (
           <img
@@ -82,7 +83,7 @@ export const GameHero = ({
                 : "Add to Collection"}
             </button>
 
-            {gameInCollection && (
+            {isLoggedIn && (
               <>
                 <button
                   onClick={() =>

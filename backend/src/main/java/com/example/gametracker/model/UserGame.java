@@ -10,9 +10,11 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user_games")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class CollectionItem {
+@Table(
+        name = "user_games",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "igdb_id"})
+)@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class UserGame {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

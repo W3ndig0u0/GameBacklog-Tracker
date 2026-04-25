@@ -45,7 +45,6 @@ const GamePage = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     gameInCollection ? removeGame(gameId) : addGame(gameId);
   };
-  console.log("User:", user);
 
   if (isLoading || !g) {
     return (
@@ -54,6 +53,7 @@ const GamePage = () => {
       </div>
     );
   }
+  console.log("User:", !!user);
 
   return (
     <>
@@ -65,6 +65,7 @@ const GamePage = () => {
           isRemoving={isRemoving}
           onToggle={handleToggleCollection}
           myGameData={myGameData}
+          isLoggedIn={!!user}
           updateGame={updateGame}
         />
 
