@@ -25,10 +25,13 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/").permitAll()
-                        .requestMatchers("/api/collection/**").permitAll()
-                        .requestMatchers("/api/private").authenticated()
-                        .anyRequest().permitAll())
+                        .requestMatchers("/api/games/**").permitAll()
+
+                        .requestMatchers("/api/library/**").authenticated()
+                        .requestMatchers("/api/collections/**").authenticated()
+                        .requestMatchers("/api/profile/**").authenticated()
+                        .anyRequest().authenticated()
+                )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
     }
@@ -38,11 +41,12 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
                 "https://gamebacklog-tracker.pages.dev",
-                "http://localhost:5173",
-                "https://game-tracker-backend-876198057788.europe-north2.run.app"
+                "http://localhost:5173"
         ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "Origin"));
+        configuration.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+        ));
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
