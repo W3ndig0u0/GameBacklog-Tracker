@@ -38,6 +38,6 @@ public class UserGame {
     private String reviewNotes;
     private Integer userRating;
 
-    @ManyToMany(mappedBy = "items")
+    @ManyToMany(mappedBy = "collections")
     private Set<Collection> collections = new HashSet<>();}
 
