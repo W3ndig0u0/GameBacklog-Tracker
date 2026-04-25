@@ -39,17 +39,27 @@ public class UserGameService {
     @Transactional
     public UserGame update(String userId, Integer igdbId, UserGameRequest updates) {
         UserGame item = repository.findByUserIdAndIgdbId(userId, igdbId)
-                .orElseThrow();
+                .orElseGet(() -> repository.save(
+                        UserGame.builder()
+                                .userId(userId)
+                                .igdbId(igdbId)
+                                .status(GameStatus.BACKLOG)
+                                .isFavorite(false)
+                                .build()
+                ));
 
         if (updates.getStatus() != null) {
             item.setStatus(GameStatus.valueOf(updates.getStatus().toUpperCase()));
         }
+
         if (updates.getUserRating() != null) {
             item.setUserRating(updates.getUserRating());
         }
+
         if (updates.getReviewNotes() != null) {
             item.setReviewNotes(updates.getReviewNotes());
         }
+
         if (updates.getIsFavorite() != null) {
             item.setIsFavorite(updates.getIsFavorite());
         }
