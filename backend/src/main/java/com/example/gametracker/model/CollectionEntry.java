@@ -10,9 +10,11 @@ import java.util.UUID;
 @Entity
 @Table(
         name = "collection_entries",
-        uniqueConstraints = @UniqueConstraint(
-                columnNames = {"collection_id", "user_game_id"}
-        )
+        uniqueConstraints = @UniqueConstraint(columnNames = {"collection_id", "user_game_id"}),
+        indexes = {
+                @Index(columnList = "collection_id"),
+                @Index(columnList = "user_game_id")
+        }
 )
 @Getter
 @Setter

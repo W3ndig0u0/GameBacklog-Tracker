@@ -37,7 +37,5 @@ public class UserGame {
     @Column(columnDefinition = "TEXT")
     private String reviewNotes;
     private Integer userRating;
-
-    @ManyToMany(mappedBy = "collections")
-    private Set<Collection> collections = new HashSet<>();}
+}
 
