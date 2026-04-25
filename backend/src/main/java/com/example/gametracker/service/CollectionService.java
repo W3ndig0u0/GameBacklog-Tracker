@@ -1,7 +1,9 @@
 package com.example.gametracker.service;
 
+import com.example.gametracker.dto.CollectionRequest;
 import com.example.gametracker.model.Collection;
 import com.example.gametracker.repository.CollectionRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +31,31 @@ public class CollectionService {
 
     public Collection get(UUID id) {
         return repository.findById(id).orElseThrow();
+    }
+
+    @Transactional
+    public void delete(String userId, UUID id) {
+        Collection col = repository.findByIdAndUserId(id, userId)
+                .orElseThrow();
+
+        repository.delete(col);
+    }
+
+    @Transactional
+    public Collection update(String userId, UUID id, CollectionRequest req) {
+        Collection col = repository.findByIdAndUserId(id, userId)
+                .orElseThrow();
+
+        if (req.getName() != null) {
+            col.setName(req.getName());
+        }
+        if (req.getDescription() != null) {
+            col.setDescription(req.getDescription());
+        }
+        if (req.getIsLocked() != null) {
+            col.setLocked(req.getIsLocked());
+        }
+
+        return repository.save(col);
     }
 }

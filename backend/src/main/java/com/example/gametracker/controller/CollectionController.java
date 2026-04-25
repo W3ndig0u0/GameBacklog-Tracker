@@ -1,5 +1,6 @@
 package com.example.gametracker.controller;
 
+import com.example.gametracker.dto.CollectionRequest;
 import com.example.gametracker.dto.UserGameRequest;
 import com.example.gametracker.model.CollectionEntry;
 import com.example.gametracker.model.GameStatus;
@@ -45,5 +46,18 @@ public class CollectionController {
     public void removeGame(@PathVariable UUID id,
                            @PathVariable UUID gameId) {
         entryService.remove(id, gameId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@AuthenticationPrincipal Jwt jwt,
+                       @PathVariable UUID id) {
+        service.delete(jwt.getSubject(), id);
+    }
+
+    @PatchMapping("/{id}")
+    public Collection update(@AuthenticationPrincipal Jwt jwt,
+                             @PathVariable UUID id,
+                             @RequestBody CollectionRequest req) {
+        return service.update(jwt.getSubject(), id, req);
     }
 }
