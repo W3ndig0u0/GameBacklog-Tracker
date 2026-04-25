@@ -67,6 +67,7 @@ public class UserGameService {
         return repository.save(item);
     }
 
+    @Transactional
     public void remove(String userId, Integer igdbId) {
         repository.deleteByUserIdAndIgdbId(userId, igdbId);
     }
