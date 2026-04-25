@@ -1,13 +1,13 @@
 import { useParams } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useAddGame } from "../../hooks/useAddGame";
-import { useCollection } from "../../hooks/useCollection";
+import { useGamesLibrary } from "../../hooks/useCollection";
 import { useGameById } from "../../hooks/useGameById";
 import { useRemoveFromCollection } from "../../hooks/useRemoveFromCollection";
 import { useUpdateCollectionItem } from "../../hooks/useUpdateCollectionItem";
 
 import { useAuth0 } from "@auth0/auth0-react";
-import type { CollectionItem } from "../../api/library";
+import type { UserGame } from "../../api/userGame";
 import { CommunityActivity } from "./CommunityActivity";
 import { GameHero } from "./GameHero";
 import { GameMedia } from "./GameMedia";
@@ -25,7 +25,7 @@ const GamePage = () => {
   const { mutate: addGame, isPending: isAdding } = useAddGame();
   const { mutate: removeGame, isPending: isRemoving } =
     useRemoveFromCollection();
-  const { data: collection } = useCollection();
+  const { data: collection } = useGamesLibrary();
   const { data: g, isLoading } = useGameById(gameId);
   const { mutate: updateGame } = useUpdateCollectionItem();
 
@@ -33,9 +33,7 @@ const GamePage = () => {
 
   const myGameData = useMemo(
     () =>
-      collection?.find(
-        (item: CollectionItem) => item.igdbId.toString() === gameId,
-      ),
+      collection?.find((item: UserGame) => item.igdbId.toString() === gameId),
     [collection, gameId],
   );
 

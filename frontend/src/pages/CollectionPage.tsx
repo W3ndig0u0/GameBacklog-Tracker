@@ -1,10 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { GameCardWrapper } from "../components/games/GameCardWrapper";
-import { useCollection } from "../hooks/useCollection";
+import { useGamesLibrary } from "../hooks/useCollection";
 
 export const CollectionPage = () => {
   const { user } = useAuth0();
-  const { data: collection, isLoading } = useCollection();
+  const { data: collection, isLoading } = useGamesLibrary();
   if (isLoading) {
     return (
       <div className="p-8 text-xs uppercase tracking-widest opacity-50 text-white text-center">

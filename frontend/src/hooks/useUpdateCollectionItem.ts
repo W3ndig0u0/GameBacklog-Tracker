@@ -1,10 +1,12 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import type { CollectionItem } from "../api/library";
-import { collectionApi } from "../api/library";
+import type { UserGame } from "../api/userGame";
+import { UserGameApi } from "../api/userGame";
 
-type UpdateFields = Partial<Pick<CollectionItem, "status" | "userRating" | "reviewNotes" | "isFavorite">>;
+type UpdateFields = Partial<
+  Pick<UserGame, "status" | "userRating" | "reviewNotes" | "isFavorite">
+>;
 
 interface UpdateMutationParams {
   igdbId: string;
@@ -18,19 +20,23 @@ export const useUpdateCollectionItem = () => {
   return useMutation({
     mutationFn: async ({ igdbId, updates }: UpdateMutationParams) => {
       const token = await getAccessTokenSilently();
-      return collectionApi.updateCollectionItem(igdbId, updates, token);
+      return UserGameApi.update(igdbId, updates, token);
     },
-    onSuccess: (updatedItem) => {
-      queryClient.setQueryData(["collection"], (oldData: CollectionItem[] | undefined) => {
+
+    onSuccess: (updatedItem: UserGame) => {
+      queryClient.setQueryData<UserGame[]>(["library"], (oldData) => {
         if (!oldData) return [];
+
         return oldData.map((item) =>
-          item.igdbId === updatedItem.igdbId ? { ...item, ...updatedItem } : item
+          item.igdbId === updatedItem.igdbId
+            ? { ...item, ...updatedItem }
+            : item,
         );
       });
-      
-      queryClient.invalidateQueries({ queryKey: ["collection-status"] });
+
       toast.success("Collection item updated!");
     },
+
     onError: () => {
       toast.error("Failed to update collection item.");
     },

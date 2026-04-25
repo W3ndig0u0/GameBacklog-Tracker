@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { collectionApi } from "../api/library";
+import { UserGameApi } from "../api/userGame";
 
 export const useRemoveFromCollection = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -10,15 +10,15 @@ export const useRemoveFromCollection = () => {
   return useMutation({
     mutationFn: async (igdbId: string) => {
       const token = await getAccessTokenSilently();
-      return collectionApi.removeFromCollection(igdbId, token);
+      return UserGameApi.remove(igdbId, token);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["collection"] });
+      queryClient.invalidateQueries({ queryKey: ["library"] });
       toast.success("Removed from collection!");
     },
 
     onError: () => {
       toast.error("Failed to remove from collection");
-    }
+    },
   });
 };
