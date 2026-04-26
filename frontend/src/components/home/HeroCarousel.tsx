@@ -106,7 +106,11 @@ export default function HeroCarousel({
     <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.2),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(34,197,94,0.1),transparent_40%)]" />
 
-      <div className="relative grid min-h-64 lg:min-h-80 lg:grid-cols-[1fr_1.2fr]">
+      <div
+        className={`relative grid min-h-64 lg:min-h-80 lg:grid-cols-[1fr_1.2fr] ${
+          isAuthenticated ? "lg:h-140" : "lg:h-110"
+        }`}
+      >
         <div className="flex flex-col justify-between gap-5 p-6 sm:p-8 lg:p-10">
           <div className="space-y-6">
             <div className="space-y-3">
@@ -177,7 +181,7 @@ export default function HeroCarousel({
                   >
                     <Icons.Save />
                   </svg>
-                  Save Game
+                  Create an Account
                 </button>
               )}
             </div>
