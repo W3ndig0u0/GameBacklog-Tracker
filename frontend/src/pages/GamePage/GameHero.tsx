@@ -1,5 +1,6 @@
 import { useState } from "react";
-import type { UserGame } from "../../api/userGame";
+import type { UserGame } from "../../api/library/userGame";
+import GameCollectionSelector from "../../components/collections/GameCollectionSelector";
 import type { GameData } from "./types";
 import { getImg } from "./utils";
 
@@ -73,7 +74,7 @@ export const GameHero = ({
             <button
               onClick={onToggle}
               disabled={isAdding || isRemoving}
-              className={`flex min-w-60 items-center justify-center rounded-xl px-8 py-3.5 font-bold uppercase transition active:scale-95}`}
+              className="flex min-w-60 items-center justify-center rounded-xl px-8 py-3.5 font-bold uppercase transition active:scale-95"
             >
               {gameInCollection
                 ? "Remove from Collection"
@@ -164,6 +165,8 @@ export const GameHero = ({
                     </>
                   )}
                 </div>
+
+                {gameInCollection && <GameCollectionSelector igdbId={gameId} />}
               </>
             )}
           </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { normalizeArray } from "./normalize";
+import { normalizeArray } from "../shared/normalize";
 
 const BASE_URL =
   "https://game-tracker-backend-876198057788.europe-north2.run.app/api";
@@ -31,7 +31,7 @@ export const collectionsApi = {
   create: async (name: string, token: string): Promise<Collection> => {
     const res = await axios.post(
       `${BASE_URL}/collections`,
-      { name }, // FIXED
+      { name },
       {
         headers: { Authorization: `Bearer ${token}` },
       },
@@ -67,5 +67,33 @@ export const collectionsApi = {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
+  },
+
+  update: async (
+    collectionId: string,
+    updates: Partial<Pick<Collection, "name" | "description">>,
+    token: string,
+  ): Promise<Collection> => {
+    const res = await axios.patch(
+      `${BASE_URL}/collections/${collectionId}`,
+      updates,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    return res.data;
+  },
+
+  delete: async (collectionId: string, token: string): Promise<void> => {
+    await axios.delete(`${BASE_URL}/collections/${collectionId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  getById: async (collectionId: string, token: string): Promise<Collection> => {
+    const res = await axios.get(`${BASE_URL}/collections/${collectionId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
   },
 };

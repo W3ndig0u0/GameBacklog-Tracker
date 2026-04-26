@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchTopRatedGames } from "../api/games";
+import { fetchTopRatedGames } from "../../api/games/games";
 
 export const useTopRatedGames = () => {
   return useQuery({

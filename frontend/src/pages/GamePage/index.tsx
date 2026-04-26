@@ -1,13 +1,13 @@
 import { useParams } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useAddGame } from "../../hooks/useAddGame";
-import { useGamesLibrary } from "../../hooks/useCollection";
-import { useGameById } from "../../hooks/useGameById";
-import { useRemoveFromCollection } from "../../hooks/useRemoveFromCollection";
-import { useUpdateCollectionItem } from "../../hooks/useUpdateCollectionItem";
+import { useGameById } from "../../hooks/games/useGameById";
+import { useAddGame } from "../../hooks/library/useAddGame";
+import { useGamesLibrary } from "../../hooks/library/useCollection";
+import { useRemoveFromCollection } from "../../hooks/library/useRemoveFromCollection";
+import { useUpdateCollectionItem } from "../../hooks/library/useUpdateCollectionItem";
 
 import { useAuth0 } from "@auth0/auth0-react";
-import type { UserGame } from "../../api/userGame";
+import type { UserGame } from "../../api/library/userGame";
 import { CommunityActivity } from "./CommunityActivity";
 import { GameHero } from "./GameHero";
 import { GameMedia } from "./GameMedia";

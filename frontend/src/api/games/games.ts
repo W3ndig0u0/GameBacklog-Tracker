@@ -2,6 +2,7 @@ import axios from "axios";
 
 const BASE_URL =
   "https://game-tracker-backend-876198057788.europe-north2.run.app/api";
+
 export type GameImage = {
   id: number;
   image_id: string;

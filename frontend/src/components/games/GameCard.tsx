@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import type { Game } from "../../api/games";
+import type { Game } from "../../api/games/games";
 type Props = {
   game: Game;
 };

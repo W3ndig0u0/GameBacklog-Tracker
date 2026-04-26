@@ -54,7 +54,7 @@ const profileRoute = createRoute({
 const libraryRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/library",
-  component: () => <>TODO</>,
+  component: () => <CollectionPage />,
 });
 
 const gameRoute = createRoute({

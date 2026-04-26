@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPopularGames } from "../api/games";
+import { fetchPopularGames } from "../../api/games/games";
 
 export const usePopularGames = () => {
   return useQuery({

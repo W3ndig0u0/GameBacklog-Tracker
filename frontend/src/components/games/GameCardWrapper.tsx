@@ -1,4 +1,4 @@
-import { useGameById } from "../../hooks/useGameById";
+import { useGameById } from "../../hooks/games/useGameById";
 import GameCard from "./GameCard";
 
 type Props = {

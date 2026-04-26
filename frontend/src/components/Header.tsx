@@ -60,13 +60,6 @@ export default function Header() {
                 >
                   Library
                 </Link>
-                <Link
-                  to="/collection"
-                  activeProps={activeStyles}
-                  inactiveProps={inactiveStyles}
-                >
-                  Collections
-                </Link>
               </>
             )}
 
@@ -161,15 +154,6 @@ export default function Header() {
                   className="block"
                 >
                   Library
-                </Link>
-                <Link
-                  to="/collection"
-                  activeProps={activeStyles}
-                  inactiveProps={inactiveStyles}
-                  onClick={() => setIsOpen(false)}
-                  className="block"
-                >
-                  Collections
                 </Link>
               </>
             )}

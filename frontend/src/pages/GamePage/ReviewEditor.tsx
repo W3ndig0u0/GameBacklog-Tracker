@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { UserGame } from "../../api/userGame";
+import type { UserGame } from "../../api/library/userGame";
 import { SectionTitle } from "./SharedUI";
 
 interface ReviewEditorProps {

@@ -1,8 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import GameSection from "../components/games/GameSection";
-import { usePopularGames } from "../hooks/usePopularGames";
-import { useTopRatedGames } from "../hooks/useTopRatedGames";
-import { useTrendingGames } from "../hooks/useTrendingGames";
+import { usePopularGames } from "../hooks/games/usePopularGames";
+import { useTopRatedGames } from "../hooks/games/useTopRatedGames";
+import { useTrendingGames } from "../hooks/games/useTrendingGames";
 
 export default function HomePage() {
   const trending = useTrendingGames();

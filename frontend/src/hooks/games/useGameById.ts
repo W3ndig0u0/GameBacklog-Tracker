@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchGameById, type Game } from "../api/games";
+import { fetchGameById, type Game } from "../../api/games/games";
 
 export const useGameById = (id: string | undefined) => {
   return useQuery<Game>({

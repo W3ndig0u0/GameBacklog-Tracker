@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { AlertCircle, Loader2, Search as SearchIcon } from "lucide-react";
 import { useDeferredValue, useState } from "react";
 import GameSection from "../components/games/GameSection";
-import { useSearchGames } from "../hooks/useSearchGames";
+import { useSearchGames } from "../hooks/games/useSearchGames";
 
 export default function Search() {
   const [query, setQuery] = useState("");
