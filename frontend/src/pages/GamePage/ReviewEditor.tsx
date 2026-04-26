@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { CollectionItem } from "../../api/userGame";
+import type { UserGame } from "../../api/userGame";
 import { SectionTitle } from "./SharedUI";
 
 interface ReviewEditorProps {
   gameId: string;
-  myGameData: CollectionItem;
+  myGameData: UserGame;
   updateGame: (data: {
     igdbId: string;
     updates: { reviewNotes: string };

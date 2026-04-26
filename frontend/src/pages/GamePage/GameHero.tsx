@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { CollectionItem } from "../../api/userGame";
+import type { UserGame } from "../../api/userGame";
 import type { GameData } from "./types";
 import { getImg } from "./utils";
 
@@ -9,12 +9,9 @@ interface GameHeroProps {
   isAdding: boolean;
   isRemoving: boolean;
   onToggle: () => void;
-  myGameData?: CollectionItem;
+  myGameData?: UserGame;
   isLoggedIn: boolean;
-  updateGame: (data: {
-    igdbId: string;
-    updates: Partial<CollectionItem>;
-  }) => void;
+  updateGame: (data: { igdbId: string; updates: Partial<UserGame> }) => void;
 }
 
 const STATUS_COLORS = {
