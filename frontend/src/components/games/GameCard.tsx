@@ -63,7 +63,7 @@ export default function GameCard({ game }: Props) {
           />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
 
         <div className="absolute top-0 left-0 w-full p-2 flex justify-between items-start z-10">
           {game.total_rating && (
@@ -88,7 +88,7 @@ export default function GameCard({ game }: Props) {
           absolute inset-0
           opacity-0 group-hover:opacity-100
           transition-all duration-300
-          bg-gradient-to-t from-black via-black/95 to-purple-900/40
+          bg-linear-to-t from-black via-black/95 to-purple-900/40
           backdrop-blur-sm
           flex flex-col justify-end p-4
           z-1
@@ -119,10 +119,10 @@ export default function GameCard({ game }: Props) {
                   key={tag.id}
                   title={tag.name}
                   className="
-                    max-w-[70px] md:max-w-[90px]
+                    max-w-17.5 md:max-w-22.5
                     truncate whitespace-nowrap
                     text-[8px] px-1.5 py-0.5 
-                    bg-[#a855f7]/[0.08] 
+                    bg-[#a855f7]/8 
                     text-[#a855f7]
                     border border-[#a855f7]/20
                     font-black uppercase tracking-tight 
