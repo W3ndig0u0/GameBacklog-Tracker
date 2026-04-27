@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { GameCardWrapper } from "../components/games/GameCardWrapper";
 import {
   useMyGameHistory,
   useMyProfile,
@@ -142,25 +143,9 @@ export default function Profile() {
                     key={item.id}
                     to="/game/$gameId"
                     params={{ gameId: item.igdbId.toString() }}
-                    className="rounded-xl border border-white/10 bg-white/5 overflow-hidden no-underline"
+                    className=""
                   >
-                    <div className="aspect-3/4 bg-zinc-900">
-                      {item.coverUrl ? (
-                        <img
-                          src={item.coverUrl}
-                          alt={item.gameName}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : null}
-                    </div>
-                    <div className="p-3">
-                      <div className="font-semibold text-sm text-white line-clamp-2">
-                        {item.gameName}
-                      </div>
-                      <div className="text-xs text-zinc-500 mt-1">
-                        {formatDate(item.clickedAt)}
-                      </div>
-                    </div>
+                    <GameCardWrapper igdbId={item.igdbId.toString()} />
                   </Link>
                 ))}
               </div>

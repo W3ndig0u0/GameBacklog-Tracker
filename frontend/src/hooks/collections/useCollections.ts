@@ -1,5 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useMemo } from "react";
 import { toast } from "react-toastify";
 import type { Collection, CollectionEntry } from "../../api/collections/collections";
 import { collectionsApi } from "../../api/collections/collections";
@@ -34,6 +40,33 @@ export const useCollectionGameIds = (collectionId: string | null) => {
     queryFn: async () =>
       collectionsApi.getGameIds(collectionId as string, await getAccessTokenSilently()),
   });
+};
+
+export const useCollectionGameCounts = (collections?: Collection[]) => {
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+
+  const queries = useQueries({
+    queries: (collections ?? []).map((collection) => ({
+      queryKey: ["collections", collection.id, "game-ids"],
+      enabled: isAuthenticated && !!collection.id,
+      queryFn: async () =>
+        collectionsApi.getGameIds(collection.id, await getAccessTokenSilently()),
+    })),
+  });
+
+  const counts = useMemo(
+    () =>
+      (collections ?? []).reduce<Record<string, number>>((acc, collection, index) => {
+        acc[collection.id] = queries[index]?.data?.length ?? 0;
+        return acc;
+      }, {}),
+    [collections, queries],
+  );
+
+  return {
+    counts,
+    isLoading: queries.some((query) => query.isLoading),
+  };
 };
 
 export const useCreateCollection = () => {
