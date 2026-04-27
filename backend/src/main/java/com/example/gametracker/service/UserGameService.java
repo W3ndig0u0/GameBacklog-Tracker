@@ -1,15 +1,16 @@
 package com.example.gametracker.service;
 
-import com.example.gametracker.dto.UserGameRequest;
-import com.example.gametracker.model.Review;
-import com.example.gametracker.model.UserGame;
-import com.example.gametracker.model.GameStatus;
-import com.example.gametracker.repository.UserGameRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.example.gametracker.dto.UserGameRequest;
+import com.example.gametracker.model.GameStatus;
+import com.example.gametracker.model.UserGame;
+import com.example.gametracker.repository.UserGameRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +34,7 @@ public class UserGameService {
                                 .igdbId(igdbId)
                                 .status(GameStatus.BACKLOG)
                                 .isFavorite(false)
-                                .build()
-                ));
+                                .build()));
     }
 
     @Transactional
@@ -53,16 +53,6 @@ public class UserGameService {
             item.setIsFavorite(updates.getIsFavorite());
         }
 
-        if (updates.getReviewNotes() != null) {
-            Review review = item.getReview();
-
-            if (review == null) {
-                review = new Review();
-                item.setReview(review);
-            }
-
-            review.setReviewText(updates.getReviewNotes());
-        }
         return repository.save(item);
     }
 
