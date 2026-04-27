@@ -45,6 +45,7 @@ public class UserGame {
     @Builder.Default
     private Boolean isFavorite = false;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
     @Builder.Default
     private boolean archived = false;
 
