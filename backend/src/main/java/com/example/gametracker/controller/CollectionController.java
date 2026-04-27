@@ -48,6 +48,11 @@ public class CollectionController {
         return entryService.add(jwt.getSubject(), id, req.getIgdbId());
     }
 
+    @GetMapping("/{id}/games")
+    public java.util.List<Integer> games(@PathVariable UUID id) {
+        return entryService.getGameIds(id);
+    }
+
     @DeleteMapping("/{id}/games/{gameId}")
     public void removeGame(@PathVariable UUID id,
             @PathVariable UUID gameId) {

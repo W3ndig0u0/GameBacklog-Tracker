@@ -56,6 +56,14 @@ export const collectionsApi = {
     return res.data;
   },
 
+  getGameIds: async (collectionId: string, token: string): Promise<number[]> => {
+    const res = await axios.get(`${BASE_URL}/collections/${collectionId}/games`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return res.data;
+  },
+
   removeGame: async (
     collectionId: string,
     gameId: string,

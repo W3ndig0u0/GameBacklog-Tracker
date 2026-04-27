@@ -1,12 +1,16 @@
 package com.example.gametracker.service;
 
-import com.example.gametracker.model.*;
-import com.example.gametracker.repository.CollectionEntryRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
+import com.example.gametracker.model.CollectionEntry;
+import com.example.gametracker.model.GameCollection;
+import com.example.gametracker.model.UserGame;
+import com.example.gametracker.repository.CollectionEntryRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +34,14 @@ public class CollectionEntryService {
                 CollectionEntry.builder()
                         .collection(collection)
                         .userGame(userGame)
-                        .build()
-        );
+                        .build());
+    }
+
+    @Transactional(readOnly = true)
+    public java.util.List<Integer> getGameIds(UUID collectionId) {
+        return entryRepository.findByCollectionId(collectionId).stream()
+                .map(entry -> entry.getUserGame().getIgdbId())
+                .toList();
     }
 
     @Transactional
