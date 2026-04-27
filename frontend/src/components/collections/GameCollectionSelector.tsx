@@ -80,9 +80,6 @@ export default function GameCollectionSelector({
                 onClick={() =>
                   handleToggleCollection(collection.id, isInCollection)
                 }
-                disabled={
-                  addGameMutation.isPending || removeGameMutation.isPending
-                }
                 className="w-full text-left px-4 py-2 text-sm text-white hover:bg-zinc-800 flex items-center gap-2 disabled:opacity-50"
               >
                 <div

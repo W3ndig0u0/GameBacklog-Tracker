@@ -1,6 +1,7 @@
 package com.example.gametracker.service;
 
 import com.example.gametracker.dto.UserGameRequest;
+import com.example.gametracker.model.Review;
 import com.example.gametracker.model.UserGame;
 import com.example.gametracker.model.GameStatus;
 import com.example.gametracker.repository.UserGameRepository;
@@ -38,32 +39,30 @@ public class UserGameService {
 
     @Transactional
     public UserGame update(String userId, Integer igdbId, UserGameRequest updates) {
-        UserGame item = repository.findByUserIdAndIgdbId(userId, igdbId)
-                .orElseGet(() -> repository.save(
-                        UserGame.builder()
-                                .userId(userId)
-                                .igdbId(igdbId)
-                                .status(GameStatus.BACKLOG)
-                                .isFavorite(false)
-                                .build()
-                ));
+        UserGame item = getOrCreate(userId, igdbId);
 
         if (updates.getStatus() != null) {
-            item.setStatus(GameStatus.valueOf(updates.getStatus().toUpperCase()));
-        }
-
-        if (updates.getUserRating() != null) {
-            item.setUserRating(updates.getUserRating());
-        }
-
-        if (updates.getReviewNotes() != null) {
-            item.setReviewNotes(updates.getReviewNotes());
+            try {
+                item.setStatus(GameStatus.valueOf(updates.getStatus().toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Invalid status: " + updates.getStatus());
+            }
         }
 
         if (updates.getIsFavorite() != null) {
             item.setIsFavorite(updates.getIsFavorite());
         }
 
+        if (updates.getReviewNotes() != null) {
+            Review review = item.getReview();
+
+            if (review == null) {
+                review = new Review();
+                item.setReview(review);
+            }
+
+            review.setReviewText(updates.getReviewNotes());
+        }
         return repository.save(item);
     }
 

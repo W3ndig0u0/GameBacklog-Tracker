@@ -29,7 +29,7 @@ public class CollectionEntry {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "collection_id")
-    private Collection collection;
+    private GameCollection collection;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_game_id")

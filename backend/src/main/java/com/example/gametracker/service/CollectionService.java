@@ -1,7 +1,7 @@
 package com.example.gametracker.service;
 
 import com.example.gametracker.dto.CollectionRequest;
-import com.example.gametracker.model.Collection;
+import com.example.gametracker.model.GameCollection;
 import com.example.gametracker.repository.CollectionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,34 +16,34 @@ public class CollectionService {
 
     private final CollectionRepository repository;
 
-    public Collection create(String userId, String name) {
+    public GameCollection create(String userId, String name) {
         return repository.save(
-                Collection.builder()
+                GameCollection.builder()
                         .userId(userId)
                         .name(name)
                         .build()
         );
     }
 
-    public List<Collection> getUserCollections(String userId) {
+    public List<GameCollection> getUserCollections(String userId) {
         return repository.findByUserId(userId);
     }
 
-    public Collection get(UUID id) {
+    public GameCollection get(UUID id) {
         return repository.findById(id).orElseThrow();
     }
 
     @Transactional
     public void delete(String userId, UUID id) {
-        Collection col = repository.findByIdAndUserId(id, userId)
+        GameCollection col = repository.findByIdAndUserId(id, userId)
                 .orElseThrow();
 
         repository.delete(col);
     }
 
     @Transactional
-    public Collection update(String userId, UUID id, CollectionRequest req) {
-        Collection col = repository.findByIdAndUserId(id, userId)
+    public GameCollection update(String userId, UUID id, CollectionRequest req) {
+        GameCollection col = repository.findByIdAndUserId(id, userId)
                 .orElseThrow();
 
         if (req.getName() != null) {

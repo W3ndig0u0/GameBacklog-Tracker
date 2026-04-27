@@ -13,5 +13,5 @@ export const GhostBadge = ({ children }: { children: React.ReactNode }) => (
 );
 
 export const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-2xl font-bold text-zinc-100 mt-10 mb-4">{children}</h2>
+  <h2 className="text-2xl font-black text-zinc-100 mt-10 mb-4">{children}</h2>
 );

@@ -1,6 +1,5 @@
 package com.example.gametracker.repository;
 
-import com.example.gametracker.model.Collection;
 import com.example.gametracker.model.CollectionEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 

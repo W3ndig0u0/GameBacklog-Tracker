@@ -20,7 +20,7 @@ public class CollectionEntryService {
     public CollectionEntry add(String userId, UUID collectionId, Integer igdbId) {
 
         UserGame userGame = userGameService.getOrCreate(userId, igdbId);
-        Collection collection = collectionService.get(collectionId);
+        GameCollection collection = collectionService.get(collectionId);
 
         if (entryRepository.existsByCollectionIdAndUserGameId(collectionId, userGame.getId())) {
             throw new RuntimeException("Already in collection");

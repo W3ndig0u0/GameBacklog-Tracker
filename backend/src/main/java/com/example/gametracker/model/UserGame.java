@@ -1,19 +1,35 @@
 package com.example.gametracker.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
-@Table(
-        name = "user_games",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "igdb_id"})
-)@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Table(name = "user_games", uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "igdb_id" }))
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserGame {
 
     @Id
@@ -34,8 +50,7 @@ public class UserGame {
     @CreationTimestamp
     private LocalDateTime addedAt;
 
-    @Column(columnDefinition = "TEXT")
-    private String reviewNotes;
-    private Integer userRating;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "review_id")
+    private Review review;
 }
-

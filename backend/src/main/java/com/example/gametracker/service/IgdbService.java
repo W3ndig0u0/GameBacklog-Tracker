@@ -1,15 +1,17 @@
 package com.example.gametracker.service;
 
-import com.example.gametracker.TwitchAuthToken;
-import lombok.RequiredArgsConstructor;
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.time.Duration;
+import com.example.gametracker.TwitchAuthToken;
+
+import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +30,13 @@ public class IgdbService {
     public String search(String query) {
 
         String body = """
-            search "%s";
-            fields id,name,cover.url,first_release_date,
-                   genres.name,themes.name,platforms.name,
-                   total_rating,total_rating_count;
-            where cover != null;
-            limit 20;
-        """.formatted(query);
+                    search "%s";
+                    fields id,name,cover.url,first_release_date,
+                           genres.name,themes.name,platforms.name,
+                           total_rating,total_rating_count;
+                    where cover != null;
+                    limit 20;
+                """.formatted(query);
 
         return callIgdb(body);
     }
@@ -43,13 +45,13 @@ public class IgdbService {
     public String getTrendingGames() {
 
         String body = """
-            fields id,name,cover.url,first_release_date,
-                   genres.name,themes.name,platforms.name,
-                   total_rating,total_rating_count,hypes;
-            where cover != null & hypes != null;
-            sort hypes desc;
-            limit 14;
-        """;
+                    fields id,name,cover.url,first_release_date,
+                           genres.name,themes.name,platforms.name,
+                           total_rating,total_rating_count,hypes;
+                    where cover != null & hypes != null;
+                    sort hypes desc;
+                    limit 12;
+                """;
 
         return callIgdb(body);
     }
@@ -58,13 +60,13 @@ public class IgdbService {
     public String getPopularGames() {
 
         String body = """
-            fields id,name,cover.url,first_release_date,
-                   genres.name,themes.name,platforms.name,
-                   total_rating,total_rating_count;
-            where cover != null & total_rating_count != null;
-            sort total_rating_count desc;
-            limit 14;
-        """;
+                    fields id,name,cover.url,first_release_date,
+                           genres.name,themes.name,platforms.name,
+                           total_rating,total_rating_count;
+                    where cover != null & total_rating_count != null;
+                    sort total_rating_count desc;
+                    limit 12;
+                """;
 
         return callIgdb(body);
     }
@@ -73,28 +75,28 @@ public class IgdbService {
     public String getTopRatedGames() {
 
         String body = """
-            fields id,name,cover.url,first_release_date,
-                   genres.name,themes.name,platforms.name,
-                   total_rating,total_rating_count;
-            where cover != null & total_rating != null;
-            sort total_rating desc;
-            limit 14;
-        """;
+                    fields id,name,cover.url,first_release_date,
+                           genres.name,themes.name,platforms.name,
+                           total_rating,total_rating_count;
+                    where cover != null & total_rating != null;
+                    sort total_rating desc;
+                    limit 12;
+                """;
 
         return callIgdb(body);
     }
 
-    public String getGame(long id){
+    public String getGame(long id) {
 
         String body = String.format("""
-        fields id, name, summary, storyline, first_release_date,
-               genres.name, themes.name, platforms.name, game_modes.name,
-               total_rating, total_rating_count, cover.url,
-               screenshots.image_id, artworks.image_id, videos.video_id,
-               involved_companies.company.name, involved_companies.developer,
-               similar_games.name, similar_games.cover.image_id;
-        where id = %d;
-        """, id);
+                fields id, name, summary, storyline, first_release_date,
+                       genres.name, themes.name, platforms.name, game_modes.name,
+                       total_rating, total_rating_count, cover.url,
+                       screenshots.image_id, artworks.image_id, videos.video_id,
+                       involved_companies.company.name, involved_companies.developer,
+                       similar_games.name, similar_games.cover.image_id;
+                where id = %d;
+                """, id);
 
         return callIgdb(body);
     }
@@ -111,8 +113,7 @@ public class IgdbService {
                 .bodyToMono(String.class)
                 .timeout(Duration.ofSeconds(5))
                 .onErrorResume(e -> Mono.error(
-                        new RuntimeException("IGDB CALL FAILED: " + e.getMessage())
-                ))
+                        new RuntimeException("IGDB CALL FAILED: " + e.getMessage())))
                 .block();
     }
 }
