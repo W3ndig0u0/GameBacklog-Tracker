@@ -47,7 +47,12 @@ public class UserProfileService {
     @Transactional
     public UserProfileDto getProfile(String auth0Sub) {
         UserProfile profile = repository.findByAuth0Sub(auth0Sub)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseGet(() -> {
+                    UserProfile created = new UserProfile();
+                    created.setAuth0Sub(auth0Sub);
+                    created.setDisplayName("User");
+                    return repository.save(created);
+                });
 
         return toDto(profile);
     }
@@ -73,7 +78,7 @@ public class UserProfileService {
                     existing.setGameName(gameName);
                     existing.setCoverUrl(coverUrl);
                     existing.setClickedAt(now);
-                    return existing;
+                    return gameViewHistoryRepository.save(existing);
                 })
                 .orElseGet(() -> gameViewHistoryRepository.save(
                         GameViewHistory.builder()
@@ -86,11 +91,16 @@ public class UserProfileService {
     }
 
     private void updateFromJwt(UserProfile user, Jwt jwt) {
-        String name = jwt.getClaimAsString("name");
+        String name = firstNonBlank(
+                jwt.getClaimAsString("name"),
+                jwt.getClaimAsString("nickname"),
+                jwt.getClaimAsString("email"));
+
         String picture = jwt.getClaimAsString("picture");
         String email = jwt.getClaimAsString("email");
 
-        if (name != null && !name.isBlank()) {
+        if (name != null && !name.isBlank()
+                && !name.equals(user.getAuth0Sub())) {
             user.setDisplayName(name);
         }
 
@@ -106,14 +116,28 @@ public class UserProfileService {
     }
 
     private UserProfile createFromJwt(Jwt jwt) {
+        String name = firstNonBlank(
+                jwt.getClaimAsString("name"),
+                jwt.getClaimAsString("nickname"),
+                "User");
+
         UserProfile user = UserProfile.builder()
                 .auth0Sub(jwt.getSubject())
-                .displayName(jwt.getClaimAsString("name"))
+                .displayName(name)
                 .pictureUrl(jwt.getClaimAsString("picture"))
                 .email(jwt.getClaimAsString("email"))
                 .build();
 
         return repository.save(user);
+    }
+
+    private String firstNonBlank(String... values) {
+        for (String v : values) {
+            if (v != null && !v.isBlank()) {
+                return v;
+            }
+        }
+        return null;
     }
 
     public UserProfileDto toDto(UserProfile profile) {
@@ -122,7 +146,11 @@ public class UserProfileService {
         return UserProfileDto.builder()
                 .id(profile.getId())
                 .auth0Sub(auth0Sub)
-                .displayName(profile.getDisplayName() != null ? profile.getDisplayName() : auth0Sub)
+                .displayName(
+                        profile.getDisplayName() != null
+                                && !profile.getDisplayName().equals(auth0Sub)
+                                        ? profile.getDisplayName()
+                                        : "User")
                 .pictureUrl(profile.getPictureUrl())
                 .email(profile.getEmail())
                 .createdAt(profile.getCreatedAt())

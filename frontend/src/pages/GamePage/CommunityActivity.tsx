@@ -48,6 +48,7 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
     new Set((reviews ?? []).map((review) => review.userId)),
   );
   const { profilesBySub } = useUserProfiles(reviewUserIds);
+  console.log("Profiles by sub:", profilesBySub);
 
   return (
     <section className="mt-10">
