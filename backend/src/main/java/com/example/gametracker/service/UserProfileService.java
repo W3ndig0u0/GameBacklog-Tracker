@@ -36,6 +36,7 @@ public class UserProfileService {
 
     @Transactional
     public UserProfileDto syncFromJwt(Jwt jwt) {
+        System.out.println("ALLA JWT CLAIMS: " + jwt.getClaims());
         String auth0Sub = jwt.getSubject();
 
         UserProfile user = repository.findByAuth0Sub(auth0Sub)
