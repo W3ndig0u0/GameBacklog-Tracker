@@ -8,6 +8,7 @@ import { useUpdateCollectionItem } from "../../hooks/library/useUpdateCollection
 
 import { useAuth0 } from "@auth0/auth0-react";
 import type { UserGame } from "../../api/library/userGame";
+import { useGameReviews } from "../../hooks/review/useReviews";
 import { CommunityActivity } from "./CommunityActivity";
 import { GameHero } from "./GameHero";
 import { GameMedia } from "./GameMedia";
@@ -21,13 +22,13 @@ import { SimilarGames } from "./SimilarGames";
 const GamePage = () => {
   const { gameId } = useParams({ from: "/game/$gameId" });
   const { isAuthenticated, user } = useAuth0();
-
   const { mutate: addGame, isPending: isAdding } = useAddGame();
   const { mutate: removeGame, isPending: isRemoving } =
     useRemoveFromCollection();
   const { data: collection } = useGamesLibrary();
   const { data: g, isLoading } = useGameById(gameId);
   const { mutate: updateGame } = useUpdateCollectionItem();
+  const { data: gameReviews } = useGameReviews(Number(gameId));
 
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
 
@@ -51,7 +52,6 @@ const GamePage = () => {
       </div>
     );
   }
-  console.log("User:", !!user);
 
   return (
     <>
@@ -107,7 +107,7 @@ const GamePage = () => {
             </div>
           )}
 
-          <CommunityActivity />
+          <CommunityActivity reviews={gameReviews} />
         </div>
       </div>
 
