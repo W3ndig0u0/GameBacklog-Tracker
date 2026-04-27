@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { UserGame } from "../../api/library/userGame";
-import GameCollectionSelector from "../../components/collections/GameCollectionSelector";
+import GameCollectionModal from "../../components/collections/GameCollectionModal";
 import type { GameData } from "./types";
 import { getImg } from "./utils";
 
@@ -12,7 +12,6 @@ interface GameHeroProps {
   onToggle: () => void;
   myGameData?: UserGame;
   isLoggedIn: boolean;
-  currentCollections?: import("../../api/collections/collections").Collection[];
   updateGame: (data: { igdbId: string; updates: Partial<UserGame> }) => void;
 }
 
@@ -34,9 +33,9 @@ export const GameHero = ({
   myGameData,
   updateGame,
   isLoggedIn,
-  currentCollections,
 }: GameHeroProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
   const isFavorite = myGameData?.isFavorite ?? false;
   const gameStatus = myGameData?.status ?? "BACKLOG";
@@ -74,7 +73,14 @@ export const GameHero = ({
 
           <div className="flex flex-wrap items-center gap-4">
             <button
-              onClick={onToggle}
+              onClick={() => {
+                if (!gameInCollection) {
+                  setIsCollectionModalOpen(true);
+                  return;
+                }
+
+                onToggle();
+              }}
               disabled={isAdding || isRemoving}
               className="flex min-w-60 items-center justify-center rounded-xl px-8 py-3.5 font-bold uppercase transition active:scale-95"
             >
@@ -167,18 +173,20 @@ export const GameHero = ({
                     </>
                   )}
                 </div>
-
-                {isLoggedIn && (
-                  <GameCollectionSelector
-                    igdbId={gameId}
-                    currentCollections={currentCollections}
-                  />
-                )}
               </>
             )}
           </div>
         </div>
       </div>
+
+      {isLoggedIn && (
+        <GameCollectionModal
+          open={isCollectionModalOpen}
+          gameId={gameId}
+          gameName={g.name}
+          onClose={() => setIsCollectionModalOpen(false)}
+        />
+      )}
     </>
   );
 };
