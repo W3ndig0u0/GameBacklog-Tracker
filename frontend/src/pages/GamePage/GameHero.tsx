@@ -12,6 +12,7 @@ interface GameHeroProps {
   onToggle: () => void;
   myGameData?: UserGame;
   isLoggedIn: boolean;
+  currentCollections?: import("../../api/collections/collections").Collection[];
   updateGame: (data: { igdbId: string; updates: Partial<UserGame> }) => void;
 }
 
@@ -33,6 +34,7 @@ export const GameHero = ({
   myGameData,
   updateGame,
   isLoggedIn,
+  currentCollections,
 }: GameHeroProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -166,7 +168,12 @@ export const GameHero = ({
                   )}
                 </div>
 
-                {gameInCollection && <GameCollectionSelector igdbId={gameId} />}
+                {isLoggedIn && (
+                  <GameCollectionSelector
+                    igdbId={gameId}
+                    currentCollections={currentCollections}
+                  />
+                )}
               </>
             )}
           </div>

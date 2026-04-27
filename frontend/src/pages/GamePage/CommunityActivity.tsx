@@ -18,6 +18,7 @@ const formatName = (userId: string) => {
 };
 
 const formatTimeAgo = (dateString: string) => {
+  if (!dateString) return "just now"; // Säkerhetskoll
   const date = new Date(dateString);
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
@@ -48,7 +49,6 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
     new Set((reviews ?? []).map((review) => review.userId)),
   );
   const { profilesBySub } = useUserProfiles(reviewUserIds);
-  console.log("Profiles by sub:", profilesBySub);
 
   return (
     <section className="mt-10">
@@ -59,6 +59,11 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
             const profile = profilesBySub[review.userId];
             const display = profile?.displayName || formatName(review.userId);
             const avatar = profile?.pictureUrl;
+
+            const timeToDisplay = review.updatedAt
+              ? review.updatedAt
+              : review.reviewedAt;
+            const isEdited = !!review.updatedAt;
 
             return (
               <div
@@ -79,7 +84,7 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
                       />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center font-bold text-white">
-                        {review.userId?.slice(0, 1).toUpperCase() || "U"}
+                        {display.slice(0, 1).toUpperCase()}
                       </div>
                     )}
                   </a>
@@ -94,11 +99,17 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
                   <span className="text-yellow-400 text-sm tracking-widest">
                     {formatStars(review.starRating)}
                   </span>
-                  <span className="text-zinc-500 text-xs ml-auto">
-                    {formatTimeAgo(review.reviewedAt)}
+
+                  <span className="text-zinc-500 text-xs ml-auto flex gap-1">
+                    <span>{formatTimeAgo(timeToDisplay)}</span>
+                    {isEdited && (
+                      <span className="italic opacity-50">(edited)</span>
+                    )}
                   </span>
                 </div>
-                <p className="text-zinc-400">{review.reviewText}</p>
+                <p className="border-l-4 border-purple-500 pl-4 py-1 text-zinc-300 italic text-lg leading-relaxed whitespace-pre-wrap text-start">
+                  "{review.reviewText}"
+                </p>
               </div>
             );
           })

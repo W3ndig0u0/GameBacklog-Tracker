@@ -19,21 +19,28 @@ public class UserGameService {
     private final UserGameRepository repository;
 
     public List<UserGame> getCollection(String userId) {
-        return repository.findByUserId(userId);
+        return repository.findByUserIdAndArchivedFalse(userId);
     }
 
     public List<UserGame> getByStatus(String userId, GameStatus status) {
-        return repository.findByUserIdAndStatus(userId, status);
+        return repository.findByUserIdAndStatusAndArchivedFalse(userId, status);
     }
 
     public UserGame getOrCreate(String userId, Integer igdbId) {
         return repository.findByUserIdAndIgdbId(userId, igdbId)
+                .map(existing -> {
+                    if (existing.isArchived()) {
+                        existing.setArchived(false);
+                    }
+                    return repository.save(existing);
+                })
                 .orElseGet(() -> repository.save(
                         UserGame.builder()
                                 .userId(userId)
                                 .igdbId(igdbId)
                                 .status(GameStatus.BACKLOG)
                                 .isFavorite(false)
+                                .archived(false)
                                 .build()));
     }
 
@@ -58,6 +65,10 @@ public class UserGameService {
 
     @Transactional
     public void remove(String userId, Integer igdbId) {
-        repository.deleteByUserIdAndIgdbId(userId, igdbId);
+        repository.findByUserIdAndIgdbId(userId, igdbId)
+                .ifPresent(item -> {
+                    item.setArchived(true);
+                    repository.save(item);
+                });
     }
 }

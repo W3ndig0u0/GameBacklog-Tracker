@@ -42,7 +42,11 @@ public class UserGame {
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
+    @Builder.Default
     private Boolean isFavorite = false;
+
+    @Builder.Default
+    private boolean archived = false;
 
     @CreationTimestamp
     private LocalDateTime addedAt;

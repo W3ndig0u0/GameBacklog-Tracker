@@ -11,6 +11,7 @@ export type Review = {
   reviewText: string;
   reviewedAt: string;
   starRating: number;
+  updatedAt?: string;
 };
 
 export type ReviewPayload = {

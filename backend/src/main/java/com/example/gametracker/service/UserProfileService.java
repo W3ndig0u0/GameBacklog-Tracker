@@ -128,15 +128,6 @@ public class UserProfileService {
         return repository.save(user);
     }
 
-    private String firstNonBlank(String... values) {
-        for (String v : values) {
-            if (v != null && !v.isBlank()) {
-                return v;
-            }
-        }
-        return null;
-    }
-
     public UserProfileDto toDto(UserProfile profile) {
         String auth0Sub = profile.getAuth0Sub();
 
@@ -153,7 +144,7 @@ public class UserProfileService {
                 .createdAt(profile.getCreatedAt())
                 .reviewCount(reviewRepository.countByUserId(auth0Sub))
                 .collectionCount(collectionRepository.countByUserId(auth0Sub))
-                .libraryCount(userGameRepository.countByUserId(auth0Sub))
+                .libraryCount(userGameRepository.countByUserIdAndArchivedFalse(auth0Sub))
                 .favoriteCount(userGameRepository.countByUserIdAndIsFavoriteTrue(auth0Sub))
                 .build();
     }

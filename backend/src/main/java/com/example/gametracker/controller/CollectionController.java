@@ -37,8 +37,8 @@ public class CollectionController {
 
     @PostMapping
     public GameCollection create(@AuthenticationPrincipal Jwt jwt,
-            @RequestBody String name) {
-        return service.create(jwt.getSubject(), name);
+            @RequestBody CollectionRequest req) {
+        return service.create(jwt.getSubject(), req.getName());
     }
 
     @PostMapping("/{id}/games")
