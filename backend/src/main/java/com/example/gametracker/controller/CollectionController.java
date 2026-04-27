@@ -44,8 +44,8 @@ public class CollectionController {
     @PostMapping("/{id}/games")
     public CollectionEntry addGame(@AuthenticationPrincipal Jwt jwt,
             @PathVariable UUID id,
-            @RequestBody Integer igdbId) {
-        return entryService.add(jwt.getSubject(), id, igdbId);
+            @RequestBody com.example.gametracker.dto.AddGameRequest req) {
+        return entryService.add(jwt.getSubject(), id, req.getIgdbId());
     }
 
     @DeleteMapping("/{id}/games/{gameId}")

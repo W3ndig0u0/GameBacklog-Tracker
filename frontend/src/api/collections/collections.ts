@@ -47,7 +47,7 @@ export const collectionsApi = {
   ): Promise<CollectionEntry> => {
     const res = await axios.post(
       `${BASE_URL}/collections/${collectionId}/games`,
-      igdbId,
+      { igdbId },
       {
         headers: { Authorization: `Bearer ${token}` },
       },

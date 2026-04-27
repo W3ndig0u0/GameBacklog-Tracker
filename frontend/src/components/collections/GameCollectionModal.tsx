@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { useState } from "react";
 import type { Collection } from "../../api/collections/collections";
 import {
@@ -58,105 +58,80 @@ export default function GameCollectionModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl rounded-2xl border border-zinc-800 bg-zinc-900 shadow-2xl">
-        <button
-          type="button"
-          onClick={handleClose}
-          className="absolute right-4 top-4 rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
-          aria-label="Close collection modal"
-        >
-          <X size={18} />
-        </button>
-
-        <div className="border-b border-zinc-800 p-6">
-          <p className="text-sm font-medium text-zinc-400">Add to Collection</p>
-          <h2 className="mt-1 text-2xl font-semibold text-white">{gameName}</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6 backdrop-blur-sm sm:p-8">
+      <div className="relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--bg) shadow--shadow)]">
+        <div className="flex items-center justify-between border-b border-(--border) p-6 sm:p-8">
+          <div className="pr-6">
+            <h2 className="text-xl font-semibold text-(--text)">
+              Add to collection
+            </h2>
+            <p className="mt-2 truncate text-base text-(--text)">{gameName}</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleClose}
+            className="rounded-full p-3 text-(--text) transition-colors hover:bg-(--border) hover:text-(--text)"
+          >
+            <X size={24} />
+          </button>
         </div>
 
-        <div className="grid gap-8 p-6 md:grid-cols-2">
-          {/* Left Column: Existing Collections */}
-          <div className="flex flex-col gap-4">
-            <div>
-              <h3 className="text-sm font-medium text-white">
-                Your Collections
-              </h3>
-              <p className="text-sm text-zinc-400">
-                Pick a collection to add this game.
-              </p>
-            </div>
-
-            {isLoading ? (
-              <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-4 text-sm text-zinc-400">
-                Loading collections...
-              </div>
-            ) : collections && collections.length > 0 ? (
-              <div className="max-h-[260px] space-y-1 overflow-y-auto pr-2">
-                {collections.map((collection) => (
-                  <button
-                    type="button"
-                    key={collection.id}
-                    onClick={() => handleAddToCollection(collection)}
-                    disabled={addGameToCollection.isPending}
-                    className="group flex w-full items-center justify-between rounded-lg p-3 text-left transition-colors hover:bg-zinc-800 disabled:opacity-50"
-                  >
-                    <span className="font-medium text-zinc-200 group-hover:text-white">
-                      {collection.name}
-                    </span>
-                    <span className="text-xs font-medium text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100">
-                      Add
-                    </span>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-lg border border-zinc-800 p-4 text-sm text-zinc-400">
-                No collections yet. Create one below.
-              </div>
-            )}
-          </div>
-
-          {/* Right Column: Create New */}
-          <div className="flex flex-col gap-4 rounded-xl border border-zinc-800 bg-zinc-900/30 p-5">
-            <div>
-              <h3 className="text-sm font-medium text-white">Create New</h3>
-              <p className="text-sm text-zinc-400">
-                Make a new collection and add this game.
-              </p>
-            </div>
-
-            <form
-              onSubmit={handleCreateCollection}
-              className="mt-auto flex flex-col gap-3"
-            >
-              <input
-                type="text"
-                value={newCollectionName}
-                onChange={(event) => setNewCollectionName(event.target.value)}
-                placeholder="Collection name..."
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm text-white placeholder-zinc-500 transition-colors focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
-              />
-              <button
-                type="submit"
-                disabled={
-                  createCollection.isPending ||
-                  addGameToCollection.isPending ||
-                  !newCollectionName.trim()
-                }
-                className="w-full rounded-lg bg-white px-4 py-2.5 text-sm font-medium text-zinc-950 transition-colors hover:bg-zinc-200 disabled:opacity-50"
-              >
-                Create and add
-              </button>
-            </form>
-
+        <div className="border-b border-(--border) bg-(--code-bg) p-6 sm:p-8">
+          <form
+            onSubmit={handleCreateCollection}
+            className="flex items-center gap-4"
+          >
+            <input
+              type="text"
+              value={newCollectionName}
+              onChange={(event) => setNewCollectionName(event.target.value)}
+              placeholder="New collection name..."
+              className="flex-1 rounded-xl border border-(--border) bg-(--bg) px-5 py-4 text-base text--text-h)] placeholder--text)] transition-colors focus:border--accent)] focus:outline-none focus:ring-1 focus:ring--accent)]"
+            />
             <button
-              type="button"
-              onClick={onClose}
-              className="w-full rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
+              type="submit"
+              disabled={
+                createCollection.isPending ||
+                addGameToCollection.isPending ||
+                !newCollectionName.trim()
+              }
+              className="flex items-center justify-center rounded-xl bg-(--accent) px-8 py-4 text-base font-semibold text--bg)] transition-colors hover:opacity-90 disabled:opacity-50"
             >
-              Cancel
+              Create
             </button>
-          </div>
+          </form>
+        </div>
+
+        <div className="flex max-h-100 flex-col overflow-y-auto p-4 sm:p-6">
+          {isLoading ? (
+            <div className="p-8 text-center text-base text-(--text)">
+              Loading...
+            </div>
+          ) : collections && collections.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              {collections.map((collection) => (
+                <button
+                  type="button"
+                  key={collection.id}
+                  onClick={() => handleAddToCollection(collection)}
+                  disabled={addGameToCollection.isPending}
+                  className="group flex w-full items-center justify-between rounded-xl border border-transparent p-5 text-left transition-colors hover:border-(--accent-border) hover:bg-(--accent-bg) disabled:opacity-50"
+                >
+                  <span className="text-base font-medium text-(--text-h) group-hover:text-(--accent)">
+                    {collection.name}
+                  </span>
+                  <Plus
+                    size={22}
+                    className="text-(--text) opacity-0 transition-opacity group-hover:text-(--accent) group-hover:opacity-100"
+                  />
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="p-10 text-center text-base text-(--text)">
+              No collections yet.
+            </div>
+          )}
         </div>
       </div>
     </div>
