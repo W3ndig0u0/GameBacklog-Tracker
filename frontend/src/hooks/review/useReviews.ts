@@ -19,12 +19,10 @@ export const useMyReviews = () => {
 };
 
 export const useGameReviews = (igdbId: number) => {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
-
   return useQuery({
     queryKey: ["reviews", "game", igdbId],
-    enabled: isAuthenticated && !!igdbId,
-    queryFn: async () => reviewsApi.getByGame(igdbId, await getAccessTokenSilently()),
+    enabled: !!igdbId,
+    queryFn: async () => reviewsApi.getByGame(igdbId),
   });
 };
 

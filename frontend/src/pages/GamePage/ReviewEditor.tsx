@@ -1,25 +1,56 @@
 import { useState } from "react";
-import type { UserGame } from "../../api/library/userGame";
+import { toast } from "react-toastify";
+import { useCreateOrUpdateReview } from "../../hooks/review/useReviews";
 import { SectionTitle } from "./SharedUI";
 
 interface ReviewEditorProps {
   gameId: string;
-  myGameData: UserGame;
-  updateGame: (data: {
-    igdbId: string;
-    updates: { reviewNotes: string; userRating: number };
-  }) => void;
 }
 
-export const ReviewEditor = ({
-  gameId,
-  myGameData,
-  updateGame,
-}: ReviewEditorProps) => {
-  const [reviewDraft, setReviewDraft] = useState(myGameData?.reviewNotes || "");
-  const [starRating, setStarRating] = useState(
-    Math.max(1, Math.min(5, myGameData?.userRating ?? 1)),
-  );
+export const ReviewEditor = ({ gameId }: ReviewEditorProps) => {
+  const minChars = 5;
+  const maxChars = 300;
+  const [reviewDraft, setReviewDraft] = useState("");
+  const [starRating, setStarRating] = useState(1);
+  const [fieldError, setFieldError] = useState<string | null>(null);
+  const { mutate: saveReview, isPending } = useCreateOrUpdateReview();
+
+  const trimmedReview = reviewDraft.trim();
+  const isTooShort =
+    trimmedReview.length > -1 && trimmedReview.length < minChars;
+  const isTooLong = reviewDraft.length > maxChars;
+
+  const handleSubmit = () => {
+    if (!Number.isFinite(Number(gameId))) {
+      toast.error("Could not save review for this game");
+      return;
+    }
+
+    if (!trimmedReview) {
+      setFieldError("Write a review before sending");
+      toast.info("Please write a review first");
+      return;
+    }
+
+    if (isTooShort) {
+      setFieldError(`Review must be at least ${minChars} characters`);
+      toast.warning(`Review must be at least ${minChars} characters`);
+      return;
+    }
+
+    if (isTooLong) {
+      setFieldError(`Review can be at most ${maxChars} characters`);
+      toast.warning(`Review can be at most ${maxChars} characters`);
+      return;
+    }
+
+    setFieldError(null);
+    saveReview({
+      igdbId: Number(gameId),
+      reviewText: trimmedReview,
+      starRating,
+    });
+  };
 
   return (
     <section className="mt-10">
@@ -32,32 +63,51 @@ export const ReviewEditor = ({
               type="button"
               onClick={() => setStarRating(star)}
               className={`text-2xl transition-colors ${
-                star <= starRating ? "text-yellow-400" : "text-zinc-600"
+                star <= starRating
+                  ? "text-purple-400"
+                  : "text-zinc-900 opacity-30 hover:opacity-100 hover:text-zinc-600"
               }`}
             >
               ★
             </button>
           ))}
-          <span className="text-zinc-400 text-sm ml-2">{starRating}/5</span>
+          <span className="text-zinc-500 text-sm ml-2">{starRating}/5</span>
         </div>
         <textarea
           className="w-full bg-transparent text-zinc-300 placeholder-zinc-600 resize-none outline-none min-h-25"
           placeholder="What did you think of the game?"
           value={reviewDraft}
-          onChange={(e) => setReviewDraft(e.target.value)}
+          onChange={(e) => {
+            setReviewDraft(e.target.value);
+            if (fieldError) setFieldError(null);
+          }}
         />
-        <div className="flex justify-end mt-2">
+        <div className="flex justify-end">
           <button
-            onClick={() =>
-              updateGame({
-                igdbId: gameId,
-                updates: { reviewNotes: reviewDraft, userRating: starRating },
-              })
-            }
-            className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition-colors"
+            onClick={handleSubmit}
+            disabled={isPending || !trimmedReview || isTooShort || isTooLong}
+            className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition-colors disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-300"
           >
-            Send
+            {isPending ? "Saving..." : "Send"}
           </button>
+        </div>
+        <div className="mt-2 flex items-center justify-between gap-4">
+          <div className="text-xs">
+            {fieldError ? (
+              <span className="text-red-400">{fieldError}</span>
+            ) : isTooLong ? (
+              <span className="text-red-400">Max {maxChars} characters</span>
+            ) : isTooShort ? (
+              <span className="text-amber-400">Min {minChars} characters</span>
+            ) : (
+              <span className="text-zinc-500">Looks good</span>
+            )}
+          </div>
+          <span
+            className={`text-xs ${isTooLong ? "text-red-400" : "text-zinc-500"}`}
+          >
+            {reviewDraft.length}/{maxChars}
+          </span>
         </div>
       </div>
     </section>

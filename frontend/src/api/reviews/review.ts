@@ -30,9 +30,9 @@ export const reviewsApi = {
     return normalizeArray<Review>(res.data);
   },
 
-  getByGame: async (igdbId: number, token: string): Promise<Review[]> => {
+  getByGame: async (igdbId: number, token?: string): Promise<Review[]> => {
     const res = await axios.get(`${BASE_URL}/reviews/game/${igdbId}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
 
     return normalizeArray<Review>(res.data);
@@ -45,7 +45,6 @@ export const reviewsApi = {
     const res = await axios.post(`${BASE_URL}/reviews`, payload, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     return res.data;
   },
 

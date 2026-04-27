@@ -1,5 +1,5 @@
 import { useParams } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useGameById } from "../../hooks/games/useGameById";
 import { useAddGame } from "../../hooks/library/useAddGame";
 import { useGamesLibrary } from "../../hooks/library/useCollection";
@@ -9,6 +9,7 @@ import { useUpdateCollectionItem } from "../../hooks/library/useUpdateCollection
 import { useAuth0 } from "@auth0/auth0-react";
 import type { UserGame } from "../../api/library/userGame";
 import { useGameReviews } from "../../hooks/review/useReviews";
+import { useRecordGameHistory } from "../../hooks/users/useUsers";
 import { CommunityActivity } from "./CommunityActivity";
 import { GameHero } from "./GameHero";
 import { GameMedia } from "./GameMedia";
@@ -22,6 +23,7 @@ import { SimilarGames } from "./SimilarGames";
 const GamePage = () => {
   const { gameId } = useParams({ from: "/game/$gameId" });
   const { isAuthenticated, user } = useAuth0();
+  const recordGameHistory = useRecordGameHistory();
   const { mutate: addGame, isPending: isAdding } = useAddGame();
   const { mutate: removeGame, isPending: isRemoving } =
     useRemoveFromCollection();
@@ -31,6 +33,23 @@ const GamePage = () => {
   const { data: gameReviews } = useGameReviews(Number(gameId));
 
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
+  const lastRecordedGameId = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated || !g || lastRecordedGameId.current === g.id) {
+      return;
+    }
+
+    lastRecordedGameId.current = g.id;
+
+    recordGameHistory.mutate({
+      igdbId: g.id,
+      gameName: g.name,
+      coverUrl: g.cover?.url
+        ? `https:${g.cover.url.replace("t_thumb", "t_cover_big")}`
+        : undefined,
+    });
+  }, [g, isAuthenticated, recordGameHistory]);
 
   const myGameData = useMemo(
     () =>
@@ -52,7 +71,6 @@ const GamePage = () => {
       </div>
     );
   }
-
   return (
     <>
       <div className="bg-bg text-text min-h-screen pb-20">
@@ -95,15 +113,11 @@ const GamePage = () => {
             <SimilarGames games={g.similar_games} />
           </div>
 
-          {isAuthenticated && gameInCollection ? (
-            <ReviewEditor
-              gameId={gameId}
-              myGameData={myGameData}
-              updateGame={updateGame}
-            />
+          {isAuthenticated ? (
+            <ReviewEditor gameId={gameId} />
           ) : (
             <div className="mt-10 p-4 bg-white/5 border border-white/10 rounded-xl text-center text-zinc-400">
-              You have to add this game to your collection to leave a review.
+              You have to login to leave a review!
             </div>
           )}
 

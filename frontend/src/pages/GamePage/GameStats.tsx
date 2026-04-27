@@ -11,12 +11,12 @@ export const GameStats = ({ g }: { g: GameData }) => {
       val: `${g.total_rating?.toFixed(0) || 0}%`,
       color: "text-yellow-500",
     },
-    { label: "Release", val: releaseYear.toString(), color: "text-blue-400" },
     {
-      label: "Reviews",
+      label: "Rated by",
       val: g.total_rating_count?.toString() || "0",
       color: "text-emerald-400",
     },
+    { label: "Released", val: releaseYear.toString(), color: "text-blue-400" },
     {
       label: "Platforms",
       val: g.platforms?.length.toString() || "0",
