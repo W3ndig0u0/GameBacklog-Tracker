@@ -1,8 +1,10 @@
 package com.example.gametracker.model;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,4 +32,6 @@ public class Review {
     @CreationTimestamp
     private LocalDateTime reviewedAt;
     private int starRating;
+    @UpdateTimestamp
+    private Instant updatedAt;
 }
