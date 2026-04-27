@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.gametracker.dto.GameViewRequest;
 import com.example.gametracker.dto.UserProfileDto;
 import com.example.gametracker.model.GameCollection;
 import com.example.gametracker.model.GameViewHistory;
@@ -61,35 +62,5 @@ public class UserProfileController {
                 req.getIgdbId(),
                 req.getGameName(),
                 req.getCoverUrl());
-    }
-}
-
-class GameViewRequest {
-    private Integer igdbId;
-    private String gameName;
-    private String coverUrl;
-
-    public Integer getIgdbId() {
-        return igdbId;
-    }
-
-    public void setIgdbId(Integer igdbId) {
-        this.igdbId = igdbId;
-    }
-
-    public String getGameName() {
-        return gameName;
-    }
-
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
-    }
-
-    public String getCoverUrl() {
-        return coverUrl;
-    }
-
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
     }
 }

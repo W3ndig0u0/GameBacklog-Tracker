@@ -20,15 +20,14 @@ export default function Profile() {
     [],
   );
 
-  const viewingOwnProfile = !profileUserId;
+  const viewingOwnProfile = user;
   const { data: ownProfile, isLoading: isOwnProfileLoading } = useMyProfile();
   const { data: publicProfile, isLoading: isPublicProfileLoading } =
     useUserProfile(profileUserId ?? "");
   const { data: myHistory } = useMyGameHistory();
 
   const profile = viewingOwnProfile ? ownProfile : publicProfile;
-  const displayName =
-    profile?.displayName || user?.name || profileUserId || "Player";
+  const displayName = user?.name || profileUserId || "Player";
   const avatar = profile?.pictureUrl || user?.picture || "";
   const loading = viewingOwnProfile
     ? isAuthLoading || (isAuthenticated && isOwnProfileLoading)

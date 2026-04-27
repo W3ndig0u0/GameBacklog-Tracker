@@ -40,6 +40,7 @@ public class UserProfileService {
                 .orElseGet(() -> createFromJwt(jwt));
 
         updateFromJwt(user, jwt);
+
         return toDto(user);
     }
 
@@ -84,32 +85,35 @@ public class UserProfileService {
                                 .build()));
     }
 
-    @Transactional
-    protected UserProfileDto updateFromJwt(UserProfile existing, Jwt jwt) {
-        String displayName = jwt.getClaimAsString("name");
-        String pictureUrl = jwt.getClaimAsString("picture");
+    private void updateFromJwt(UserProfile user, Jwt jwt) {
+        String name = jwt.getClaimAsString("name");
+        String picture = jwt.getClaimAsString("picture");
         String email = jwt.getClaimAsString("email");
 
-        if (displayName != null && !displayName.isBlank()) {
-            existing.setDisplayName(displayName);
-        }
-        if (pictureUrl != null && !pictureUrl.isBlank()) {
-            existing.setPictureUrl(pictureUrl);
-        }
-        if (email != null && !email.isBlank()) {
-            existing.setEmail(email);
+        if (name != null && !name.isBlank()) {
+            user.setDisplayName(name);
         }
 
-        return toDto(repository.save(existing));
+        if (picture != null && !picture.isBlank()) {
+            user.setPictureUrl(picture);
+        }
+
+        if (email != null && !email.isBlank()) {
+            user.setEmail(email);
+        }
+
+        repository.save(user);
     }
 
     private UserProfile createFromJwt(Jwt jwt) {
-        return repository.save(UserProfile.builder()
+        UserProfile user = UserProfile.builder()
                 .auth0Sub(jwt.getSubject())
                 .displayName(jwt.getClaimAsString("name"))
                 .pictureUrl(jwt.getClaimAsString("picture"))
                 .email(jwt.getClaimAsString("email"))
-                .build());
+                .build();
+
+        return repository.save(user);
     }
 
     public UserProfileDto toDto(UserProfile profile) {

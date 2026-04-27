@@ -33,21 +33,22 @@ export type GameViewPayload = {
 };
 
 export const usersApi = {
-  getProfile: async (auth0Sub: string, token: string): Promise<UserProfile> => {
-    const res = await axios.get(`${BASE_URL}/users/${encodeURIComponent(auth0Sub)}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return res.data;
-  },
-
   getMe: async (token: string): Promise<UserProfile> => {
     const res = await axios.get(`${BASE_URL}/users/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     return res.data;
   },
 
+  getById: async (auth0Sub: string, token: string): Promise<UserProfile> => {
+    const res = await axios.get(
+      `${BASE_URL}/users/${encodeURIComponent(auth0Sub)}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return res.data;
+  },
   getMyHistory: async (token: string): Promise<GameViewHistory[]> => {
     const res = await axios.get(`${BASE_URL}/users/me/history`, {
       headers: { Authorization: `Bearer ${token}` },

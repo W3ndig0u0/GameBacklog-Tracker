@@ -4,11 +4,13 @@ import { toast } from "react-toastify";
 import { usersApi, type GameViewPayload, type UserProfile } from "../../api/users/users";
 
 export const useUserProfile = (auth0Sub: string) => {
-    const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+
   return useQuery({
     queryKey: ["users", "profile", auth0Sub],
     enabled: isAuthenticated && !!auth0Sub,
-    queryFn: async () => usersApi.getProfile(auth0Sub, await getAccessTokenSilently()),
+    queryFn: async () =>
+      usersApi.getById(auth0Sub, await getAccessTokenSilently()),
   });
 };
 
@@ -20,7 +22,7 @@ const { getAccessTokenSilently, isAuthenticated } = useAuth0();
     queries: uniqueSubs.map((auth0Sub) => ({
       queryKey: ["users", "profile", auth0Sub],
       enabled: isAuthenticated && !!auth0Sub,
-      queryFn: async () => usersApi.getProfile(auth0Sub, await getAccessTokenSilently()),
+      queryFn: async () => usersApi.getById(auth0Sub, await getAccessTokenSilently()),
     })),
   });
 
