@@ -49,6 +49,7 @@ export const usersApi = {
     );
     return res.data;
   },
+  
   getMyHistory: async (token: string): Promise<GameViewHistory[]> => {
     const res = await axios.get(`${BASE_URL}/users/me/history`, {
       headers: { Authorization: `Bearer ${token}` },

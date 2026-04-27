@@ -6,8 +6,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.gametracker.dto.UserProfileDto;
 import com.example.gametracker.model.GameCollection;
@@ -44,16 +46,9 @@ public class UserProfileService {
         return toDto(user);
     }
 
-    @Transactional
     public UserProfileDto getProfile(String auth0Sub) {
         UserProfile profile = repository.findByAuth0Sub(auth0Sub)
-                .orElseGet(() -> {
-                    UserProfile created = new UserProfile();
-                    created.setAuth0Sub(auth0Sub);
-                    created.setDisplayName("User");
-                    return repository.save(created);
-                });
-
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User profile not found"));
         return toDto(profile);
     }
 
@@ -91,16 +86,15 @@ public class UserProfileService {
     }
 
     private void updateFromJwt(UserProfile user, Jwt jwt) {
-        String name = firstNonBlank(
-                jwt.getClaimAsString("name"),
-                jwt.getClaimAsString("nickname"),
-                jwt.getClaimAsString("email"));
+        String name = jwt.getClaimAsString("https://gamebacklog-tracker.pages.dev/name");
+        String picture = jwt.getClaimAsString("https://gamebacklog-tracker.pages.dev/picture");
+        String email = jwt.getClaimAsString("https://gamebacklog-tracker.pages.dev/email");
 
-        String picture = jwt.getClaimAsString("picture");
-        String email = jwt.getClaimAsString("email");
+        // Fallback if somehow still null
+        if (name == null || name.isBlank())
+            name = "User";
 
-        if (name != null && !name.isBlank()
-                && !name.equals(user.getAuth0Sub())) {
+        if (!name.equals(user.getAuth0Sub())) {
             user.setDisplayName(name);
         }
 
@@ -116,16 +110,18 @@ public class UserProfileService {
     }
 
     private UserProfile createFromJwt(Jwt jwt) {
-        String name = firstNonBlank(
-                jwt.getClaimAsString("name"),
-                jwt.getClaimAsString("nickname"),
-                "User");
+        String name = jwt.getClaimAsString("https://gamebacklog-tracker.pages.dev/name");
+        String picture = jwt.getClaimAsString("https://gamebacklog-tracker.pages.dev/picture");
+        String email = jwt.getClaimAsString("https://gamebacklog-tracker.pages.dev/email");
+
+        if (name == null || name.isBlank())
+            name = "User";
 
         UserProfile user = UserProfile.builder()
                 .auth0Sub(jwt.getSubject())
                 .displayName(name)
-                .pictureUrl(jwt.getClaimAsString("picture"))
-                .email(jwt.getClaimAsString("email"))
+                .pictureUrl(picture)
+                .email(email)
                 .build();
 
         return repository.save(user);

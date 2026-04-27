@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { usersApi, type GameViewPayload, type UserProfile } from "../../api/users/users";
 
@@ -59,10 +59,14 @@ export const useMyGameHistory = () => {
 
 export const useRecordGameHistory = () => {
   const { getAccessTokenSilently } = useAuth0();
-
+  const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: async (payload: GameViewPayload) =>
       usersApi.recordHistory(payload, await getAccessTokenSilently()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", "history", "me"] });
+    },
     onError: () => {
       toast.error("Failed to save game history");
     },
