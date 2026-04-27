@@ -45,6 +45,25 @@ public class ReviewService {
     }
 
     @Transactional
+    public Review partialUpdate(String userId, Integer igdbId, String text, Integer rating) {
+
+        return repository.findByUserIdAndIgdbId(userId, igdbId)
+                .map(existing -> {
+
+                    if (text != null) {
+                        existing.setReviewText(text);
+                    }
+
+                    if (rating != null) {
+                        existing.setStarRating(rating);
+                    }
+
+                    return repository.save(existing);
+                })
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+    }
+
+    @Transactional
     public void delete(String userId, Integer igdbId) {
         repository.deleteByUserIdAndIgdbId(userId, igdbId);
     }

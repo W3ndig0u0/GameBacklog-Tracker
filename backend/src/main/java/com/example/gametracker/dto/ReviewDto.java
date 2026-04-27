@@ -1,12 +1,15 @@
 package com.example.gametracker.dto;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
+
+import lombok.Data;
 
 @Data
 public class ReviewDto {
+    private Integer igdbId;
+    private String userId;
+
     private String reviewText;
-    private LocalDateTime reviewedAt;
     private int starRating;
+    private LocalDateTime reviewedAt;
 }
