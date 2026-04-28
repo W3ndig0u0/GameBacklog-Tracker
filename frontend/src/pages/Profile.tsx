@@ -421,29 +421,43 @@ export default function Profile() {
               {reviews.map((review) => (
                 <div
                   key={review.id}
-                  className="border-b border-purple-800/90 opacity-0.1 pb-6 mb-6 last:border-b-0 last:mb-0 last:pb-0"
+                  className="border-b border-purple-800/90 pb-6 mb-6 last:border-b-0 last:mb-0 last:pb-0"
                 >
-                  {" "}
-                  <div className="mb-3 flex items-center justify-between gap-4">
-                    <div className="text-sm tracking-widest text-yellow-400">
-                      {"★".repeat(Math.max(1, Math.min(5, review.starRating)))}
-                      {"☆".repeat(
-                        5 - Math.max(1, Math.min(5, review.starRating)),
-                      )}
+                  <div className="mb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                    <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
+                      <div className="text-sm tracking-widest text-yellow-400">
+                        {"★".repeat(
+                          Math.max(1, Math.min(5, review.starRating)),
+                        )}
+                        {"☆".repeat(
+                          5 - Math.max(1, Math.min(5, review.starRating)),
+                        )}
+                      </div>
+
+                      <Link
+                        to="/game/$gameId"
+                        params={{ gameId: review.igdbId.toString() }}
+                        className="text-xs font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300 sm:hidden"
+                      >
+                        Open
+                      </Link>
                     </div>
-                    <div className="mb-3 inline-flex items-center rounded-full border border-purple-700/20 bg-purple-800/10 px-3 py-1 text-start text-[11px] font-bold uppercase tracking-widest text-purple-400">
+
+                    <div className="inline-flex items-center rounded-full border border-purple-700/20 bg-purple-800/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-purple-400 max-w-full truncate">
                       {reviewGamesById[review.igdbId.toString()]?.name ??
                         `Game #${review.igdbId}`}
                     </div>
+
                     <Link
                       to="/game/$gameId"
                       params={{ gameId: review.igdbId.toString() }}
-                      className="text-xs font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300"
+                      className="hidden sm:block text-xs font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300"
                     >
                       Open game
                     </Link>
                   </div>
-                  <p className="flex-1 border-l-4 border-purple-500 py-1 pl-4 text-start text-lg leading-relaxed whitespace-pre-wrap italic text-zinc-300">
+
+                  <p className="border-l-4 border-purple-500 py-1 pl-4 text-start text-base sm:text-lg leading-relaxed whitespace-pre-wrap italic text-zinc-300">
                     {review.reviewText}
                   </p>
                   <div className="mt-3 text-start text-xs italic text-zinc-500">
@@ -454,7 +468,7 @@ export default function Profile() {
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-zinc-800 p-16 text-center text-zinc-500">
+            <div className="rounded-2xl border border-dashed border-zinc-800 p-10 sm:p-16 text-center text-zinc-500">
               No public reviews yet.
             </div>
           )}
