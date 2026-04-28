@@ -11,7 +11,7 @@ import { usePopularGames } from "../hooks/games/usePopularGames";
 import { useTopRatedGames } from "../hooks/games/useTopRatedGames";
 import { useTrendingGames } from "../hooks/games/useTrendingGames";
 import { useGamesLibrary } from "../hooks/library/useCollection";
-import { useUserHistory, useUserLibrary } from "../hooks/users/useUsers";
+import { useUserLibrary } from "../hooks/users/useUsers";
 
 export default function HomePage() {
   const { user, isAuthenticated, isLoading, error } = useAuth0();
@@ -23,7 +23,6 @@ export default function HomePage() {
   const collectionAmount = collections?.length ?? 0;
   const targetUserId = user?.sub ?? "";
   const { data: userLibrary } = useUserLibrary(targetUserId);
-  const { data: userHistory } = useUserHistory(targetUserId);
 
   const featuredGames = useMemo(() => {
     const seen = new Set<number>();
@@ -218,7 +217,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
-            {userHistory?.map((game) => (
+            {libraryGameData?.similar_games?.map((game) => (
               <GameCardWrapper key={game.id} igdbId={game.id.toString()} />
             ))}
           </div>
@@ -226,31 +225,6 @@ export default function HomePage() {
       )}
 
       <GameSection title="Popular Releases" data={popular.data} />
-
-      {isAuthenticated && favoriteGames.length > 0 && (
-        <section className="mb-16 space-y-6 rounded-4xl border border-white/10 bg-white/5 p-5 text-start md:p-8">
-          <div className="mb-8 border-b border-zinc-900 pb-3">
-            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-xs italic font-semibold uppercase tracking-[0.3em] text-purple-400">
-                  Personalized For You
-                </p>
-                <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white md:text-4xl">
-                  Recommended Because You Recently Added{" "}
-                  <span className="text-purple-400">
-                    {libraryGameData?.name}
-                  </span>
-                </h2>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
-            {libraryGameData?.similar_games?.map((game) => (
-              <GameCardWrapper key={game.id} igdbId={game.id.toString()} />
-            ))}
-          </div>
-        </section>
-      )}
 
       <GameSection title="Top Rated Gems" data={topRated.data} />
     </div>
