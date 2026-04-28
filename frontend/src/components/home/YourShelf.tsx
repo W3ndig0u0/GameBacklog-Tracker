@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import type { UserGame } from "../../api/library/userGame";
+import { StatCard } from "../../pages/profileParts/ProfileComponents";
 import { GameCardWrapper } from "../games/GameCardWrapper";
-
 type YourShelfProps = {
   libraryCount: number;
   playingCount: number;
@@ -22,13 +22,34 @@ export default function YourShelf({
   recentlyAdded,
 }: YourShelfProps) {
   const stats = [
-    { label: "Total", value: libraryCount, color: "text-white" },
-    { label: "Playing", value: playingCount, color: "text-emerald-400" },
-    { label: "Backlog", value: backlogCount, color: "text-blue-400" },
-    { label: "Done", value: completedCount, color: "text-purple-400" },
-    { label: "Dropped", value: droppedCount, color: "text-zinc-400" },
+    {
+      label: "Playing",
+      value: playingCount,
+      color: "text-blue-400",
+      border:
+        "border-blue-400/20 hover:border-blue-400/50 hover:bg-blue-400/10",
+    },
+    {
+      label: "Completed",
+      value: completedCount,
+      color: "text-emerald-400",
+      border:
+        "border-emerald-400/20 hover:border-emerald-400/50 hover:bg-emerald-400/10",
+    },
+    {
+      label: "Backlog",
+      value: backlogCount,
+      color: "text-purple-400",
+      border:
+        "border-purple-400/20 hover:border-purple-400/50 hover:bg-purple-400/10",
+    },
+    {
+      label: "Dropped",
+      value: droppedCount,
+      color: "text-red-400",
+      border: "border-red-400/20 hover:border-red-400/50 hover:bg-red-400/10",
+    },
   ];
-
   const renderGameSection = (
     title: string,
     games: UserGame[],
@@ -71,24 +92,22 @@ export default function YourShelf({
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-        {stats.map(({ label, value, color }) => (
-          <div
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        {stats.map(({ label, value, color, border }) => (
+          <StatCard
             key={label}
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm"
-          >
-            <p className="text-[10px] tracking-[0.2em] text-zinc-500 uppercase">
-              {label}
-            </p>
-            <p className={`mt-2 text-2xl font-black ${color}`}>{value}</p>
-          </div>
+            label={label}
+            value={value.toString()}
+            valueClassName={color}
+            className={`text-${color}-400 rounded-2xl border ${border} p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl`}
+          />
         ))}
       </div>
 
       {renderGameSection(
         "★ Your Favorites",
         favoriteGames,
-        "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6",
+        "grid-cols-2 sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-6",
       )}
       {renderGameSection(
         "Recently Added",

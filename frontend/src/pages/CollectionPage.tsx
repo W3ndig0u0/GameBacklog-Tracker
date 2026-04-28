@@ -223,11 +223,11 @@ export const CollectionPage = () => {
               Fetching collection games...
             </div>
           ) : visibleLibrary.length > 0 ? (
-            <div className="grid grid-cols-4 gap-6 ">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-5 lg:gap-6">
               {visibleLibrary.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-2 flex flex-col gap-2 justify-center items-center"
+                  className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-2 sm:p-3 flex flex-col gap-2 justify-center items-center"
                 >
                   <GameCardWrapper igdbId={item.igdbId.toString()} />
 
