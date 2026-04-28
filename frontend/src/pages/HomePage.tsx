@@ -1,14 +1,17 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMemo } from "react";
+import { GameCardWrapper } from "../components/games/GameCardWrapper";
 import GameSection from "../components/games/GameSection";
 import CallToActionSection from "../components/home/CallToActionSection";
 import HeroCarousel from "../components/home/HeroCarousel";
 import YourShelf from "../components/home/YourShelf";
 import { useCollections } from "../hooks/collections/useCollections";
+import { useGameById } from "../hooks/games/useGameById";
 import { usePopularGames } from "../hooks/games/usePopularGames";
 import { useTopRatedGames } from "../hooks/games/useTopRatedGames";
 import { useTrendingGames } from "../hooks/games/useTrendingGames";
 import { useGamesLibrary } from "../hooks/library/useCollection";
+import { useUserHistory, useUserLibrary } from "../hooks/users/useUsers";
 
 export default function HomePage() {
   const { user, isAuthenticated, isLoading, error } = useAuth0();
@@ -18,6 +21,9 @@ export default function HomePage() {
   const library = useGamesLibrary();
   const { data: collections } = useCollections();
   const collectionAmount = collections?.length ?? 0;
+  const targetUserId = user?.sub ?? "";
+  const { data: userLibrary } = useUserLibrary(targetUserId);
+  const { data: userHistory } = useUserHistory(targetUserId);
 
   const featuredGames = useMemo(() => {
     const seen = new Set<number>();
@@ -51,7 +57,7 @@ export default function HomePage() {
   ).length;
 
   const favoriteGames = useMemo(
-    () => libraryGames.filter((game) => game.isFavorite).slice(0, 6),
+    () => libraryGames.filter((game) => game.isFavorite),
     [libraryGames],
   );
 
@@ -72,6 +78,51 @@ export default function HomePage() {
     topRated.isLoading ||
     library.isLoading;
 
+  type LibraryItem = {
+    id: string;
+    igdbId: number;
+    status: "PLAYING" | "BACKLOG" | "COMPLETED" | "DROPPED";
+    userRating?: number;
+    reviewNotes?: string;
+    isFavorite?: boolean;
+    addedAt: string;
+  };
+
+  const userFavoriteGames = useMemo<LibraryItem[]>(() => {
+    return (
+      userLibrary?.map((item) => ({
+        ...item,
+        igdbId: Number(item.igdbId),
+      })) ?? []
+    );
+  }, [userLibrary]);
+
+  const randomFavorite = useMemo(() => {
+    if (!userFavoriteGames.length) return null;
+
+    return userFavoriteGames[
+      // eslint-disable-next-line react-hooks/purity
+      Math.floor(Math.random() * userFavoriteGames.length)
+    ];
+  }, [userFavoriteGames]);
+
+  const randomFavoriteId = randomFavorite?.igdbId ?? null;
+
+  const { data: randomGameData } = useGameById(
+    randomFavoriteId ? randomFavoriteId.toString() : "",
+  );
+
+  const randomLibraryGame = useMemo(() => {
+    if (!libraryGames.length) return null;
+
+    // eslint-disable-next-line react-hooks/purity
+    return libraryGames[Math.floor(Math.random() * libraryGames.length)];
+  }, [libraryGames]);
+
+  const { data: libraryGameData } = useGameById(
+    randomLibraryGame?.igdbId?.toString() ?? "",
+  );
+
   if (fetchIsLoading) {
     return (
       <span className="animate-pulse text-xl font-semibold">
@@ -90,7 +141,7 @@ export default function HomePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-blue-500">
+      <div className="min-h-screen flex items-center justify-center text-blue-500">
         <span className="animate-pulse text-xl font-semibold">
           Something went wrong while loading user data. Please try again later.
           The error message is:
@@ -110,7 +161,6 @@ export default function HomePage() {
         favoritesCount={favoritesCount}
         collectionAmount={collectionAmount}
       />
-
       {isAuthenticated && libraryCount > 0 && (
         <YourShelf
           libraryCount={libraryCount}
@@ -122,14 +172,84 @@ export default function HomePage() {
           recentlyAdded={recentlyAdded}
         />
       )}
-
       {!isAuthenticated && <CallToActionSection />}
+      {isAuthenticated && favoriteGames.length > 0 && (
+        <section className="mb-16 space-y-6 rounded-4xl border border-white/10 bg-white/5 p-5 text-start md:p-8">
+          <div className="mb-8 border-b border-zinc-900 pb-3">
+            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs italic font-semibold uppercase tracking-[0.3em] text-purple-400">
+                  Personalized For You
+                </p>
+                <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white md:text-4xl">
+                  Recommended Because You Love{" "}
+                  <span className="text-purple-400">
+                    {randomGameData?.name}
+                  </span>
+                </h2>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
+            {randomGameData?.similar_games?.map((game) => (
+              <GameCardWrapper key={game.id} igdbId={game.id.toString()} />
+            ))}
+          </div>
+        </section>
+      )}
 
-      <section className="space-y-8 pl-0 md:pl-1">
-        <GameSection title="Trending Now" data={trending.data} />
-        <GameSection title="Popular Releases" data={popular.data} />
-        <GameSection title="Top Rated Gems" data={topRated.data} />
-      </section>
+      <GameSection title="Trending Now" data={trending.data} />
+
+      {isAuthenticated && favoriteGames.length > 0 && (
+        <section className="mb-16 space-y-6 rounded-4xl border border-white/10 bg-white/5 p-5 text-start md:p-8">
+          <div className="mb-8 border-b border-zinc-900 pb-3">
+            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs italic font-semibold uppercase tracking-[0.3em] text-purple-400">
+                  Personalized For You
+                </p>
+                <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white md:text-4xl">
+                  <span className="text-purple-400">{user?.names} History</span>
+                </h2>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
+            {userHistory?.map((game) => (
+              <GameCardWrapper key={game.id} igdbId={game.id.toString()} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <GameSection title="Popular Releases" data={popular.data} />
+
+      {isAuthenticated && favoriteGames.length > 0 && (
+        <section className="mb-16 space-y-6 rounded-4xl border border-white/10 bg-white/5 p-5 text-start md:p-8">
+          <div className="mb-8 border-b border-zinc-900 pb-3">
+            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs italic font-semibold uppercase tracking-[0.3em] text-purple-400">
+                  Personalized For You
+                </p>
+                <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white md:text-4xl">
+                  Recommended Because You Recently Added{" "}
+                  <span className="text-purple-400">
+                    {libraryGameData?.name}
+                  </span>
+                </h2>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
+            {libraryGameData?.similar_games?.map((game) => (
+              <GameCardWrapper key={game.id} igdbId={game.id.toString()} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <GameSection title="Top Rated Gems" data={topRated.data} />
     </div>
   );
 }

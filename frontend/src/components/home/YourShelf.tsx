@@ -50,11 +50,7 @@ export default function YourShelf({
       border: "border-red-400/20 hover:border-red-400/50 hover:bg-red-400/10",
     },
   ];
-  const renderGameSection = (
-    title: string,
-    games: UserGame[],
-    gridCols: string,
-  ) => {
+  const renderGameSection = (title: string, games: UserGame[]) => {
     if (!games.length) return null;
 
     return (
@@ -62,7 +58,7 @@ export default function YourShelf({
         <h3 className="text-sm font-semibold uppercase tracking-widest text-zinc-300">
           {title}
         </h3>
-        <div className={`grid gap-4 ${gridCols}`}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
           {games.map(
             (game) =>
               game.igdbId && (
@@ -104,16 +100,8 @@ export default function YourShelf({
         ))}
       </div>
 
-      {renderGameSection(
-        "★ Your Favorites",
-        favoriteGames,
-        "grid-cols-2 sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-6",
-      )}
-      {renderGameSection(
-        "Recently Added",
-        recentlyAdded,
-        "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6",
-      )}
+      {renderGameSection("★ Your Favorites", favoriteGames)}
+      {renderGameSection("Recently Added", recentlyAdded)}
 
       <div className="flex flex-wrap gap-3 pt-4 border-t border-zinc-900">
         <Link

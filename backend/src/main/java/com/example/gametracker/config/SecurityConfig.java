@@ -36,7 +36,10 @@ public class SecurityConfig {
                                                 .requestMatchers("/api/collections/**").authenticated()
                                                 .requestMatchers("/api/profile/**").authenticated()
                                                 .anyRequest().authenticated())
-                                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
+                                })).exceptionHandling(ex -> ex
+                                                .authenticationEntryPoint((req, res, ex2) -> res.setStatus(401)))
+                                .securityContext(context -> context.requireExplicitSave(false))
                                 .build();
         }
 
