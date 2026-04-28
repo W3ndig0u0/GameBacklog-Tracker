@@ -4,6 +4,7 @@ import GameSection from "../components/games/GameSection";
 import CallToActionSection from "../components/home/CallToActionSection";
 import HeroCarousel from "../components/home/HeroCarousel";
 import YourShelf from "../components/home/YourShelf";
+import { useCollections } from "../hooks/collections/useCollections";
 import { usePopularGames } from "../hooks/games/usePopularGames";
 import { useTopRatedGames } from "../hooks/games/useTopRatedGames";
 import { useTrendingGames } from "../hooks/games/useTrendingGames";
@@ -15,6 +16,8 @@ export default function HomePage() {
   const popular = usePopularGames();
   const topRated = useTopRatedGames();
   const library = useGamesLibrary();
+  const { data: collections } = useCollections();
+  const collectionAmount = collections?.length ?? 0;
 
   const featuredGames = useMemo(() => {
     const seen = new Set<number>();
@@ -105,7 +108,7 @@ export default function HomePage() {
         isAuthenticated={isAuthenticated}
         libraryCount={libraryCount}
         favoritesCount={favoritesCount}
-        playingCount={playingCount}
+        collectionAmount={collectionAmount}
       />
 
       {isAuthenticated && libraryCount > 0 && (

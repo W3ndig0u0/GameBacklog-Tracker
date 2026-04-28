@@ -50,7 +50,7 @@ type HeroCarouselProps = {
   isAuthenticated: boolean;
   libraryCount?: number;
   favoritesCount?: number;
-  playingCount?: number;
+  collectionAmount?: number;
 };
 
 export default function HeroCarousel({
@@ -59,7 +59,7 @@ export default function HeroCarousel({
   isAuthenticated,
   libraryCount = 0,
   favoritesCount = 0,
-  playingCount = 0,
+  collectionAmount = 0,
 }: HeroCarouselProps) {
   const { loginWithRedirect } = useAuth0();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -83,22 +83,25 @@ export default function HeroCarousel({
 
   const stats = [
     {
-      label: "Library",
-      value: libraryCount,
-      color: "text-white",
-      borderHover: "hover:border-purple-400/50",
+      label: "Collections",
+      value: collectionAmount,
+      color: "text-blue-400",
+      border:
+        "border-blue-400/20 hover:border-blue-400/50 hover:bg-blue-400/10",
     },
     {
       label: "★ Favorite",
       value: favoritesCount,
-      color: "text-pink-400",
-      borderHover: "hover:border-pink-400/50",
+      color: "text-emerald-400",
+      border:
+        "border-emerald-400/20 hover:border-emerald-400/50 hover:bg-emerald-400/10",
     },
     {
-      label: "Playing",
-      value: playingCount,
-      color: "text-emerald-400",
-      borderHover: "hover:border-emerald-400/50",
+      label: "Total Games",
+      value: libraryCount,
+      color: "text-purple-400",
+      border:
+        "border-purple-400/20 hover:border-purple-400/50 hover:bg-purple-400/10",
     },
   ];
 
@@ -188,10 +191,10 @@ export default function HeroCarousel({
 
           {isAuthenticated && (
             <div className="grid w-full grid-cols-3 gap-3">
-              {stats.map(({ label, value, color, borderHover }) => (
+              {stats.map(({ label, value, color, border }) => (
                 <div
                   key={label}
-                  className={`rounded-xl border border-white/10 bg-white/5 px-3 py-3 backdrop-blur-sm transition duration-200 hover:bg-white/10 ${borderHover}`}
+                  className={`rounded-xl border border-white/10 bg-white/5 px-3 py-3 backdrop-blur-sm transition duration-200 hover:bg-white/10 ${border}`}
                 >
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
                     {label}

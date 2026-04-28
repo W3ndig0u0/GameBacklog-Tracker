@@ -11,6 +11,7 @@ import {
   useUserProfile,
   useUserReviews,
 } from "../hooks/users/useUsers";
+
 import {
   CollectionShelf,
   GameCardShell,
@@ -18,6 +19,7 @@ import {
   StatCard,
   TagChip,
 } from "./profileParts/ProfileComponents";
+
 import {
   formatDate,
   formatTimeAgo,
@@ -189,13 +191,11 @@ export default function Profile() {
   return (
     <div className="min-h-screen pb-20 font-sans text-white">
       <div className="relative h-56 w-full overflow-hidden rounded-3xl bg-zinc-900 md:h-96">
-        {bannerImage ? (
-          <img
-            src={bannerImage}
-            alt="Profile Banner"
-            className="h-full w-full object-cover object-top-mid opacity-75"
-          />
-        ) : null}
+        <img
+          src={bannerImage}
+          alt="Profile Banner"
+          className="h-full w-full object-cover object-top-mid opacity-75"
+        />
         <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#09090b]/40 to-[#09090b]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(52,211,153,0.18),transparent_25%),radial-gradient(circle_at_80%_20%,rgba(96,165,250,0.18),transparent_25%),radial-gradient(circle_at_50%_80%,rgba(168,85,247,0.16),transparent_30%)]" />
       </div>
@@ -203,35 +203,21 @@ export default function Profile() {
       <div className="relative z-10 mx-auto -mt-16 max-w-6xl px-6">
         <div className="mb-10 flex flex-col items-center text-center">
           <div className="relative group">
-            {avatar ? (
-              <img
-                src={avatar}
-                alt={displayName}
-                className="h-32 w-32 rounded-full border-4 border-[#09090b] object-cover shadow-[0_0_20px_rgba(170,59,255,0.2)]"
-              />
-            ) : (
-              <div className="flex items-center justify-center rounded-full border-4 border-[#09090b] bg-zinc-800 text-4xl font-black text-white">
-                {displayName.slice(0, 1).toUpperCase()}
-              </div>
-            )}
-            <div className="absolute inset-0 rounded-full bg-accent opacity-20 blur-xl transition-all duration-300 group-hover:opacity-40" />
+            <img
+              src={avatar}
+              alt={displayName}
+              className="h-32 w-32 rounded-full border-4 border-[#09090b] object-cover shadow-[0_0_20px_rgba(170,59,255,0.2)]"
+            />
           </div>
-
           <h1 className="mt-4 text-2xl font-bold tracking-wide text-white md:text-3xl">
             {displayName}
           </h1>
-          {profile?.email && viewingOwnProfile ? (
-            <p className="mt-1 text-sm font-medium text-zinc-400">
-              {profile.email}
-            </p>
-          ) : null}
-
-          {profile?.createdAt ? (
-            <p className="mt-4 text-sm text-zinc-500">
-              Joined {formatDate(profile.createdAt)}
-            </p>
-          ) : null}
-
+          <p className="mt-1 text-sm font-medium text-zinc-400">
+            {profile?.email}
+          </p>
+          <p className="mt-4 text-sm text-zinc-500">
+            Joined {formatDate(profile?.createdAt)}
+          </p>
           <div className="mt-6 grid w-full max-w-5xl gap-3 md:grid-cols-3">
             <StatCard
               label="Library"
@@ -255,7 +241,6 @@ export default function Profile() {
               valueClassName="text-purple-400"
             />
           </div>
-
           <div className="mt-4 grid w-full max-w-5xl grid-cols-2 gap-3 md:grid-cols-4">
             <StatCard
               label="Reviews"
@@ -312,9 +297,7 @@ export default function Profile() {
           {library && library.length > 0 ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
               {library.map((item) => (
-                <GameCardShell key={item.id}>
-                  <GameCardWrapper igdbId={item.igdbId.toString()} />
-                </GameCardShell>
+                <GameCardWrapper igdbId={item.igdbId.toString()} />
               ))}
             </div>
           ) : (
@@ -331,9 +314,7 @@ export default function Profile() {
           {favoriteGames.length > 0 ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
               {favoriteGames.map((item) => (
-                <GameCardShell key={item.id}>
-                  <GameCardWrapper igdbId={item.igdbId.toString()} />
-                </GameCardShell>
+                <GameCardWrapper igdbId={item.igdbId.toString()} />
               ))}
             </div>
           ) : (
@@ -352,12 +333,12 @@ export default function Profile() {
               {favoriteTags.map((tag, index) => {
                 const accent =
                   index % 4 === 0
-                    ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"
+                    ? "border-blue-400/20 bg-blue-400/10 text-blue-300"
                     : index % 4 === 1
-                      ? "border-blue-400/20 bg-blue-400/10 text-blue-300"
+                      ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"
                       : index % 4 === 2
                         ? "border-purple-400/20 bg-purple-400/10 text-purple-300"
-                        : "border-yellow-400/20 bg-yellow-400/10 text-yellow-300";
+                        : "border-red-400/20 bg-red-400/10 text-red-300";
 
                 return (
                   <TagChip
