@@ -53,7 +53,7 @@ export const CollectionShelf = ({ collection }: { collection: Collection }) => {
           Loading games...
         </div>
       ) : gameIds && gameIds.length > 0 ? (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5 ">
           {gameIds.map((igdbId) => (
             <GameCardWrapper
               key={`${collection.id}-${igdbId}`}
@@ -69,14 +69,6 @@ export const CollectionShelf = ({ collection }: { collection: Collection }) => {
     </div>
   );
 };
-
-export const GameCardShell = ({ children }: { children: ReactNode }) => (
-  <div className="group relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 p-2 shadow-[0_12px_40px_rgba(0,0,0,0.25)] transition-transform duration-300 hover:-translate-y-1">
-    <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-linear-to-br from-purple-500/25 via-blue-400/20 to-emerald-400/20 blur-2xl transition-opacity duration-300 group-hover:opacity-90" />
-    <div className="pointer-events-none absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-linear-to-br from-yellow-400/15 via-transparent to-purple-400/10 blur-3xl" />
-    <div className="relative z-10">{children}</div>
-  </div>
-);
 
 export const StatCard = ({
   label,

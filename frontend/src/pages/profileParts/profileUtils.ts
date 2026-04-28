@@ -31,6 +31,11 @@ export const formatTimeAgo = (dateString: string) => {
 };
 
 export const STATUS_COLORS = {
+  COMPLETED: {
+    label: "Completed",
+    accent: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
+    bar: "bg-emerald-500",
+  },
   PLAYING: {
     label: "Playing",
     accent: "border-blue-500/30 bg-blue-500/10 text-blue-300",
@@ -40,11 +45,6 @@ export const STATUS_COLORS = {
     label: "Backlog",
     accent: "border-purple-500/30 bg-purple-500/10 text-purple-300",
     bar: "bg-purple-500",
-  },
-  COMPLETED: {
-    label: "Completed",
-    accent: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
-    bar: "bg-emerald-500",
   },
   DROPPED: {
     label: "Dropped",

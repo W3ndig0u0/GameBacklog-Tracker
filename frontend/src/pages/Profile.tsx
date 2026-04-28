@@ -14,17 +14,12 @@ import {
 
 import {
   CollectionShelf,
-  GameCardShell,
   ProfileSection,
   StatCard,
   TagChip,
 } from "./profileParts/ProfileComponents";
 
-import {
-  formatDate,
-  formatTimeAgo,
-  STATUS_COLORS,
-} from "./profileParts/profileUtils";
+import { formatDate, STATUS_COLORS } from "./profileParts/profileUtils";
 
 export default function Profile() {
   const { user, isLoading: isAuthLoading } = useAuth0();
@@ -147,7 +142,7 @@ export default function Profile() {
     return [...counts.entries()]
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
-      .slice(0, 6);
+      .slice(0, 12);
   }, [tagGames]);
 
   const loading =
@@ -176,10 +171,13 @@ export default function Profile() {
     );
   }
 
-  const displayName =
-    profile?.displayName || user?.name || targetUserId || "Player";
-  const avatar =
-    profile?.pictureUrl || (viewingOwnProfile ? user?.picture : "");
+  const displayName = profile?.displayName || targetUserId || "Player";
+  const avatar = profile?.pictureUrl
+    ? profile.pictureUrl
+    : viewingOwnProfile && user?.picture
+      ? user.picture
+      : "https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg";
+
   const bannerImage = bannerGame?.cover?.url
     ? `https:${bannerGame.cover.url.replace("t_thumb", "t_1080p")}`
     : bannerGame?.screenshots?.[0]?.url
@@ -295,7 +293,7 @@ export default function Profile() {
           subtitle="All public games in this user's library"
         >
           {library && library.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
               {library.map((item) => (
                 <GameCardWrapper igdbId={item.igdbId.toString()} />
               ))}
@@ -312,7 +310,7 @@ export default function Profile() {
           subtitle="Public favorites pulled from the library"
         >
           {favoriteGames.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
               {favoriteGames.map((item) => (
                 <GameCardWrapper igdbId={item.igdbId.toString()} />
               ))}
@@ -329,7 +327,7 @@ export default function Profile() {
           subtitle="Genres and themes from their public library"
         >
           {favoriteTags.length > 0 ? (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {favoriteTags.map((tag, index) => {
                 const accent =
                   index % 4 === 0
@@ -361,7 +359,7 @@ export default function Profile() {
           title="Status Graph"
           subtitle="How this library is split right now"
         >
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-5 md:p-6">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-1 rounded-3xl border border-white/10 bg-white/5 p-5">
             <div className="space-y-4">
               {(
                 Object.entries(STATUS_COLORS) as Array<
@@ -399,14 +397,12 @@ export default function Profile() {
 
         <ProfileSection title="History" subtitle="Recent public game clicks">
           {history && history.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
               {history.map((item) => (
-                <GameCardShell key={item.id}>
-                  <GameCardWrapper igdbId={item.igdbId.toString()} />
-                  <div className="px-1 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-widest text-zinc-500">
-                    {formatTimeAgo(item.clickedAt)}
-                  </div>
-                </GameCardShell>
+                <GameCardWrapper
+                  key={item.id}
+                  igdbId={item.igdbId.toString()}
+                />
               ))}
             </div>
           ) : (
@@ -421,12 +417,13 @@ export default function Profile() {
           subtitle="Public reviews written by this user"
         >
           {reviews && reviews.length > 0 ? (
-            <div className="space-y-4">
+            <div className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
               {reviews.map((review) => (
                 <div
                   key={review.id}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-5"
+                  className="border-b border-purple-800/90 opacity-0.1 pb-6 mb-6 last:border-b-0 last:mb-0 last:pb-0"
                 >
+                  {" "}
                   <div className="mb-3 flex items-center justify-between gap-4">
                     <div className="text-sm tracking-widest text-yellow-400">
                       {"★".repeat(Math.max(1, Math.min(5, review.starRating)))}

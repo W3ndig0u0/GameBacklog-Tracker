@@ -38,7 +38,7 @@ export const CollectionPage = () => {
 
   const [showManager, setShowManager] = useState(false);
 
-  const { data: selectedCollectionGameIds, isLoading: selectedGamesLoading } =
+  const { data: selectedCollectionGameIds } =
     useCollectionGameIds(selectedCollectionId);
 
   const visibleLibrary = useMemo(() => {
@@ -218,11 +218,7 @@ export const CollectionPage = () => {
             </div>
           </div>
 
-          {selectedCollectionId && selectedGamesLoading ? (
-            <div className="rounded-2xl border border-zinc-800 border-dashed p-20 text-center text-zinc-500">
-              Fetching collection games...
-            </div>
-          ) : visibleLibrary.length > 0 ? (
+          {visibleLibrary.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-5 lg:gap-6">
               {visibleLibrary.map((item) => (
                 <div
