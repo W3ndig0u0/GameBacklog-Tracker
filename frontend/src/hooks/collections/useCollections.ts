@@ -31,13 +31,10 @@ export const useCollection = (collectionId: string) => {
 };
 
 export const useCollectionGameIds = (collectionId: string | null) => {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
-
   return useQuery({
     queryKey: ["collections", collectionId, "game-ids"],
-    enabled: isAuthenticated && !!collectionId,
-    queryFn: async () =>
-      collectionsApi.getGameIds(collectionId as string, await getAccessTokenSilently()),
+    enabled: !!collectionId,
+    queryFn: async () => collectionsApi.getGameIds(collectionId as string),
   });
 };
 

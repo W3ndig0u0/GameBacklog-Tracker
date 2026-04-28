@@ -1,4 +1,7 @@
 import axios from "axios";
+import type { Collection } from "../collections/collections";
+import type { UserGame } from "../library/userGame";
+import type { Review } from "../reviews/review";
 import { normalizeArray } from "../shared/normalize";
 
 const BASE_URL =
@@ -40,20 +43,51 @@ export const usersApi = {
     return res.data;
   },
 
-  getById: async (auth0Sub: string, token: string): Promise<UserProfile> => {
+  getById: async (auth0Sub: string, token?: string): Promise<UserProfile> => {
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
     const res = await axios.get(
       `${BASE_URL}/users/${encodeURIComponent(auth0Sub)}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      headers ? { headers } : undefined,
     );
     return res.data;
+  },
+
+  getCollections: async (auth0Sub: string): Promise<Collection[]> => {
+    const res = await axios.get(
+      `${BASE_URL}/users/${encodeURIComponent(auth0Sub)}/collections`,
+    );
+
+    return normalizeArray<Collection>(res.data);
+  },
+
+  getReviews: async (auth0Sub: string): Promise<Review[]> => {
+    const res = await axios.get(
+      `${BASE_URL}/users/${encodeURIComponent(auth0Sub)}/reviews`,
+    );
+
+    return normalizeArray<Review>(res.data);
+  },
+
+  getLibrary: async (auth0Sub: string): Promise<UserGame[]> => {
+    const res = await axios.get(
+      `${BASE_URL}/users/${encodeURIComponent(auth0Sub)}/library`,
+    );
+
+    return normalizeArray<UserGame>(res.data);
   },
   
   getMyHistory: async (token: string): Promise<GameViewHistory[]> => {
     const res = await axios.get(`${BASE_URL}/users/me/history`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
+    return normalizeArray<GameViewHistory>(res.data);
+  },
+
+  getHistory: async (auth0Sub: string): Promise<GameViewHistory[]> => {
+    const res = await axios.get(
+      `${BASE_URL}/users/${encodeURIComponent(auth0Sub)}/history`,
+    );
 
     return normalizeArray<GameViewHistory>(res.data);
   },

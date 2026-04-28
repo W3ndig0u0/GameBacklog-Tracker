@@ -61,6 +61,10 @@ public class UserProfileService {
         return reviewRepository.findByUserId(auth0Sub);
     }
 
+    public List<com.example.gametracker.model.UserGame> getLibrary(String auth0Sub) {
+        return userGameRepository.findByUserIdAndArchivedFalse(auth0Sub);
+    }
+
     public List<GameViewHistory> getRecentViews(String auth0Sub) {
         return gameViewHistoryRepository.findTop10ByUserIdOrderByClickedAtDesc(auth0Sub);
     }

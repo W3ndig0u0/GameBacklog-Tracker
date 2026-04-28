@@ -1,4 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { Link } from "@tanstack/react-router";
 import { Trash2 } from "lucide-react";
 import type { Review } from "../../api/reviews/review";
 import { useDeleteReview } from "../../hooks/review/useReviews";
@@ -82,8 +83,9 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
                 className="bg-white/5 border border-white/10 p-4 rounded-xl"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <a
-                    href={`/profile?userId=${encodeURIComponent(review.userId)}`}
+                  <Link
+                    to="/profile"
+                    search={{ userId: review.userId }}
                     aria-label={`View profile of ${display}`}
                     className="flex items-center gap-3 no-underline"
                   >
@@ -98,14 +100,15 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
                         {display.slice(0, 1).toUpperCase()}
                       </div>
                     )}
-                  </a>
+                  </Link>
 
-                  <a
-                    href={`/profile?userId=${encodeURIComponent(review.userId)}`}
+                  <Link
+                    to="/profile"
+                    search={{ userId: review.userId }}
                     className="no-underline"
                   >
                     <span className="font-bold text-zinc-200">{display}</span>
-                  </a>
+                  </Link>
 
                   <span className="text-yellow-400 text-sm tracking-widest">
                     {formatStars(review.starRating)}

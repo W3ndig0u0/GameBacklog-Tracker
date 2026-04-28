@@ -16,6 +16,7 @@ import com.example.gametracker.dto.UserProfileDto;
 import com.example.gametracker.model.GameCollection;
 import com.example.gametracker.model.GameViewHistory;
 import com.example.gametracker.model.Review;
+import com.example.gametracker.model.UserGame;
 import com.example.gametracker.service.UserProfileService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,16 @@ public class UserProfileController {
     @GetMapping("/{auth0Sub}/reviews")
     public List<Review> reviews(@PathVariable String auth0Sub) {
         return service.getReviews(auth0Sub);
+    }
+
+    @GetMapping("/{auth0Sub}/library")
+    public List<UserGame> library(@PathVariable String auth0Sub) {
+        return service.getLibrary(auth0Sub);
+    }
+
+    @GetMapping("/{auth0Sub}/history")
+    public List<GameViewHistory> publicHistory(@PathVariable String auth0Sub) {
+        return service.getRecentViews(auth0Sub);
     }
 
     @GetMapping("/me/history")

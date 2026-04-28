@@ -37,8 +37,12 @@ export default function CallToActionSection() {
   ];
 
   const stats = [
-    { value: "360K+", label: "Games Tracked", color: "text-purple-400" },
-    { value: "100K+", label: "Active Gamers", color: "text-emerald-400" },
+    { value: "360K+", label: "Games Database", color: "text-purple-400" }, // if using IGDB scale
+    {
+      value: "Personalized",
+      label: "Track Your Collection",
+      color: "text-emerald-400",
+    },
     { value: "100%", label: "Free Forever", color: "text-blue-400" },
   ];
 

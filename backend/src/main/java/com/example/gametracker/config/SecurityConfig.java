@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,6 +31,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/api/users/me").authenticated()
                                                 .requestMatchers("/api/users/me/**").authenticated()
                                                 .requestMatchers("/api/users/**").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api/collections/**").permitAll()
                                                 .requestMatchers("/api/library/**").authenticated()
                                                 .requestMatchers("/api/collections/**").authenticated()
                                                 .requestMatchers("/api/profile/**").authenticated()

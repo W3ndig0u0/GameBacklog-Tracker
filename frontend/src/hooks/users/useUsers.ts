@@ -4,25 +4,30 @@ import { toast } from "react-toastify";
 import { usersApi, type GameViewPayload, type UserProfile } from "../../api/users/users";
 
 export const useUserProfile = (auth0Sub: string) => {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   return useQuery({
     queryKey: ["users", "profile", auth0Sub],
-    enabled: isAuthenticated && !!auth0Sub,
-    queryFn: async () =>
-      usersApi.getById(auth0Sub, await getAccessTokenSilently()),
+    enabled: !!auth0Sub,
+    queryFn: async () => {
+      const token = await getAccessTokenSilently().catch(() => undefined);
+      return usersApi.getById(auth0Sub, token);
+    },
   });
 };
 
 export const useUserProfiles = (auth0Subs: string[]) => {
-const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
   const uniqueSubs = Array.from(new Set(auth0Subs.filter(Boolean)));
 
   const queries = useQueries({
     queries: uniqueSubs.map((auth0Sub) => ({
       queryKey: ["users", "profile", auth0Sub],
-      enabled: isAuthenticated && !!auth0Sub,
-      queryFn: async () => usersApi.getById(auth0Sub, await getAccessTokenSilently()),
+      enabled: !!auth0Sub,
+      queryFn: async () => {
+        const token = await getAccessTokenSilently().catch(() => undefined);
+        return usersApi.getById(auth0Sub, token);
+      },
     })),
   });
 
@@ -36,6 +41,34 @@ const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   return { profilesBySub, isLoading: queries.some((query) => query.isLoading) };
 };
+
+export const useUserCollections = (auth0Sub: string) =>
+  useQuery({
+    queryKey: ["users", "collections", auth0Sub],
+    enabled: !!auth0Sub,
+    queryFn: async () => usersApi.getCollections(auth0Sub),
+  });
+
+export const useUserReviews = (auth0Sub: string) =>
+  useQuery({
+    queryKey: ["users", "reviews", auth0Sub],
+    enabled: !!auth0Sub,
+    queryFn: async () => usersApi.getReviews(auth0Sub),
+  });
+
+export const useUserHistory = (auth0Sub: string) =>
+  useQuery({
+    queryKey: ["users", "history", auth0Sub],
+    enabled: !!auth0Sub,
+    queryFn: async () => usersApi.getHistory(auth0Sub),
+  });
+
+export const useUserLibrary = (auth0Sub: string) =>
+  useQuery({
+    queryKey: ["users", "library", auth0Sub],
+    enabled: !!auth0Sub,
+    queryFn: async () => usersApi.getLibrary(auth0Sub),
+  });
 
 export const useMyProfile = () => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();

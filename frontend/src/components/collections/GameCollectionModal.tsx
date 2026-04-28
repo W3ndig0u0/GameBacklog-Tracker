@@ -1,4 +1,4 @@
-import { Plus, X } from "lucide-react";
+import { Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import type { Collection } from "../../api/collections/collections";
 import {
@@ -69,14 +69,14 @@ export default function GameCollectionModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6 backdrop-blur-sm sm:p-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6 backdrop-blur-sm sm:p-8">
       <div className="relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--bg) shadow--shadow)]">
         <div className="flex items-center justify-between border-b border-(--border) p-6 sm:p-8">
           <div className="pr-6">
-            <h2 className="text-xl font-semibold text-(--text)">
+            <h2 className="text-white text-2xl text-start md:text-3xl font-black uppercase italic tracking-tighter shrink-0">
               Add to collection
             </h2>
-            <p className="mt-2 truncate text-base text-(--text)">{gameName}</p>
+            <p className="mt-2 truncate text-base text-start">{gameName}</p>
           </div>
           <button
             type="button"
@@ -135,7 +135,7 @@ export default function GameCollectionModal({
                       disabled={removeGameFromCollection.isPending}
                       className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
                     >
-                      Remove
+                      <Trash2 size={16} className="mr-2" /> Remove
                     </button>
                   ) : (
                     <button

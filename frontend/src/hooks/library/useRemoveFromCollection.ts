@@ -29,6 +29,7 @@ export const useRemoveFromCollection = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["library"] });
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
     },
   });
 };
