@@ -293,7 +293,7 @@ export default function Profile() {
           subtitle="All public games in this user's library"
         >
           {library && library.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
+            <div className="grid grid-cols-1 gap-4 justify-items-center sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
               {library.map((item) => (
                 <GameCardWrapper igdbId={item.igdbId.toString()} />
               ))}
@@ -310,7 +310,7 @@ export default function Profile() {
           subtitle="Public favorites pulled from the library"
         >
           {favoriteGames.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
+            <div className="grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
               {favoriteGames.map((item) => (
                 <GameCardWrapper igdbId={item.igdbId.toString()} />
               ))}
@@ -397,7 +397,7 @@ export default function Profile() {
 
         <ProfileSection title="History" subtitle="Recent public game clicks">
           {history && history.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
+            <div className="grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 rounded-3xl border border-white/10 bg-white/5 p-5">
               {history.map((item) => (
                 <GameCardWrapper
                   key={item.id}
