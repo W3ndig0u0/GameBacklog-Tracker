@@ -45,7 +45,6 @@ export const GameHero = ({
   return (
     <>
       <div className="relative w-full bg-zinc-900">
-        {/* HERO BACKGROUND */}
         <div className="relative h-[40vh] md:h-[60vh]">
           {bgId && (
             <img
@@ -57,17 +56,18 @@ export const GameHero = ({
           <div className="absolute inset-0 bg-linear-to-t from-bg via-bg/20 to-transparent" />
         </div>
 
-        {/* CONTENT */}
         <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-start gap-8 px-6 md:-mt-40 md:flex-row md:items-end">
           {coverId && (
-            <img
-              src={getImg(coverId, "1080p")}
-              className="w-64 rounded-2xl border border-white/10 shadow-2xl"
-              alt={g.name}
-            />
+            <div className="relative w-64 aspect-2/3 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+              <img
+                src={getImg(coverId, "1080p")}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
+            </div>
           )}
 
-          <h1 className="mb-6 text-5xl font-black uppercase italic leading-none tracking-tighter md:text-6xl">
+          <h1 className="text-5xl font-black uppercase italic leading-none tracking-tighter md:text-6xl">
             {g.name}
           </h1>
 
