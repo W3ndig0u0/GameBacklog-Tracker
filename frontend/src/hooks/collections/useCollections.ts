@@ -202,12 +202,12 @@ export const useRemoveGameFromCollection = () => {
   return useMutation({
     mutationFn: async ({
       collectionId,
-      gameId,
+      igdbId,
     }: {
       collectionId: string;
-      gameId: string;
+      igdbId: number;
     }) =>
-      collectionsApi.removeGame(collectionId, gameId, await getAccessTokenSilently()),
+      collectionsApi.removeGame(collectionId, igdbId, await getAccessTokenSilently()),
     onSuccess: (_, { collectionId }) => {
       queryClient.invalidateQueries({
         queryKey: ["collections", collectionId],

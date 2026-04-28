@@ -45,7 +45,10 @@ public class CollectionEntryService {
     }
 
     @Transactional
-    public void remove(UUID collectionId, UUID userGameId) {
-        entryRepository.deleteByCollectionIdAndUserGameId(collectionId, userGameId);
+    public void remove(String userId, UUID collectionId, Integer igdbId) {
+        UserGame userGame = userGameService.findByUserIdAndIgdbId(userId, igdbId)
+                .orElseThrow();
+
+        entryRepository.deleteByCollectionIdAndUserGameId(collectionId, userGame.getId());
     }
 }

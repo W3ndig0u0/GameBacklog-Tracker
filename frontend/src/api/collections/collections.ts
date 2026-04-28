@@ -66,11 +66,11 @@ export const collectionsApi = {
 
   removeGame: async (
     collectionId: string,
-    gameId: string,
+    igdbId: number,
     token: string,
   ): Promise<void> => {
     await axios.delete(
-      `${BASE_URL}/collections/${collectionId}/games/${gameId}`,
+      `${BASE_URL}/collections/${collectionId}/games/${igdbId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },

@@ -1,6 +1,7 @@
 package com.example.gametracker.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,5 +71,9 @@ public class UserGameService {
                     item.setArchived(true);
                     repository.save(item);
                 });
+    }
+
+    public Optional<UserGame> findByUserIdAndIgdbId(String userId, Integer igdbId) {
+        return repository.findByUserIdAndIgdbId(userId, igdbId);
     }
 }

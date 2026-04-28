@@ -64,7 +64,7 @@ export default function GameCollectionModal({
   const handleRemoveFromCollection = async (collection: Collection) => {
     await removeGameFromCollection.mutateAsync({
       collectionId: collection.id,
-      gameId: gameId,
+      igdbId: Number(gameId),
     });
   };
 

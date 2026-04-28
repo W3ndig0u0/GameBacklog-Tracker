@@ -9,7 +9,6 @@ interface GameHeroProps {
   gameInCollection: boolean;
   isAdding: boolean;
   isEditing: boolean;
-  onToggle?: () => void;
   myGameData?: UserGame;
   isLoggedIn: boolean;
   updateGame: (data: { igdbId: string; updates: Partial<UserGame> }) => void;
@@ -29,7 +28,6 @@ export const GameHero = ({
   gameInCollection,
   isAdding,
   isEditing,
-  onToggle = () => {},
   myGameData,
   updateGame,
   isLoggedIn,
@@ -70,12 +68,7 @@ export const GameHero = ({
           <div className="flex flex-wrap items-center gap-4">
             <button
               onClick={() => {
-                if (!gameInCollection) {
-                  setIsCollectionModalOpen(true);
-                  return;
-                }
-
-                onToggle();
+                setIsCollectionModalOpen(true);
               }}
               disabled={isAdding || isEditing}
               className="flex min-w-60 items-center justify-center rounded-xl px-8 py-3.5 font-bold uppercase transition active:scale-95"

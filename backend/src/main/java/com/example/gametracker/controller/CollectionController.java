@@ -54,9 +54,10 @@ public class CollectionController {
     }
 
     @DeleteMapping("/{id}/games/{gameId}")
-    public void removeGame(@PathVariable UUID id,
-            @PathVariable UUID gameId) {
-        entryService.remove(id, gameId);
+    public void removeGame(@AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @PathVariable Integer gameId) {
+        entryService.remove(jwt.getSubject(), id, gameId);
     }
 
     @DeleteMapping("/{id}")
