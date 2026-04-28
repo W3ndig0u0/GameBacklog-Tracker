@@ -36,7 +36,12 @@ const indexRoute = createRoute({
 const searchRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/search",
-  component: () => <Search />,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      q: (search.q as string) ?? "",
+    };
+  },
+  component: Search,
 });
 
 const collectionRoute = createRoute({
