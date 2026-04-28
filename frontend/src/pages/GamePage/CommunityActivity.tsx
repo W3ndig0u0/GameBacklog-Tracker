@@ -1,4 +1,7 @@
+import { useAuth0 } from "@auth0/auth0-react";
+import { Trash2 } from "lucide-react";
 import type { Review } from "../../api/reviews/review";
+import { useDeleteReview } from "../../hooks/review/useReviews";
 import { useUserProfiles } from "../../hooks/users/useUsers";
 import { SectionTitle } from "./SharedUI";
 
@@ -18,7 +21,7 @@ const formatName = (userId: string) => {
 };
 
 const formatTimeAgo = (dateString: string) => {
-  if (!dateString) return "just now"; // Säkerhetskoll
+  if (!dateString) return "just now";
   const date = new Date(dateString);
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
@@ -45,17 +48,25 @@ const formatTimeAgo = (dateString: string) => {
 };
 
 export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
+  const sortedReviews = [...(reviews ?? [])].sort((a, b) => {
+    const aTime = new Date(a.updatedAt ?? a.reviewedAt ?? 0).getTime();
+    const bTime = new Date(b.updatedAt ?? b.reviewedAt ?? 0).getTime();
+    return bTime - aTime;
+  });
+
   const reviewUserIds = Array.from(
     new Set((reviews ?? []).map((review) => review.userId)),
   );
   const { profilesBySub } = useUserProfiles(reviewUserIds);
-
+  const deleteReviewMutation = useDeleteReview();
+  const { user } = useAuth0();
+  const currentUserId = user?.sub;
   return (
     <section className="mt-10">
       <SectionTitle>Community Activity</SectionTitle>
       <div className="space-y-4">
-        {reviews && reviews.length > 0 ? (
-          reviews.slice(0, 6).map((review) => {
+        {sortedReviews.length > 0 ? (
+          sortedReviews.map((review) => {
             const profile = profilesBySub[review.userId];
             const display = profile?.displayName || formatName(review.userId);
             const avatar = profile?.pictureUrl;
@@ -107,9 +118,20 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
                     )}
                   </span>
                 </div>
-                <p className="border-l-4 border-purple-500 pl-4 py-1 text-zinc-300 italic text-lg leading-relaxed whitespace-pre-wrap text-start">
-                  "{review.reviewText}"
-                </p>
+                <div className="flex w-full items-start justify-between gap-4">
+                  <p className="flex-1 border-l-4 border-purple-500 pl-4 py-1 text-zinc-300 italic text-lg leading-relaxed whitespace-pre-wrap text-start">
+                    "{review.reviewText}"
+                  </p>
+                  {currentUserId && review.userId === currentUserId ? (
+                    <button
+                      onClick={() => deleteReviewMutation.mutate(review.igdbId)}
+                      className="shrink-0 self-start text-purple-500/40 hover:text-red-400 transition-colors"
+                      aria-label="Delete review"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
+                  ) : null}
+                </div>
               </div>
             );
           })

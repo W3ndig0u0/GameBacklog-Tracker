@@ -5,7 +5,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useMemo } from "react";
 import { toast } from "react-toastify";
 import type { Collection, CollectionEntry } from "../../api/collections/collections";
 import { collectionsApi } from "../../api/collections/collections";
@@ -54,18 +53,42 @@ export const useCollectionGameCounts = (collections?: Collection[]) => {
     })),
   });
 
-  const counts = useMemo(
-    () =>
-      (collections ?? []).reduce<Record<string, number>>((acc, collection, index) => {
-        acc[collection.id] = queries[index]?.data?.length ?? 0;
-        return acc;
-      }, {}),
-    [collections, queries],
-  );
-
+const counts = (collections ?? []).reduce<Record<string, number>>((acc, collection, index) => {
+    acc[collection.id] = queries[index]?.data?.length ?? 0;
+    return acc;
+  }, {});
+  
   return {
     counts,
     isLoading: queries.some((query) => query.isLoading),
+  };
+};
+
+export const useCollectionsMembership = (
+  collections?: Collection[],
+  igdbId?: string | number,
+) => {
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+
+  const idStr = igdbId?.toString();
+
+  const queries = useQueries({
+    queries: (collections ?? []).map((collection) => ({
+      queryKey: ["collections", collection.id, "has-game", idStr],
+      enabled: isAuthenticated && !!collection.id && !!idStr,
+      queryFn: async () =>
+        (await collectionsApi.getGameIds(collection.id, await getAccessTokenSilently())).includes(Number(idStr)),
+    })),
+  });
+
+  const membership = (collections ?? []).reduce<Record<string, boolean>>((acc, collection, index) => {
+    acc[collection.id] = queries[index]?.data ?? false;
+    return acc;
+  }, {});
+
+  return {
+    membership,
+    isLoading: queries.some((q) => q.isLoading),
   };
 };
 
@@ -158,6 +181,12 @@ export const useAddGameToCollection = () => {
       queryClient.invalidateQueries({
         queryKey: ["collections", entry.collectionId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["collections", entry.collectionId, "game-ids"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["collections", entry.collectionId, "has-game"],
+      });
       toast.success("Game added to collection!");
     },
     onError: () => {
@@ -182,6 +211,12 @@ export const useRemoveGameFromCollection = () => {
     onSuccess: (_, { collectionId }) => {
       queryClient.invalidateQueries({
         queryKey: ["collections", collectionId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["collections", collectionId, "game-ids"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["collections", collectionId, "has-game"],
       });
       toast.success("Game removed from collection");
     },

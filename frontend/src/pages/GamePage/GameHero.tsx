@@ -8,8 +8,8 @@ interface GameHeroProps {
   g: GameData;
   gameInCollection: boolean;
   isAdding: boolean;
-  isRemoving: boolean;
-  onToggle: () => void;
+  isEditing: boolean;
+  onToggle?: () => void;
   myGameData?: UserGame;
   isLoggedIn: boolean;
   updateGame: (data: { igdbId: string; updates: Partial<UserGame> }) => void;
@@ -28,8 +28,8 @@ export const GameHero = ({
   g,
   gameInCollection,
   isAdding,
-  isRemoving,
-  onToggle,
+  isEditing,
+  onToggle = () => {},
   myGameData,
   updateGame,
   isLoggedIn,
@@ -55,22 +55,18 @@ export const GameHero = ({
           />
         )}
         <div className="absolute inset-0 bg-linear-to-t from-bg via-bg/20 to-transparent" />
-      </div>
 
-      <div className="relative z-10 mx-auto -mt-32 flex max-w-6xl flex-col items-start gap-8 px-6 md:flex-row md:items-end">
-        {coverId && (
-          <img
-            src={getImg(coverId, "1080p")}
-            className="w-64 rounded-2xl border border-white/10 shadow-2xl"
-            alt={g.name}
-          />
-        )}
-
-        <div className="flex-1 pb-4">
+        <div className="relative z-10 mx-auto -mt-32 flex max-w-6xl flex-col items-start gap-8 px-6 md:flex-row md:items-end">
+          {coverId && (
+            <img
+              src={getImg(coverId, "1080p")}
+              className="w-64 rounded-2xl border border-white/10 shadow-2xl"
+              alt={g.name}
+            />
+          )}
           <h1 className="mb-6 text-5xl font-black uppercase italic leading-none tracking-tighter md:text-6xl">
             {g.name}
           </h1>
-
           <div className="flex flex-wrap items-center gap-4">
             <button
               onClick={() => {
@@ -81,12 +77,10 @@ export const GameHero = ({
 
                 onToggle();
               }}
-              disabled={isAdding || isRemoving}
+              disabled={isAdding || isEditing}
               className="flex min-w-60 items-center justify-center rounded-xl px-8 py-3.5 font-bold uppercase transition active:scale-95"
             >
-              {gameInCollection
-                ? "Remove from Collection"
-                : "Add to Collection"}
+              {gameInCollection ? "Manage Collections" : "Add to Collections"}
             </button>
 
             {isLoggedIn && (

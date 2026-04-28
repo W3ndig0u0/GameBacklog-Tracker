@@ -4,7 +4,9 @@ import type { Collection } from "../../api/collections/collections";
 import {
   useAddGameToCollection,
   useCollections,
+  useCollectionsMembership,
   useCreateCollection,
+  useRemoveGameFromCollection,
 } from "../../hooks/collections/useCollections";
 
 interface GameCollectionModalProps {
@@ -23,7 +25,9 @@ export default function GameCollectionModal({
   const { data: collections, isLoading } = useCollections();
   const createCollection = useCreateCollection();
   const addGameToCollection = useAddGameToCollection();
+  const removeGameFromCollection = useRemoveGameFromCollection();
   const [newCollectionName, setNewCollectionName] = useState("");
+  const { membership } = useCollectionsMembership(collections, Number(gameId));
 
   const handleClose = () => {
     setNewCollectionName("");
@@ -55,6 +59,13 @@ export default function GameCollectionModal({
       igdbId: Number(gameId),
     });
     handleClose();
+  };
+
+  const handleRemoveFromCollection = async (collection: Collection) => {
+    await removeGameFromCollection.mutateAsync({
+      collectionId: collection.id,
+      gameId: gameId,
+    });
   };
 
   return (
@@ -110,21 +121,33 @@ export default function GameCollectionModal({
           ) : collections && collections.length > 0 ? (
             <div className="flex flex-col gap-3">
               {collections.map((collection) => (
-                <button
-                  type="button"
+                <div
                   key={collection.id}
-                  onClick={() => handleAddToCollection(collection)}
-                  disabled={addGameToCollection.isPending}
-                  className="group flex w-full items-center justify-between rounded-xl border border-transparent p-5 text-left transition-colors hover:border-(--accent-border) hover:bg-(--accent-bg) disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl border border-transparent p-5 text-left transition-colors hover:border-(--accent-border) hover:bg-(--accent-bg)"
                 >
-                  <span className="text-base font-medium text-(--text-h) group-hover:text-(--accent)">
+                  <span className="text-base font-medium text-(--text-h)">
                     {collection.name}
                   </span>
-                  <Plus
-                    size={22}
-                    className="text-(--text) opacity-0 transition-opacity group-hover:text-(--accent) group-hover:opacity-100"
-                  />
-                </button>
+                  {membership?.[collection.id] ? (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFromCollection(collection)}
+                      disabled={removeGameFromCollection.isPending}
+                      className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                    >
+                      Remove
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleAddToCollection(collection)}
+                      disabled={addGameToCollection.isPending}
+                      className="flex items-center justify-center rounded-xl bg-(--accent) px-4 py-2 text-sm font-semibold text--bg)] transition-colors hover:opacity-90 disabled:opacity-50"
+                    >
+                      <Plus size={16} className="mr-2" /> Add
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
           ) : (

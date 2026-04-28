@@ -2,10 +2,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
-    reviewsApi,
-    type Review,
-    type ReviewPayload,
-    type ReviewUpdatePayload,
+  reviewsApi,
+  type Review,
+  type ReviewPayload,
+  type ReviewUpdatePayload,
 } from "../../api/reviews/review";
 
 export const useMyReviews = () => {

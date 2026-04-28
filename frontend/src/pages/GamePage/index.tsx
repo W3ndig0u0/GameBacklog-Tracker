@@ -24,9 +24,8 @@ const GamePage = () => {
   const { gameId } = useParams({ from: "/game/$gameId" });
   const { isAuthenticated, user } = useAuth0();
   const recordGameHistory = useRecordGameHistory();
-  const { mutate: addGame, isPending: isAdding } = useAddGame();
-  const { mutate: removeGame, isPending: isRemoving } =
-    useRemoveFromCollection();
+  const { isPending: isAdding } = useAddGame();
+  const { isPending: isRemoving } = useRemoveFromCollection();
   const { data: collection } = useGamesLibrary();
   const { data: g, isLoading } = useGameById(gameId);
   const { mutate: updateGame } = useUpdateCollectionItem();
@@ -59,11 +58,6 @@ const GamePage = () => {
 
   const gameInCollection = !!myGameData;
 
-  const handleToggleCollection = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    gameInCollection ? removeGame(gameId) : addGame(gameId);
-  };
-
   if (isLoading || !g) {
     return (
       <div className="flex items-center justify-center h-screen bg-bg text-accent uppercase font-black animate-pulse">
@@ -78,8 +72,7 @@ const GamePage = () => {
           g={g}
           gameInCollection={gameInCollection}
           isAdding={isAdding}
-          isRemoving={isRemoving}
-          onToggle={handleToggleCollection}
+          isEditing={isRemoving}
           myGameData={myGameData}
           isLoggedIn={!!user}
           updateGame={updateGame}

@@ -1,28 +1,31 @@
 package com.example.gametracker.service;
 
-import com.example.gametracker.dto.CollectionRequest;
-import com.example.gametracker.model.GameCollection;
-import com.example.gametracker.repository.CollectionRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.example.gametracker.dto.CollectionRequest;
+import com.example.gametracker.model.GameCollection;
+import com.example.gametracker.repository.CollectionEntryRepository;
+import com.example.gametracker.repository.CollectionRepository;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CollectionService {
 
     private final CollectionRepository repository;
+    private final CollectionEntryRepository entryRepository;
 
     public GameCollection create(String userId, String name) {
         return repository.save(
                 GameCollection.builder()
                         .userId(userId)
                         .name(name)
-                        .build()
-        );
+                        .build());
     }
 
     public List<GameCollection> getUserCollections(String userId) {
@@ -38,6 +41,7 @@ public class CollectionService {
         GameCollection col = repository.findByIdAndUserId(id, userId)
                 .orElseThrow();
 
+        entryRepository.deleteByCollectionId(id);
         repository.delete(col);
     }
 
