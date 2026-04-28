@@ -44,17 +44,21 @@ export const GameHero = ({
 
   return (
     <>
-      <div className="relative h-[60vh] w-full bg-zinc-900">
-        {bgId && (
-          <img
-            src={getImg(bgId, "1080p")}
-            className="h-full w-full object-cover opacity-30"
-            alt=""
-          />
-        )}
-        <div className="absolute inset-0 bg-linear-to-t from-bg via-bg/20 to-transparent" />
+      <div className="relative w-full bg-zinc-900">
+        {/* HERO BACKGROUND */}
+        <div className="relative h-[40vh] md:h-[60vh]">
+          {bgId && (
+            <img
+              src={getImg(bgId, "1080p")}
+              className="h-full w-full object-cover opacity-30"
+              alt=""
+            />
+          )}
+          <div className="absolute inset-0 bg-linear-to-t from-bg via-bg/20 to-transparent" />
+        </div>
 
-        <div className="relative z-10 mx-auto -mt-40 flex max-w-6xl flex-col items-start gap-8 overflow-visible px-6 md:flex-row md:items-end">
+        {/* CONTENT */}
+        <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-start gap-8 px-6 md:-mt-40 md:flex-row md:items-end">
           {coverId && (
             <img
               src={getImg(coverId, "1080p")}
@@ -62,14 +66,14 @@ export const GameHero = ({
               alt={g.name}
             />
           )}
+
           <h1 className="mb-6 text-5xl font-black uppercase italic leading-none tracking-tighter md:text-6xl">
             {g.name}
           </h1>
+
           <div className="flex flex-wrap items-center gap-4">
             <button
-              onClick={() => {
-                setIsCollectionModalOpen(true);
-              }}
+              onClick={() => setIsCollectionModalOpen(true)}
               disabled={isAdding || isEditing}
               className="flex min-w-60 items-center justify-center rounded-xl px-8 py-3.5 font-bold uppercase transition active:scale-95"
             >
@@ -99,7 +103,9 @@ export const GameHero = ({
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`h-5 w-5 transition ${isFavorite ? "scale-110" : "group-hover:scale-110"}`}
+                    className={`h-5 w-5 transition ${
+                      isFavorite ? "scale-110" : "group-hover:scale-110"
+                    }`}
                   >
                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                   </svg>
@@ -112,10 +118,13 @@ export const GameHero = ({
                   >
                     <span className="flex items-center gap-2">
                       <span
-                        className={`h-2 w-2 rounded-full ${STATUS_COLORS[gameStatus] || STATUS_COLORS.BACKLOG}`}
+                        className={`h-2 w-2 rounded-full ${
+                          STATUS_COLORS[gameStatus]
+                        }`}
                       />
                       {gameStatus}
                     </span>
+
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -123,7 +132,9 @@ export const GameHero = ({
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className={`h-4 w-4 text-zinc-500 transition group-hover:text-zinc-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                      className={`h-4 w-4 text-zinc-500 transition group-hover:text-zinc-300 ${
+                        isDropdownOpen ? "rotate-180" : ""
+                      }`}
                     >
                       <path d="m6 9 6 6 6-6" />
                     </svg>
@@ -136,7 +147,7 @@ export const GameHero = ({
                         onClick={() => setIsDropdownOpen(false)}
                       />
 
-                      <div className="absolute left-0 top-full z-50 mt-2 w-full backdrop-blur-xl animate-in fade-in slide-in-from-top-2">
+                      <div className="static mt-2 w-full md:absolute md:left-0 md:top-full md:z-50 md:backdrop-blur-xl md:animate-in md:fade-in md:slide-in-from-top-2">
                         {GAME_STATUSES.map((status) => (
                           <button
                             key={status}

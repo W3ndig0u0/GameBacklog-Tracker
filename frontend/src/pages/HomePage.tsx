@@ -189,7 +189,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 justify-items-center sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
             {randomGameData?.similar_games?.map((game) => (
               <GameCardWrapper key={game.id} igdbId={game.id.toString()} />
             ))}
@@ -216,7 +216,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 justify-items-center sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5">
             {libraryGameData?.similar_games?.map((game) => (
               <GameCardWrapper key={game.id} igdbId={game.id.toString()} />
             ))}
