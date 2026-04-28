@@ -65,6 +65,7 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
   return (
     <section className="mt-10">
       <SectionTitle>Community Activity</SectionTitle>
+
       <div className="space-y-4">
         {sortedReviews.length > 0 ? (
           sortedReviews.map((review) => {
@@ -82,53 +83,59 @@ export const CommunityActivity = ({ reviews }: CommunityActivityProps) => {
                 key={review.id}
                 className="bg-white/5 border border-white/10 p-4 rounded-xl"
               >
-                <div className="flex items-center gap-3 mb-2">
-                  <Link
-                    to="/profile"
-                    search={{ userId: review.userId }}
-                    aria-label={`View profile of ${display}`}
-                    className="flex items-center gap-3 no-underline"
-                  >
-                    {avatar ? (
-                      <img
-                        src={avatar}
-                        alt={display}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center font-bold text-white">
-                        {display.slice(0, 1).toUpperCase()}
-                      </div>
-                    )}
-                  </Link>
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 mb-3">
+                  <div className="flex items-center gap-3">
+                    <Link
+                      to="/profile"
+                      search={{ userId: review.userId }}
+                      aria-label={`View profile of ${display}`}
+                      className="flex items-center gap-3 no-underline"
+                    >
+                      {avatar ? (
+                        <img
+                          src={avatar}
+                          alt={display}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center font-bold text-white">
+                          {display.slice(0, 1).toUpperCase()}
+                        </div>
+                      )}
+                    </Link>
 
-                  <Link
-                    to="/profile"
-                    search={{ userId: review.userId }}
-                    className="no-underline"
-                  >
-                    <span className="font-bold text-zinc-200">{display}</span>
-                  </Link>
+                    <Link
+                      to="/profile"
+                      search={{ userId: review.userId }}
+                      className="no-underline"
+                    >
+                      <span className="font-bold text-zinc-200 max-w-25 truncate block">
+                        {display}
+                      </span>
+                    </Link>
 
-                  <span className="text-yellow-400 text-sm tracking-widest">
-                    {formatStars(review.starRating)}
-                  </span>
+                    <span className="text-yellow-400 text-sm tracking-widest">
+                      {formatStars(review.starRating)}
+                    </span>
+                  </div>
 
-                  <span className="text-zinc-500 text-xs ml-auto flex gap-1">
+                  <span className="text-zinc-500 text-xs sm:ml-auto flex gap-1">
                     <span>{formatTimeAgo(timeToDisplay)}</span>
                     {isEdited && (
                       <span className="italic opacity-50">(edited)</span>
                     )}
                   </span>
                 </div>
-                <div className="flex w-full items-start justify-between gap-4">
-                  <p className="flex-1 border-l-4 border-purple-500 pl-4 py-1 text-zinc-300 italic text-lg leading-relaxed whitespace-pre-wrap text-start">
+
+                <div className="flex flex-col sm:flex-row w-full items-start justify-between gap-3 sm:gap-4">
+                  <p className="flex-1 border-l-4 border-purple-500 pl-4 py-1 text-zinc-300 italic text-base sm:text-lg leading-relaxed whitespace-pre-wrap text-start">
                     "{review.reviewText}"
                   </p>
+
                   {currentUserId && review.userId === currentUserId ? (
                     <button
                       onClick={() => deleteReviewMutation.mutate(review.igdbId)}
-                      className="shrink-0 self-start text-purple-500/40 hover:text-red-400 transition-colors"
+                      className="self-end sm:self-start shrink-0 text-purple-500/40 hover:text-red-400 transition-colors"
                       aria-label="Delete review"
                     >
                       <Trash2 className="h-5 w-5" />

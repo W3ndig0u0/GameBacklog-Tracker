@@ -106,14 +106,14 @@ export default function HeroCarousel({
   ];
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
+    <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl pb-16 sm:pb-0">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.2),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(34,197,94,0.1),transparent_40%)]" />
       <div
-        className={`relative flex h-auto flex-col min-h-80 lg:grid lg:min-h-100 lg:grid-cols-[1fr_1.2fr] ${
+        className={`relative flex min-h-80 flex-col lg:grid lg:min-h-100 lg:grid-cols-[1fr_1.2fr] ${
           isAuthenticated ? "lg:h-140" : "lg:h-110"
         }`}
       >
-        <div className="flex flex-col justify-between gap-5 p-6 sm:p-8 lg:p-10">
+        <div className="flex flex-col justify-between gap-5 p-5 sm:p-6 md:p-8 lg:p-10">
           <div className="space-y-6">
             <div className="space-y-3">
               <div className="inline-flex items-center rounded-full border border-purple-500/50 bg-purple-500/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.4em] text-purple-300 backdrop-blur-sm">
@@ -129,7 +129,7 @@ export default function HeroCarousel({
                   : "Featured Game"}
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase italic tracking-tighter leading-[0.9] text-white drop-shadow-lg">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase italic tracking-tighter leading-[0.9] text-white drop-shadow-lg">
                 {activeGame.name}
               </h1>
 
@@ -190,7 +190,7 @@ export default function HeroCarousel({
           </div>
 
           {isAuthenticated && (
-            <div className="grid w-full grid-cols-3 gap-3">
+            <div className="grid w-full grid-cols-1 sm:grid-cols-3 gap-3">
               {stats.map(({ label, value, color, border }) => (
                 <div
                   key={label}
@@ -243,7 +243,9 @@ export default function HeroCarousel({
                   {previewTags.map((tag, i) => (
                     <span
                       key={tag}
-                      className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${tagToneClasses[i % tagToneClasses.length]}`}
+                      className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                        tagToneClasses[i % tagToneClasses.length]
+                      }`}
                     >
                       {tag}
                     </span>
@@ -258,8 +260,8 @@ export default function HeroCarousel({
           </div>
         </div>
       </div>
-
-      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2 rounded-full border border-white/10 bg-zinc-950/50 px-3 py-2 backdrop-blur-md lg:bottom-8 lg:left-auto lg:right-8 lg:translate-x-0 z-30">
+      <div className="absolute bottom-5 sm:bottom-10 md:bottom-10 lg:bottom-8 left-1/2 flex -translate-x-1/2 gap-2 rounded-full border border-white/10 bg-zinc-950/50 px-3 py-2 backdrop-blur-md lg:left-auto lg:right-8 lg:translate-x-0 z-30">
+        {" "}
         {slides.map((game, index) => (
           <button
             key={game.id}

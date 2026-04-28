@@ -55,8 +55,9 @@ export const ReviewEditor = ({ gameId }: ReviewEditorProps) => {
   return (
     <section className="mt-10">
       <SectionTitle>Review</SectionTitle>
+
       <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex flex-wrap items-center gap-2 mb-4">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
               key={star}
@@ -71,10 +72,12 @@ export const ReviewEditor = ({ gameId }: ReviewEditorProps) => {
               ★
             </button>
           ))}
-          <span className="text-zinc-500 text-sm ml-2">{starRating}/5</span>
+
+          <span className="text-zinc-500 text-sm sm:ml-2">{starRating}/5</span>
         </div>
+
         <textarea
-          className="w-full bg-transparent text-zinc-300 placeholder-zinc-600 resize-none outline-none min-h-25"
+          className="w-full bg-transparent text-zinc-300 placeholder-zinc-600 resize-none outline-none min-h-25 text-sm sm:text-base"
           placeholder="What did you think of the game?"
           value={reviewDraft}
           onChange={(e) => {
@@ -82,16 +85,18 @@ export const ReviewEditor = ({ gameId }: ReviewEditorProps) => {
             if (fieldError) setFieldError(null);
           }}
         />
-        <div className="flex justify-end">
+
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-2 sm:gap-0 mt-3">
           <button
             onClick={handleSubmit}
             disabled={isPending || !trimmedReview || isTooShort || isTooLong}
-            className="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition-colors disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-300"
+            className="w-full sm:w-auto px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition-colors disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-300"
           >
             {isPending ? "Saving..." : "Send"}
           </button>
         </div>
-        <div className="mt-2 flex items-center justify-between gap-4">
+
+        <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
           <div className="text-xs">
             {fieldError ? (
               <span className="text-red-400">{fieldError}</span>
@@ -103,6 +108,7 @@ export const ReviewEditor = ({ gameId }: ReviewEditorProps) => {
               <span className="text-zinc-500">Looks good</span>
             )}
           </div>
+
           <span
             className={`text-xs ${isTooLong ? "text-red-400" : "text-zinc-500"}`}
           >
