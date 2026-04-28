@@ -209,7 +209,10 @@ export default function HomePage() {
                   Personalized For You
                 </p>
                 <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white md:text-4xl">
-                  <span className="text-purple-400">{user?.names} History</span>
+                  Recommended Because You Recently Added{" "}
+                  <span className="text-purple-400">
+                    {libraryGameData?.name}
+                  </span>
                 </h2>
               </div>
             </div>

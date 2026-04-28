@@ -77,12 +77,9 @@ export const searchGames = async (query: string): Promise<Game[]> => {
   return typeof res.data === "string" ? JSON.parse(res.data) : res.data;
 };
 
-export const fetchGameById = async (id: string, token: string): Promise<Game> => {
-  const res = await axios.get(`${BASE_URL}/games/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return res.data;
+export const fetchGameById = async (id: string): Promise<Game> => {
+  const res = await axios.get<string>(`${BASE_URL}/games/${id}`);
+  const parsedData =
+    typeof res.data === "string" ? JSON.parse(res.data) : res.data;
+  return Array.isArray(parsedData) ? parsedData[0] : parsedData;
 };
