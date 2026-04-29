@@ -172,11 +172,10 @@ export default function Profile() {
   }
 
   const displayName = profile?.displayName || targetUserId || "Player";
-  const avatar = profile?.pictureUrl
-    ? profile.pictureUrl
-    : viewingOwnProfile && user?.picture
-      ? user.picture
-      : "https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg";
+  const avatar =
+    profile?.pictureUrl ||
+    (viewingOwnProfile ? user?.picture : null) ||
+    "https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg";
 
   const bannerImage = bannerGame?.cover?.url
     ? `https:${bannerGame.cover.url.replace("t_thumb", "t_1080p")}`
