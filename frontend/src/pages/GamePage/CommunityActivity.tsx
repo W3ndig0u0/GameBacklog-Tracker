@@ -18,12 +18,7 @@ const formatStars = (rating: number) => {
 const formatName = (userId: string, email?: string) => {
   if (email) return email.split("@")[0];
   if (!userId) return "Unknown User";
-
   const parts = userId.split("|");
-
-  if (parts[0] === "google-oauth2") return "Google User";
-  if (parts[0] === "auth0") return "User";
-
   return parts.length > 1 ? parts[1] : userId;
 };
 
