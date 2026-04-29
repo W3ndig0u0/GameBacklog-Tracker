@@ -65,6 +65,7 @@ export default function Header() {
 
             <Link
               to="/search"
+              search={{ q: "" }}
               activeProps={activeStyles}
               inactiveProps={inactiveStyles}
             >
@@ -75,6 +76,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Link
             to="/search"
+            search={{ q: "" }}
             className="p-2.5 rounded-[10px] transition-all duration-200 hover:bg-[#a855f7]/10 group"
             activeProps={{ className: "bg-[#a855f7]/20 p-2.5 rounded-[10px]" }}
           >
