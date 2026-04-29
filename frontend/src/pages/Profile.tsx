@@ -227,14 +227,14 @@ export default function Profile() {
             <StatCard
               label="Favorites"
               value={String(favoriteGames.length).padStart(2, "0")}
-              subtitle="Liked games"
+              subtitle="Favorite games"
               className="border-emerald-400/20 bg-linear-to-br from-emerald-400/10 to-transparent hover:border-emerald-400/50 hover:bg-emerald-400/15"
               valueClassName="text-emerald-400"
             />
             <StatCard
               label="Progress"
               value={`${completedPercent}%`}
-              subtitle={`${completedCount} done · ${backlogCount} left`}
+              subtitle={`${completedCount} done · ${backlogCount + playingCount} left`}
               className="border-purple-400/20 bg-linear-to-br from-purple-400/10 to-transparent hover:border-purple-400/50 hover:bg-purple-400/15"
               valueClassName="text-purple-400"
             />
