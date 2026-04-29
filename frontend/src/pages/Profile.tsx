@@ -250,7 +250,7 @@ export default function Profile() {
             <StatCard
               label="Collections"
               value={String(profile?.collectionCount ?? 0).padStart(2, "0")}
-              subtitle="Public lists"
+              subtitle="Public Collections"
               className="border-emerald-400/20 hover:border-emerald-400/50 hover:bg-emerald-400/10"
               valueClassName="text-emerald-400"
             />
