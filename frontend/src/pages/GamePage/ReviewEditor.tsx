@@ -50,6 +50,9 @@ export const ReviewEditor = ({ gameId }: ReviewEditorProps) => {
       reviewText: trimmedReview,
       starRating,
     });
+
+    setReviewDraft("");
+    setStarRating(1);
   };
 
   return (
